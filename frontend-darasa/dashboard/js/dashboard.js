@@ -1,0 +1,1 @@
+AuthUtils.requireAuth();

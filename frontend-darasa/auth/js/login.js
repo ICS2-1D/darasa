@@ -141,5 +141,9 @@ function checkAuthStatus() {
   }
 }
 
+if (AuthUtils.isAuthenticated()) {
+    window.location.href = '/frontend-darasa/dashboard.html';
+}
+
 // Check auth status when page loads
 document.addEventListener('DOMContentLoaded', checkAuthStatus);
