@@ -123,7 +123,7 @@ class AuthUtils {
       const isAuth = await this.isAuthenticated();
       if (isAuth) {
         // Make sure dashboard exists before redirecting
-        window.location.href = '/frontend-darasa/dashboard.html';
+        window.location.href = '/frontend-darasa/dashboard/dashboard.html';
         return false;
       }
       return true;
@@ -143,7 +143,7 @@ class AuthUtils {
     if (this.isAuthPage()) {
       // If on auth page and already authenticated, redirect to dashboard
       if (this.isAuthenticatedSync()) {
-        window.location.href = '/frontend-darasa/dashboard.html';
+        window.location.href = '/frontend-darasa/dashboard/dashboard.html';
         return false;
       }
       return true;

@@ -14,6 +14,9 @@ const submitButton = document.querySelector('.btn');
 document.addEventListener('DOMContentLoaded', function() {
   // Handle form submission
   loginForm.addEventListener('submit', handleLogin);
+  
+  // Check auth status when page loads
+  checkAuthStatus();
 });
 
 async function handleLogin(e) {
@@ -60,8 +63,8 @@ async function handleLogin(e) {
         // Redirect to appropriate dashboard based on user role
         const user = data.data.user;
         const dashboardPath = user.role === 'teacher' 
-          ? '../dashboard/teacher.html' 
-          : '../dashboard/student.html';
+          ? '/frontend-darasa/dashboard/dashboard.html' 
+          : '/frontend-darasa/dashboard/dashboard.html';
         window.location.href = dashboardPath;
       }, 2000);
     } else {
@@ -130,20 +133,23 @@ function showMessage(message, type = 'info') {
   }, 5000);
 }
 
-// Check if user is already logged in
-function checkAuthStatus() {
-  const token = localStorage.getItem('authToken');
-  const userData = localStorage.getItem('userData');
-  
-  if (token && userData) {
-    // User is already logged in, redirect to dashboard
-    window.location.href = '../dashboard.html';
+// Check if user is already logged in (FIXED VERSION)
+async function checkAuthStatus() {
+  try {
+    // Use the synchronous version for immediate check
+    const token = localStorage.getItem('authToken');
+    const userData = localStorage.getItem('userData');
+    
+    if (token && userData) {
+      // User appears to be logged in, verify with server
+      const isAuth = await AuthUtils.isAuthenticated();
+      if (isAuth) {
+        // User is already logged in, redirect to dashboard
+        window.location.href = '/frontend-darasa/dashboard/dashboard.html';
+      }
+    }
+  } catch (error) {
+    console.log('Auth check failed:', error);
+    // If auth check fails, just stay on login page
   }
 }
-
-if (AuthUtils.isAuthenticated()) {
-    window.location.href = '/frontend-darasa/dashboard.html';
-}
-
-// Check auth status when page loads
-document.addEventListener('DOMContentLoaded', checkAuthStatus);

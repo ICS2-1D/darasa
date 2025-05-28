@@ -1,5 +1,3 @@
-// const { set } = require("mongoose");
-
 // API Configuration - Backend server URL
 const API_BASE_URL = 'http://localhost:3000/api';
 
@@ -11,7 +9,6 @@ const registerForm = document.querySelector('form');
 const nameInput = document.getElementById('name');
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
-// const roleSelect = document.getElementById('role');
 const submitButton = document.querySelector('.btn');
 
 // Add event listener when DOM is loaded
@@ -22,6 +19,9 @@ document.addEventListener('DOMContentLoaded', function () {
   // Add real-time validation
   emailInput.addEventListener('blur', validateEmail);
   passwordInput.addEventListener('input', validatePassword);
+  
+  // Check auth status when page loads
+  checkAuthStatus();
 });
 
 async function handleRegister(e) {
@@ -53,8 +53,8 @@ async function handleRegister(e) {
     if (data.success) {
       showMessage('Registration successful! Redirecting to login...', 'success');
       setTimeout(() => {
-        // Redirect to login page instead of dashboard
-        window.location.href = 'login.html';
+        // Redirect to login page
+        window.location.href = '/frontend-darasa/auth/login.html';
       }, 2000);
     } else {
       throw new Error(data.message || 'Registration failed');
@@ -67,7 +67,6 @@ async function handleRegister(e) {
     setLoadingState(false);
   }
 }
-
 
 function validateForm(fullName, email, password) {
   const errors = [];
@@ -83,10 +82,6 @@ function validateForm(fullName, email, password) {
   if (!password || password.length < 6) {
     errors.push('Password must be at least 6 characters long');
   }
-
-  // if (!role || (role !== 'student' && role !== 'lecturer')) {
-  //   errors.push('Please select a valid role');
-  // }
 
   return errors;
 }
@@ -193,16 +188,23 @@ function showMessage(message, type = 'info') {
   }, 5000);
 }
 
-// Check if user is already logged in
-function checkAuthStatus() {
-  const token = localStorage.getItem('authToken');
-  const userData = localStorage.getItem('userData');
-
-  if (token && userData) {
-    // User is already logged in, redirect to dashboard
-    window.location.href = '../dashboard.html';
+// Check if user is already logged in (FIXED VERSION)
+async function checkAuthStatus() {
+  try {
+    // Use the synchronous version for immediate check
+    const token = localStorage.getItem('authToken');
+    const userData = localStorage.getItem('userData');
+    
+    if (token && userData) {
+      // User appears to be logged in, verify with server
+      const isAuth = await AuthUtils.isAuthenticated();
+      if (isAuth) {
+        // User is already logged in, redirect to dashboard
+        window.location.href = '/frontend-darasa/dashboard/dashboard.html';
+      }
+    }
+  } catch (error) {
+    console.log('Auth check failed:', error);
+    // If auth check fails, just stay on register page
   }
 }
-
-// Check auth status when page loads
-document.addEventListener('DOMContentLoaded', checkAuthStatus);
