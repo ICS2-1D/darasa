@@ -1,0 +1,144 @@
+* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background-color: #f3f4f6;
+  color: #1a2c42;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 22%;
+  background-color: #ffffff;
+  border-right: 1px solid #dcdcdc;
+  padding: 30px 20px;
+}
+
+.sidebar h2 {
+  margin-bottom: 25px;
+  font-size: 22px;
+  color: #003366;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.assignment-list {
+  list-style: none;
+}
+
+.assignment {
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.assignment:hover {
+  background-color: #eef6ff;
+}
+
+.assignment.submitted {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.assignment.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.assignment.missing {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.content {
+  flex-grow: 1;
+  padding: 40px;
+  overflow-y: auto;
+  background-color: #f9fafc;
+}
+
+.card {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.card h1 {
+  font-size: 24px;
+  color: #004080;
+  margin-bottom: 20px;
+}
+
+.details p {
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+.status {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.status.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status.submitted {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.upload-section {
+  margin-top: 25px;
+}
+
+.upload-section label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+#upload {
+  display: block;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+  background-color: #fafafa;
+}
+
+.submit-btn {
+  padding: 10px 20px;
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #005fa3;
+}
