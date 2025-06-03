@@ -1,665 +1,604 @@
-
+/* General Reset & Body Styles */
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: #f0f4ff;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f8f9fa; /* Lighter background */
     margin: 0;
     padding: 0;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-}
-
-/* Header styles (for teacher dashboard) */
-.header {
-    background: linear-gradient(135deg, #0457F1, #02338D);
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(4, 87, 241, 0.3);
-    padding: 25px;
-    margin-bottom: 25px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.header h1 {
-    font-size: 28px;
-    color: #ffffff;
-    margin: 0;
-    font-weight: 600;
-}
-
-.header nav {
-    display: flex;
-    gap: 30px;
-}
-
-.header nav a {
-    color: #ffffff;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 16px;
-    padding: 8px 16px;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-}
-
-.header nav a:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-.header button {
-    background-color: rgba(255, 255, 255, 0.15);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    cursor: pointer;
-    padding: 10px;
-    display: flex;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-}
-
-.header button:hover {
-    background-color: rgba(255, 255, 255, 0.25);
-}
-
-.header button svg {
-    width: 24px;
-    height: 24px;
-    color: #ffffff;
-}
-
-/* Student Dashboard Specific Styles */
-.dashboard {
-    display: flex;
+    color: #3c4043; /* Google-like text color */
+    line-height: 1.6;
+    display: flex; /* For the main layout */
     height: 100vh;
+    overflow: hidden; /* Prevent body scroll, individual sections will scroll */
 }
 
-/* Sidebar styles (for student dashboard) */
+/* Main Dashboard Layout */
+.dashboard-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+/* Sidebar */
 .sidebar {
-    width: 250px;
-    height: 100vh;
+    width: 256px; /* Google Classroom like width */
     background-color: #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-right: 1px solid #dadce0; /* Subtle border */
     display: flex;
     flex-direction: column;
-    position: fixed;
-    left: 0;
+    padding: 0;
+    height: 100vh; /* Full height */
+    position: fixed; /* Fixed sidebar */
     top: 0;
-    z-index: 10;
-    border: 1px solid rgba(4, 87, 241, 0.1);
+    left: 0;
+    z-index: 1000;
+    transition: width 0.3s ease;
 }
 
-.logo {
-    padding: 16px;
+.sidebar .logo {
+    padding: 18px 24px;
     display: flex;
     align-items: center;
     gap: 12px;
-    border-bottom: 1px solid rgba(4, 87, 241, 0.1);
+    border-bottom: 1px solid #dadce0;
+    height: 64px; /* Standard height */
+    box-sizing: border-box;
 }
 
-.logo img {
-    width: 32px;
-    height: 32px;
+.sidebar .logo img {
+    width: 28px; /* Slightly smaller */
+    height: 28px;
 }
 
-.logo span {
-    font-size: 18px;
-    font-weight: 600;
-    color: #02338D;
+.sidebar .logo span {
+    font-size: 1.375rem; /* 22px */
+    font-weight: 500;
+    color: #5f6368; /* Google's secondary text color */
 }
 
-.nav-menu {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.sidebar .nav-menu {
     flex-grow: 1;
-    padding: 16px 0;
+    padding: 8px 0;
+    overflow-y: auto; /* Scroll if many items */
 }
 
-.nav-top, .nav-bottom {
-    display: flex;
-    flex-direction: column;
-}
-
-.nav-menu ul {
+.sidebar .nav-menu ul {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-.nav-menu li {
-    margin: 4px 8px;
-}
-
-.nav-menu a {
-    color: #333;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 14px;
-    font-weight: 500;
-    padding: 12px 16px;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-}
-
-.nav-menu a:hover {
-    background-color: rgba(4, 87, 241, 0.08);
-}
-
-.nav-menu li.active a {
-    background: linear-gradient(135deg, rgba(4, 87, 241, 0.1), rgba(204, 156, 74, 0.1));
-    color: #0457F1;
-    font-weight: 600;
-}
-
-/* Main content styles for student dashboard */
-.main-content {
-    margin-left: 250px;
-    width: calc(100% - 550px);
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
-
-/* Teacher dashboard main content */
-.left-column {
-    flex: 2;
-}
-
-.right-column {
-    flex: 1;
-}
-
-@media (min-width: 768px) {
-    .main-content:not(.student-main) {
-        flex-direction: row;
-    }
-}
-
-/* Student dashboard header */
-.student-header {
-    padding: 25px;
-    background-color: #f0f4ff;
-}
-
-.student-header h2 {
-    font-size: 28px;
-    font-weight: 600;
-    color: #02338D;
+.sidebar .nav-menu li {
     margin: 0;
 }
 
-.dashboard-content {
-    padding: 25px;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
-
-/* Section styles (shared) */
-.section {
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    padding: 25px;
-    margin-bottom: 25px;
-    border: 1px solid rgba(4, 87, 241, 0.1);
-}
-
-.section h2 {
-    font-size: 22px;
-    color: #02338D;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #0457F1;
-    padding-bottom: 12px;
-    font-weight: 600;
-}
-
-.section h2::before {
-    content: '';
-    display: inline-block;
-    width: 4px;
-    height: 20px;
-    background: linear-gradient(135deg, #df9c2a, #cc9c4a);
-    margin-right: 12px;
-    border-radius: 2px;
-}
-
-/* Course cards for student dashboard */
-.courses-section {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 25px;
-}
-
-.course-card {
-    background-color: #ffffff;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    border: 1px solid rgba(4, 87, 241, 0.1);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.course-header {
-    padding: 20px;
-    color: white;
-}
-
-.course-number {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 8px;
-}
-
-.course-title {
-    font-size: 18px;
-    font-weight: 600;
-}
-
-.course-content {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    flex-grow: 1;
-}
-
-.course-info {
+.sidebar .nav-menu a {
+    color: #3c4043;
+    text-decoration: none;
     display: flex;
     align-items: center;
-    gap: 8px;
-    color: #333;
-    font-size: 14px;
+    gap: 20px; /* More space for icon */
+    font-size: 0.875rem; /* 14px */
+    font-weight: 500;
+    padding: 12px 24px;
+    border-radius: 0; /* No rounded corners inside */
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar .nav-menu a i {
+    font-size: 1.25rem; /* 20px */
+    width: 24px; /* Ensure alignment */
+    text-align: center;
+    color: #5f6368;
+}
+
+.sidebar .nav-menu a:hover {
+    background-color: #e8f0fe; /* Google's hover blue */
+}
+
+.sidebar .nav-menu li.active a {
+    background-color: #e8f0fe; /* Light blue for active */
+    color: #1967d2; /* Google's primary blue */
     font-weight: 500;
 }
 
-.course-info i {
-    font-size: 14px;
-    width: 16px;
-    color: #0457F1;
+.sidebar .nav-menu li.active a i {
+    color: #1967d2;
 }
 
-.view-button {
-    margin-top: auto;
-    padding: 8px 16px;
-    background: linear-gradient(135deg, #0457F1, #02338D);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    transition: all 0.3s ease;
+.sidebar .nav-bottom {
+    border-top: 1px solid #dadce0;
+    padding: 8px 0;
 }
 
-.view-button:hover {
-    background: linear-gradient(135deg, #02338D, #0457F1);
-}
-
-/* Right sidebar for student dashboard */
-.right-sidebar {
-    width: 300px;
-    height: 100vh;
-    background: linear-gradient(135deg, #ffffff, #f0f4ff);
-    position: fixed;
-    right: 0;
-    top: 0;
-    padding: 25px;
-    border-left: 1px solid rgba(4, 87, 241, 0.1);
+/* Main Content Area */
+.main-content-wrapper {
+    flex-grow: 1;
+    margin-left: 256px; /* Space for the sidebar */
     display: flex;
     flex-direction: column;
-    gap: 32px;
-    overflow-y: auto;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    height: 100vh; /* Full height */
+    overflow: hidden; /* Wrapper doesn't scroll */
 }
 
-.section-header {
+.main-header {
+    height: 64px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #dadce0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    box-sizing: border-box;
+    flex-shrink: 0; /* Header should not shrink */
+}
+
+.main-header .page-title {
+    font-size: 1.375rem; /* 22px */
+    font-weight: 400; /* Google uses lighter weight for titles */
+    color: #3c4043;
+}
+
+.main-header .user-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.main-header .user-actions .icon-button {
+    background: none;
+    border: none;
+    color: #5f6368;
+    font-size: 1.5rem; /* 24px */
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+}
+.main-header .user-actions .icon-button:hover {
+    background-color: rgba(0,0,0,0.05);
+}
+
+
+.page-content {
+    flex-grow: 1;
+    padding: 24px;
+    overflow-y: auto; /* This is where content scrolls */
+    background-color: #f8f9fa;
+}
+
+/* Section Styling */
+.content-section {
+    margin-bottom: 32px;
+}
+
+.content-section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 16px;
-}
-
-.section-header h3 {
-    font-size: 20px;
-    color: #02338D;
-    font-weight: 600;
-    border-bottom: 2px solid #cc9c4a;
     padding-bottom: 8px;
+    border-bottom: 1px solid #dadce0;
 }
 
-.add-button {
-    background: linear-gradient(135deg, rgba(4, 87, 241, 0.1), rgba(204, 156, 74, 0.1));
-    border: none;
-    color: #0457F1;
+.content-section-header h2 {
+    font-size: 1.25rem; /* 20px */
+    font-weight: 500;
+    color: #3c4043;
+    margin: 0;
+}
+
+/* Card Styling (Inspired by Google Classroom) */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.course-card {
+    background-color: #ffffff;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s ease;
+}
+
+.course-card:hover {
+    box-shadow: 0 1px 3px 0 rgba(60,64,67,0.302), 0 4px 8px 3px rgba(60,64,67,0.149);
+}
+
+.course-card-header {
+    padding: 16px;
+    /* background-color: #1967d2;  Example: Use for a colored banner */
+    color: #ffffff;
+    position: relative;
+    min-height: 80px; /* For banner image/color */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+/* Default banner colors - can be overridden inline for specific courses */
+.course-card-header.color-1 { background-color: #1a73e8; } /* Google Blue */
+.course-card-header.color-2 { background-color: #e67c73; } /* Google Red */
+.course-card-header.color-3 { background-color: #f7cb4d; color: #3c4043; } /* Google Yellow */
+.course-card-header.color-4 { background-color: #549f57; } /* Google Green */
+
+
+.course-card-header .course-number {
+    font-size: 0.75rem; /* 12px */
+    font-weight: 500;
+    opacity: 0.8;
+    margin-bottom: 4px;
+}
+
+.course-card-header .course-title {
+    font-size: 1.25rem; /* 20px */
+    font-weight: 500;
+    line-height: 1.3;
+}
+.course-card-header .course-title a {
+    color: inherit;
+    text-decoration: none;
+}
+.course-card-header .course-title a:hover {
+    text-decoration: underline;
+}
+
+
+.course-card-content {
+    padding: 16px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.course-card-content .course-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.875rem; /* 14px */
+    color: #5f6368;
+}
+
+.course-card-content .course-info i {
+    font-size: 1rem; /* 16px */
+    width: 18px;
+    text-align: center;
+    color: #5f6368;
+}
+
+.course-card-footer {
+    padding: 8px 16px;
+    border-top: 1px solid #dadce0;
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 8px;
+}
+
+/* Button Styles */
+.btn {
+    font-family: 'Inter', sans-serif;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 0.875rem; /* 14px */
+    font-weight: 500;
     cursor: pointer;
-    border-radius: 6px;
-    width: 32px;
-    height: 32px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.btn-primary {
+    background-color: #1a73e8; /* Google Blue */
+    color: #ffffff;
+    border-color: #1a73e8;
+}
+.btn-primary:hover {
+    background-color: #185abc;
+    border-color: #185abc;
+    box-shadow: 0 1px 2px 0 rgba(26,115,232,0.451);
+}
+
+.btn-secondary {
+    background-color: #ffffff;
+    color: #1a73e8;
+    border: 1px solid #dadce0;
+}
+.btn-secondary:hover {
+    background-color: #f8f9fa;
+    border-color: #c6c9cc;
+}
+
+.btn-text { /* For less prominent actions */
+    background: none;
+    color: #1a73e8;
+    border: none;
+    padding: 8px; /* Smaller padding for text buttons */
+}
+.btn-text:hover {
+    background-color: rgba(26,115,232,0.05);
+}
+
+
+/* Stream/Activity List */
+.activity-stream {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.stream-item {
+    background-color: #ffffff;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.stream-item-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #e8f0fe; /* Light blue */
+    color: #1967d2; /* Darker blue */
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
-    font-weight: 600;
+    font-size: 1.25rem; /* 20px */
+    flex-shrink: 0;
 }
+.stream-item-icon.accent-gold { background-color: #feefc3; color: #f29900; } /* Gold accent */
 
-.add-button:hover {
-    background: linear-gradient(135deg, #0457F1, #02338D);
-    color: #ffffff;
-}
 
-/* Todo list styles */
-.todo-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.todo-item {
-    display: flex;
-    align-items: center;
-    padding: 12px;
-    border-radius: 8px;
-    background: linear-gradient(135deg, #f0f4ff, rgba(4, 87, 241, 0.03));
-    gap: 12px;
-    border: 1px solid rgba(4, 87, 241, 0.1);
-}
-
-.todo-checkbox {
-    width: 18px;
-    height: 18px;
-    accent-color: #0457F1;
-}
-
-.todo-text {
+.stream-item-content {
     flex-grow: 1;
-    font-size: 14px;
-    color: #333;
+}
+
+.stream-item-content .item-title {
+    font-size: 1rem; /* 16px */
     font-weight: 500;
+    color: #3c4043;
+    margin-bottom: 4px;
+}
+.stream-item-content .item-title a {
+    color: inherit;
+    text-decoration: none;
+}
+.stream-item-content .item-title a:hover {
+    text-decoration: underline;
 }
 
-.todo-actions {
-    display: flex;
-    gap: 8px;
-    opacity: 0;
-    transition: all 0.3s ease;
-}
-
-.todo-item:hover .todo-actions {
-    opacity: 1;
-}
-
-.todo-actions button {
-    background: none;
-    border: none;
-    color: #333;
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-}
-
-.todo-actions button:hover {
-    color: #0457F1;
-}
-
-/* Upcoming classes */
-.upcoming-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.upcoming-item {
-    background: linear-gradient(135deg, #f0f4ff, rgba(4, 87, 241, 0.05));
-    border-radius: 8px;
-    padding: 16px;
-    border: 1px solid rgba(4, 87, 241, 0.1);
-}
-
-.upcoming-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-}
-
-.upcoming-header i {
-    color: #0457F1;
-}
-
-.course-code {
-    font-weight: 600;
-    color: #02338D;
-}
-
-.upcoming-details {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    color: #333;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.upcoming-details div {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.upcoming-details i {
-    width: 16px;
-    color: #0457F1;
-}
-
-/* Teacher dashboard specific styles */
-.announcement-box {
-    border: 2px dashed #cc9c4a;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    color: #333;
-    background: linear-gradient(135deg, #f0f4ff, rgba(204, 156, 74, 0.1));
-    font-style: italic;
-    font-weight: 500;
-}
-
-.announcement {
-    background: linear-gradient(135deg, #f0f4ff, rgba(4, 87, 241, 0.05));
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 15px;
-    border-left: 4px solid #0457F1;
-    border: 1px solid rgba(4, 87, 241, 0.1);
-}
-
-.announcement h3 {
-    font-size: 18px;
-    color: #02338D;
+.stream-item-content .item-description {
+    font-size: 0.875rem; /* 14px */
+    color: #5f6368;
     margin-bottom: 8px;
-    font-weight: 600;
 }
 
-.announcement p {
-    color: #333;
-    margin: 0;
-    font-weight: 500;
+.stream-item-content .item-meta {
+    font-size: 0.75rem; /* 12px */
+    color: #5f6368;
 }
 
-.classwork-item {
-    border: 1px solid rgba(204, 156, 74, 0.3);
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    background: linear-gradient(135deg, #ffffff, rgba(204, 156, 74, 0.05));
-}
-
-.classwork-item h3 {
-    font-size: 18px;
-    color: #02338D;
-    margin-bottom: 12px;
-    font-weight: 600;
-}
-
-.classwork-item ul {
-    margin: 0;
-    padding-left: 20px;
-}
-
-.classwork-item li {
-    color: #333;
-    margin-bottom: 6px;
-    font-weight: 500;
-}
-
-/* Table styles */
-.grades-table, .courses-table {
+/* Table Styles */
+.data-table {
     width: 100%;
     border-collapse: collapse;
-    border-radius: 10px;
-    overflow: hidden;
     background-color: #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    overflow: hidden; /* For border-radius on table */
 }
 
-.grades-table thead th, .courses-table thead th {
-    background: linear-gradient(135deg, #0457F1, #02338D);
-    color: #ffffff;
-    padding: 16px 12px;
+.data-table th,
+.data-table td {
+    padding: 12px 16px;
     text-align: left;
-    font-weight: 600;
-    font-size: 16px;
+    border-bottom: 1px solid #dadce0;
+    font-size: 0.875rem; /* 14px */
 }
 
-.grades-table tbody td, .courses-table tbody td {
-    padding: 14px 12px;
-    border-bottom: 1px solid rgba(4, 87, 241, 0.1);
-    color: #333;
+.data-table th {
     font-weight: 500;
+    color: #5f6368;
+    background-color: #f8f9fa; /* Light grey for header */
 }
 
-.grades-table tbody tr:last-child td, .courses-table tbody tr:last-child td {
+.data-table td {
+    color: #3c4043;
+}
+
+.data-table tbody tr:last-child td {
     border-bottom: none;
 }
 
-.grades-table tbody tr:nth-child(odd), .courses-table tbody tr:nth-child(odd) {
-    background: linear-gradient(135deg, #f0f4ff, rgba(4, 87, 241, 0.03));
+.data-table tbody tr:hover {
+    background-color: #f1f3f4; /* Subtle hover for rows */
 }
 
-.grades-table tbody td:nth-child(n+2):nth-child(-n+4) {
-    font-weight: 600;
+/* Form Styles */
+.form-section {
+    background-color: #ffffff;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    padding: 24px;
 }
 
-.grades-table tbody td:last-child {
-    background: linear-gradient(135deg, #df9c2a, #cc9c4a);
-    color: #ffffff;
-    font-weight: 700;
-    text-align: center;
+.form-group {
+    margin-bottom: 20px;
 }
 
-/* Teacher sidebar styles */
-.teacher-sidebar {
-    background: linear-gradient(135deg, #ffffff, #f0f4ff);
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    padding: 25px;
-    border: 1px solid rgba(4, 87, 241, 0.1);
-}
-
-.teacher-sidebar h2 {
-    font-size: 20px;
-    color: #02338D;
-    margin-bottom: 15px;
-    border-bottom: 2px solid #cc9c4a;
-    padding-bottom: 10px;
-    font-weight: 600;
-}
-
-.teacher-sidebar p {
-    color: #333;
-    margin-bottom: 25px;
+.form-group label {
+    display: block;
+    font-size: 0.875rem; /* 14px */
     font-weight: 500;
+    color: #3c4043;
+    margin-bottom: 8px;
 }
 
-.teacher-sidebar a {
-    color: #0457F1;
-    text-decoration: none;
-    font-weight: 600;
-    padding: 8px 16px;
-    background: linear-gradient(135deg, rgba(4, 87, 241, 0.1), rgba(204, 156, 74, 0.1));
-    border-radius: 6px;
-    display: inline-block;
-    transition: all 0.3s ease;
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+    font-size: 0.875rem; /* 14px */
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: #1a73e8; /* Blue focus border */
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(26,115,232,0.2);
 }
 
-.teacher-sidebar a:hover {
-    background: linear-gradient(135deg, #0457F1, #02338D);
-    color: #ffffff;
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
 }
 
-/* Responsive styles */
-@media (max-width: 1200px) {
-    .main-content {
-        width: calc(100% - 250px);
-    }
-    
-    .right-sidebar {
-        display: none;
-    }
+/* Quick Actions (Teacher Dashboard) */
+.quick-actions-container {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
 }
 
-@media (max-width: 768px) {
+/* Right Sidebar (To-Do, Upcoming - if kept, needs to be simpler) */
+/* For now, this is removed from the main layout. If needed, it would be integrated differently. */
+/*
+.right-sidebar-content {
+    width: 300px;
+    padding: 24px;
+    background-color: #ffffff;
+    border-left: 1px solid #dadce0;
+    overflow-y: auto;
+    height: calc(100vh - 65px); // Adjust based on header height
+}
+.right-sidebar-content .widget-section {
+    margin-bottom: 24px;
+}
+.right-sidebar-content .widget-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #3c4043;
+    margin-bottom: 12px;
+}
+.todo-list-item, .upcoming-class-item {
+    font-size: 0.875rem;
+    padding: 8px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+.todo-list-item:last-child, .upcoming-class-item:last-child {
+    border-bottom: none;
+}
+*/
+
+/* Responsive Adjustments */
+@media (max-width: 992px) { /* Tablet and smaller */
     .sidebar {
-        width: 70px;
+        width: 72px; /* Icon only */
     }
-    
-    .logo span,
-    .nav-menu a span {
+    .sidebar .logo span,
+    .sidebar .nav-menu a span {
         display: none;
     }
-    
-    .logo {
+    .sidebar .logo {
         justify-content: center;
+        padding: 18px 0;
     }
-    
-    .nav-menu a {
+    .sidebar .nav-menu a {
         justify-content: center;
-        padding: 12px;
+        padding: 16px 0; /* More padding for touch */
+        gap: 0;
     }
-    
-    .main-content {
-        margin-left: 70px;
-        width: calc(100% - 70px);
+    .sidebar .nav-menu a i {
+        margin-right: 0;
     }
-    
-    .header {
-        flex-direction: column;
-        gap: 20px;
-        text-align: center;
+    .main-content-wrapper {
+        margin-left: 72px;
     }
-    
-    .header nav {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 15px;
+    .card-grid {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     }
-    
-    .container {
-        margin: 10px;
-        padding: 15px;
+}
+
+@media (max-width: 768px) { /* Mobile */
+    .main-header {
+        padding: 0 16px;
+    }
+    .main-header .page-title {
+        font-size: 1.25rem; /* 20px */
+    }
+    .page-content {
+        padding: 16px;
+    }
+    .card-grid {
+        grid-template-columns: 1fr; /* Single column */
+        gap: 16px;
+    }
+    .quick-actions-container .btn {
+        width: 100%; /* Full width buttons */
+    }
+    .data-table { /* Allow table horizontal scroll on mobile */
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    .data-table th, .data-table td {
+        white-space: nowrap; /* Prevent text wrapping in cells when scrolling */
     }
 }
 
 @media (max-width: 576px) {
-    .courses-section {
-        grid-template-columns: 1fr;
+    .sidebar {
+        /* Could be hidden by default and toggled with a button */
+        /* For now, keeping it icon-only */
+        width: 0; /* Hide sidebar completely on very small screens */
+        overflow: hidden;
+        border-right: none;
+    }
+    .main-content-wrapper {
+        margin-left: 0;
+    }
+    /* Add a toggle button for sidebar if needed */
+    .main-header .menu-toggle { /* Example for a toggle button */
+        display: inline-block; /* Show it on mobile */
+        margin-right: 10px;
     }
 }
+
+/* Utility Classes */
+.text-muted {
+    color: #5f6368 !important;
+}
+.font-weight-normal {
+    font-weight: 400 !important;
+}
+.font-weight-medium {
+    font-weight: 500 !important;
+}
+.mb-1 { margin-bottom: 0.25rem !important; }
+.mb-2 { margin-bottom: 0.5rem !important; }
+.mb-3 { margin-bottom: 1rem !important; }
+.mt-auto { margin-top: auto !important; }
+
+/* Hide elements meant for larger screens */
+.menu-toggle {
+    display: none; /* Hidden by default */
+}
+

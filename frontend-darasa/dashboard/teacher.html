@@ -6,15 +6,13 @@
   <title>Teacher Dashboard | Darasa</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link rel="stylesheet" href="dashboard.css">
-  <link rel="icon" href="/frontend-darasa/assets/images/logo_white.png" type="image/png">
-</head>
+  <link rel="stylesheet" href="dashboard.css"> 
+  <link rel="icon" href="/frontend-darasa/assets/images/logo_white.png" type="image/png"> </head>
 <body>
-  <div class="dashboard">
+  <div class="dashboard-container">
     <div class="sidebar">
       <div class="logo">
-        <img src="/frontend-darasa/assets/images/logo_blue.png" alt="Darasa Logo">
-        <span>Darasa Teacher</span>
+        <img src="/frontend-darasa/assets/images/logo_blue.png" alt="Darasa Logo"> <span>Darasa</span>
       </div>
       
       <nav class="nav-menu">
@@ -23,13 +21,13 @@
             <li class="active">
               <a href="#" data-page="home">
                 <i class="fas fa-home"></i>
-                <span>Home</span>
+                <span>Dashboard</span>
               </a>
             </li>
             <li>
               <a href="#" data-page="my-courses">
                 <i class="fas fa-chalkboard-teacher"></i>
-                <span>My Courses</span>
+                <span>Courses</span>
               </a>
             </li>
             <li>
@@ -39,7 +37,7 @@
               </a>
             </li>
             <li>
-              <a href="#" data-page="assignments">
+              <a href="#" data-page="assignments-teacher">
                 <i class="fas fa-tasks"></i>
                 <span>Assignments</span>
               </a>
@@ -51,13 +49,13 @@
               </a>
             </li>
             <li>
-              <a href="#" data-page="announcements">
+              <a href="#" data-page="announcements-teacher">
                 <i class="fas fa-bullhorn"></i>
                 <span>Announcements</span>
               </a>
             </li>
              <li>
-              <a href="#" data-page="calendar">
+              <a href="#" data-page="calendar-teacher">
                 <i class="fas fa-calendar-alt"></i>
                 <span>Calendar</span>
               </a>
@@ -68,13 +66,13 @@
         <div class="nav-bottom">
           <ul>
             <li>
-              <a href="#" data-page="account">
+              <a href="#" data-page="account-teacher">
                 <i class="fas fa-user-cog"></i>
                 <span>Account</span>
               </a>
             </li>
             <li>
-              <a href="#" data-action="logout">
+              <a href="#" data-action="logout-teacher">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Logout</span>
               </a>
@@ -84,96 +82,142 @@
       </nav>
     </div>
     
-    <div class="main-content"> <header class="student-header"> <div class="header-content">
-          <h2>Teacher Dashboard</h2>
-          <p>Welcome, Dr. [Teacher's Name]!</p> </div>
+    <div class="main-content-wrapper">
+      <header class="main-header">
+         <div class="page-title">
+            Teacher Dashboard
+        </div>
+        <div class="user-actions">
+            <button class="icon-button" aria-label="Create">
+                <i class="fas fa-plus-circle"></i>
+            </button>
+            <button class="icon-button" aria-label="Notifications">
+                <i class="fas fa-bell"></i>
+            </button>
+            <button class="icon-button" aria-label="User Profile">
+                <i class="fas fa-user-circle"></i> </button>
+        </div>
       </header>
       
-      <div class="dashboard-content">
-        <section class="section">
-            <h2>Quick Actions</h2>
-            <div class="quick-actions-container" style="display: flex; gap: 15px; flex-wrap: wrap;">
-                <button class="view-button" style="background: linear-gradient(135deg, #0457F1, #02338D);"><i class="fas fa-plus-circle"></i> Create New Course</button>
-                <button class="view-button" style="background: linear-gradient(135deg, #df9c2a, #cc9c4a);"><i class="fas fa-user-plus"></i> Add New Student</button>
-                <button class="view-button" style="background: linear-gradient(135deg, #28a745, #218838);"><i class="fas fa-file-alt"></i> Create Assignment</button>
-                <button class="view-button" style="background: linear-gradient(135deg, #dc3545, #c82333);"><i class="fas fa-bullhorn"></i> Post Announcement</button>
-            </div>
+      <main class="page-content">
+        <section class="content-section quick-actions-container">
+            <button class="btn btn-primary"><i class="fas fa-plus-circle"></i> Create Course</button>
+            <button class="btn btn-secondary"><i class="fas fa-file-alt"></i> New Assignment</button>
+            <button class="btn btn-secondary"><i class="fas fa-bullhorn"></i> Post Announcement</button>
         </section>
 
-        <section class="section">
-          <h2>My Courses</h2>
-          <div class="courses-section">
+        <section class="content-section">
+          <div class="content-section-header">
+            <h2>My Courses</h2>
+            <a href="#" class="btn btn-text">Manage All Courses</a>
+          </div>
+          <div class="card-grid">
             <div class="course-card" data-course-id="WEB-101-TEACH">
-              <div class="course-header" style="background: linear-gradient(135deg, #0457F1, #02338D);">
+              <div class="course-card-header color-1">
                 <div class="course-number">WEB-101</div>
-                <div class="course-title">Web Development Fundamentals</div>
+                <h3 class="course-title"><a href="#">Web Development Fundamentals</a></h3>
               </div>
-              <div class="course-content">
-                <div class="course-info">
-                  <i class="fas fa-users"></i>
-                  <span>45 Students Enrolled</span>
-                </div>
-                <div class="course-info">
-                  <i class="fas fa-list-alt"></i>
-                  <span>10 Assignments</span>
-                </div>
-                 <div class="course-info">
-                  <i class="fas fa-calendar-check"></i>
-                  <span>Next Deadline: Project Phase 3</span>
-                </div>
-                <button class="view-button" data-action="manage-course">
-                  <i class="fas fa-cog"></i>
-                  Manage Course
-                </button>
-                 <button class="view-button" data-action="view-submissions" style="margin-top: 8px; background: linear-gradient(135deg, #df9c2a, #cc9c4a);">
-                  <i class="fas fa-eye"></i>
-                  View Submissions
-                </button>
+              <div class="course-card-content">
+                <div class="course-info"><i class="fas fa-users"></i> 45 Students</div>
+                <div class="course-info"><i class="fas fa-list-alt"></i> 10 Assignments</div>
+                <div class="course-info"><i class="fas fa-exclamation-triangle text-muted"></i> 3 Ungraded</div>
+              </div>
+              <div class="course-card-footer">
+                <button class="btn btn-text"><i class="fas fa-plus"></i> Add</button>
+                <button class="btn btn-secondary btn-text"><i class="fas fa-cog"></i> Manage</button>
               </div>
             </div>
             
             <div class="course-card" data-course-id="CS-201-TEACH">
-              <div class="course-header" style="background: linear-gradient(135deg, #df9c2a, #cc9c4a);">
+              <div class="course-card-header color-2">
                 <div class="course-number">CS-201</div>
-                <div class="course-title">Data Structures & Algorithms</div>
+                <h3 class="course-title"><a href="#">Data Structures & Algorithms</a></h3>
               </div>
-              <div class="course-content">
-                <div class="course-info">
-                  <i class="fas fa-users"></i>
-                  <span>38 Students Enrolled</span>
-                </div>
-                 <div class="course-info">
-                  <i class="fas fa-list-alt"></i>
-                  <span>12 Assignments</span>
-                </div>
-                <div class="course-info">
-                  <i class="fas fa-exclamation-triangle"></i>
-                  <span>5 Ungraded Submissions</span>
-                </div>
-                <button class="view-button" data-action="manage-course">
-                  <i class="fas fa-cog"></i>
-                  Manage Course
-                </button>
-                 <button class="view-button" data-action="grade-assignments" style="margin-top: 8px; background: linear-gradient(135deg, #28a745, #218838);">
-                  <i class="fas fa-check-circle"></i>
-                  Grade Assignments
-                </button>
+              <div class="course-card-content">
+                <div class="course-info"><i class="fas fa-users"></i> 38 Students</div>
+                <div class="course-info"><i class="fas fa-list-alt"></i> 12 Assignments</div>
+                <div class="course-info"><i class="fas fa-check-circle text-muted"></i> All Graded</div>
+              </div>
+              <div class="course-card-footer">
+                <button class="btn btn-text"><i class="fas fa-plus"></i> Add</button>
+                <button class="btn btn-secondary btn-text"><i class="fas fa-cog"></i> Manage</button>
               </div>
             </div>
             </div>
         </section>
 
-        <section class="section">
-            <h2>Student Management</h2>
-            <div class="announcement-box" style="border-color: #0457F1; background: linear-gradient(135deg, #f0f4ff, rgba(4, 87, 241, 0.05));">
-                <p>Search for students, view profiles, manage enrollment, and communicate.</p>
+        <section class="content-section">
+            <div class="content-section-header">
+              <h2>To Review</h2>
+              <a href="#" class="btn btn-text">View All Submissions</a>
             </div>
-            <table class="courses-table"> <thead>
+            <div class="activity-stream">
+              <div class="stream-item">
+                <div class="stream-item-icon accent-gold">
+                  <i class="fas fa-file-upload"></i>
+                </div>
+                <div class="stream-item-content">
+                  <div class="item-title"><a href="#">WEB-101: Project Phase 2</a></div>
+                  <div class="item-description">5 new submissions. 12 graded.</div>
+                  <div class="item-meta">Due: Yesterday</div>
+                </div>
+                <button class="btn btn-primary mt-auto">Grade</button>
+              </div>
+              <div class="stream-item">
+                <div class="stream-item-icon">
+                  <i class="fas fa-question-circle"></i>
+                </div>
+                <div class="stream-item-content">
+                  <div class="item-title"><a href="#">CS-201: Discussion Forum</a></div>
+                  <div class="item-description">2 new posts requiring attention.</div>
+                  <div class="item-meta">Posted: 3 hours ago</div>
+                </div>
+                <button class="btn btn-secondary mt-auto">View Posts</button>
+              </div>
+            </div>
+          </section>
+
+        <section class="content-section">
+            <div class="content-section-header">
+              <h2>Post New Announcement</h2>
+            </div>
+            <div class="form-section">
+              <form>
+                <div class="form-group">
+                  <label for="announcement-title">Title</label>
+                  <input type="text" id="announcement-title" name="announcement-title">
+                </div>
+                <div class="form-group">
+                  <label for="announcement-content">Content</label>
+                  <textarea id="announcement-content" name="announcement-content" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="announcement-course">Select Course(s)</label>
+                  <select id="announcement-course" multiple>
+                    <option value="all">All My Courses</option>
+                    <option value="WEB-101">WEB-101 - Web Development</option>
+                    <option value="CS-201">CS-201 - Data Structures</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                  <i class="fas fa-paper-plane"></i> Post Announcement
+                </button>
+              </form>
+            </div>
+          </section>
+
+        <section class="content-section">
+            <div class="content-section-header">
+                <h2>Student Roster (WEB-101)</h2>
+                <a href="#" class="btn btn-text">View All Students</a>
+            </div>
+            <table class="data-table">
+                <thead>
                     <tr>
                         <th>Student ID</th>
                         <th>Name</th>
                         <th>Email</th>
-                        <th>Enrolled Courses</th>
+                        <th>Progress</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -182,124 +226,21 @@
                         <td>S1001</td>
                         <td>Jolene Doe</td>
                         <td>jolene.doe@example.com</td>
-                        <td>WEB-101, CS-201</td>
-                        <td><button class="view-button" style="font-size: 12px; padding: 6px 10px;">View Details</button></td>
+                        <td>75%</td>
+                        <td><button class="btn btn-text btn-secondary"><i class="fas fa-eye"></i> View</button></td>
                     </tr>
                     <tr>
                         <td>S1002</td>
                         <td>Mark Smith</td>
                         <td>mark.smith@example.com</td>
-                        <td>WEB-101, MATH-301</td>
-                        <td><button class="view-button" style="font-size: 12px; padding: 6px 10px;">View Details</button></td>
+                        <td>82%</td>
+                        <td><button class="btn btn-text btn-secondary"><i class="fas fa-eye"></i> View</button></td>
                     </tr>
-                    </tbody>
+                </tbody>
             </table>
         </section>
-
-        <section class="section">
-            <h2>Assignment Management</h2>
-             <div class="announcement-box" style="border-color: #df9c2a; background: linear-gradient(135deg, #fff8eb, rgba(204, 156, 74, 0.05));">
-                <p>Create, edit, and manage assignments. View submission statistics.</p>
-            </div>
-            <div class="classwork-item">
-                <h3>Recently Created Assignments</h3>
-                <ul>
-                    <li>WEB-101: Project Phase 3 - Due: June 15, 2025 (25 Submissions / 45 Students)</li>
-                    <li>CS-201: Algorithm Analysis Quiz - Due: June 10, 2025 (30 Submissions / 38 Students)</li>
-                </ul>
-                <button class="view-button" style="background: linear-gradient(135deg, #0457F1, #02338D);"><i class="fas fa-plus"></i> Create New Assignment</button>
-            </div>
-        </section>
-        
-        <section class="section">
-            <h2>Grading Center</h2>
-            <div class="announcement-box" style="border-color: #28a745; background: linear-gradient(135deg, #f0fff4, rgba(40, 167, 69, 0.05));">
-                <p>Access gradebooks, input grades, and provide feedback.</p>
-            </div>
-            <table class="grades-table">
-                <thead>
-                    <tr>
-                        <th>Course</th>
-                        <th>Assignment</th>
-                        <th>Submissions to Grade</th>
-                        <th>Average Score</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>WEB-101</td>
-                        <td>Project Phase 2</td>
-                        <td>5</td>
-                        <td>85%</td>
-                        <td><button class="view-button" style="font-size: 12px; padding: 6px 10px; background: linear-gradient(135deg, #df9c2a, #cc9c4a);">Grade Now</button></td>
-                    </tr>
-                    <tr>
-                        <td>CS-201</td>
-                        <td>Midterm Exam</td>
-                        <td>0</td>
-                        <td>78%</td>
-                        <td><button class="view-button" style="font-size: 12px; padding: 6px 10px;">View Grades</button></td>
-                    </tr>
-                    </tbody>
-            </table>
-        </section>
-
-        <section class="section">
-          <h2>Post New Announcement</h2>
-          <div class="announcement-form">
-            <div style="margin-bottom: 15px;">
-              <label for="announcement-title" style="display: block; margin-bottom: 5px; font-weight: 500; color: #02338D;">Title:</label>
-              <input type="text" id="announcement-title" name="announcement-title" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid rgba(4, 87, 241, 0.3); box-sizing: border-box;">
-            </div>
-            <div style="margin-bottom: 15px;">
-              <label for="announcement-content" style="display: block; margin-bottom: 5px; font-weight: 500; color: #02338D;">Content:</label>
-              <textarea id="announcement-content" name="announcement-content" rows="4" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid rgba(4, 87, 241, 0.3); box-sizing: border-box;"></textarea>
-            </div>
-            <div style="margin-bottom: 15px;">
-              <label for="announcement-course" style="display: block; margin-bottom: 5px; font-weight: 500; color: #02338D;">Select Course(s):</label>
-              <select id="announcement-course" multiple style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid rgba(4, 87, 241, 0.3); min-height: 80px;">
-                <option value="all">All My Courses</option>
-                <option value="WEB-101">WEB-101 - Web Development</option>
-                <option value="CS-201">CS-201 - Data Structures</option>
-                </select>
-            </div>
-            <button class="view-button" style="background: linear-gradient(135deg, #0457F1, #02338D);">
-              <i class="fas fa-paper-plane"></i> Post Announcement
-            </button>
-          </div>
-        </section>
-
-      </div> </div> <div class="right-sidebar teacher-sidebar"> <div class="todo-section"> <div class="section-header">
-          <h3>Teacher's Quick Links</h3>
-        </div>
-        <div class="upcoming-list"> <a href="#" class="upcoming-item" style="text-decoration:none; display:block; margin-bottom:10px;">
-                <div class="upcoming-header"><i class="fas fa-book-reader"></i> <span class="course-code">View Curriculum</span></div>
-            </a>
-            <a href="#" class="upcoming-item" style="text-decoration:none; display:block; margin-bottom:10px;">
-                <div class="upcoming-header"><i class="fas fa-chart-line"></i> <span class="course-code">Performance Analytics</span></div>
-            </a>
-            <a href="#" class="upcoming-item" style="text-decoration:none; display:block; margin-bottom:10px;">
-                <div class="upcoming-header"><i class="fas fa-tools"></i> <span class="course-code">Teaching Resources</span></div>
-            </a>
-        </div>
-      </div>
-      
-      <div class="upcoming-section"> <div class="section-header">
-          <h3>Pending Tasks</h3>
-        </div>
-        <div class="todo-list"> <div class="todo-item">
-                <i class="fas fa-exclamation-circle" style="color: #df9c2a; margin-right: 8px;"></i>
-                <span class="todo-text">Grade WEB-101 Phase 2 (5 new)</span>
-            </div>
-             <div class="todo-item">
-                <i class="fas fa-info-circle" style="color: #0457F1; margin-right: 8px;"></i>
-                <span class="todo-text">Prepare lecture for CS-201</span>
-            </div>
-        </div>
-      </div>
+      </main>
     </div>
-
   </div>
 
   </body>
