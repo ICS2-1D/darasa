@@ -3,33 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Darasa Learning Platform</title>
+  <title>Login | Darasa Learning Platform</title>
   <script src="https://kit.fontawesome.com/17e091a2b0.js" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="icon" href="../assets/images/logo_white.png" type="image/png">
+  <!-- Assuming styles.css is in the same directory or adjust path -->
+  <link rel="stylesheet" href="styles.css"> 
+  <!-- Adjust path to your logo if necessary -->
+  <link rel="icon" href="assets/images/logo_white.png" type="image/png"> 
 </head>
 <body>
-  <!-- Login Page -->
   <div class="card">
-
     <div class="image-side">
+      <!-- Adjust path to your background and logo if necessary -->
       <img src="../assets/images/background.png" alt="Learning illustration" class="main-image">
-      <img src="../assets/images/logo_white.png"alt="Darasa Logo" class="brand-logo">
+      <img src="../assets/images/logo_white.png" alt="Darasa Logo" class="brand-logo">
     </div>
     
     <div class="form-side">
       <h1>Welcome Back</h1>
       <p class="subtitle">Login to your account</p>
-      
-      <form id="loginForm">
-
+      <form id="loginForm" action="../backend/login_process.php" method="POST">
         <div class="form-group">
-          <input type="text" id="email" placeholder="Email address or Username" required>
+          <input type="text" id="email" name="email" placeholder="Email address or Username" required>
           <i class="fas fa-user icon"></i>
         </div>
         
         <div class="form-group">
-          <input type="password" id="password" placeholder="Password" required>
+          <input type="password" id="password" name="password" placeholder="Password" required>
           <i class="fas fa-lock icon"></i>
         </div>
         
@@ -37,7 +36,6 @@
           Login
           <i class="fas fa-arrow-right arrow-icon"></i>
         </button>
-
       </form>
       
       <div class="alt-action">
@@ -46,8 +44,5 @@
       </div>
     </div>
   </div>
-
-   <script src="js/auth-utils.js"></script>
-    <script src="js/login.js"></script>
 </body>
 </html>
