@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard | Darasa</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="icon" href="/frontend-darasa/assets/images/logo_white.png">
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="logo">
+        <img src="assets/logo_blue.png" alt="Darasa Logo">
+        <span>Darasa</span>
+      </div>
+      
+      <nav class="nav-menu">
+        <div class="nav-top">
+          <ul>
+            <li class="active">
+              <a href="#">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Calendar</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i class="fas fa-tasks"></i>
+                <span>Assignments</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i class="fas fa-book"></i>
+                <span>Courses</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="nav-bottom">
+          <ul>
+            <li>
+              <a href="#">
+                <i class="fas fa-user-cog"></i>
+                <span>Account</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+      <header class="header">
+        <h2>Welcome, Jolene!</h2>
+      </header>
+      
+      <div class="dashboard-content">
+        <div class="courses-section">
+          <!-- Course Card 1 -->
+          <div class="course-card">
+            <div class="course-header" style="background-color: #1967d2;">
+              <div class="course-number">WEB-101</div>
+              <div class="course-title">Web Development Fundamentals</div>
+            </div>
+            <div class="course-content">
+              <div class="course-info">
+                <i class="fas fa-user-tie"></i>
+                <span>Prof. John Smith</span>
+              </div>
+              <div class="course-info">
+                <i class="fas fa-calendar"></i>
+                <span>Spring 2025</span>
+              </div>
+              <button class="view-button">View Coursework</button>
+            </div>
+          </div>
+          
+          <!-- Course Card 2 -->
+          <div class="course-card">
+            <div class="course-header" style="background-color: #188038;">
+              <div class="course-number">CS-201</div>
+              <div class="course-title">Data Structures & Algorithms</div>
+            </div>
+            <div class="course-content">
+              <div class="course-info">
+                <i class="fas fa-user-tie"></i>
+                <span>Dr. Emily Chen</span>
+              </div>
+              <div class="course-info">
+                <i class="fas fa-calendar"></i>
+                <span>Spring 2025</span>
+              </div>
+              <button class="view-button">View Coursework</button>
+            </div>
+          </div>
+          
+          <!-- Course Card 3 -->
+          <div class="course-card">
+            <div class="course-header" style="background-color: #e37400;">
+              <div class="course-number">MATH-301</div>
+              <div class="course-title">Linear Algebra</div>
+            </div>
+            <div class="course-content">
+              <div class="course-info">
+                <i class="fas fa-user-tie"></i>
+                <span>Prof. Robert Johnson</span>
+              </div>
+              <div class="course-info">
+                <i class="fas fa-calendar"></i>
+                <span>Spring 2025</span>
+              </div>
+              <button class="view-button">View Coursework</button>
+            </div>
+          </div>
+          
+          <!-- Course Card 4 -->
+          <div class="course-card">
+            <div class="course-header" style="background-color: #7627bb;">
+              <div class="course-number">ENG-202</div>
+              <div class="course-title">Technical Writing</div>
+            </div>
+            <div class="course-content">
+              <div class="course-info">
+                <i class="fas fa-user-tie"></i>
+                <span>Dr. Sarah Williams</span>
+              </div>
+              <div class="course-info">
+                <i class="fas fa-calendar"></i>
+                <span>Spring 2025</span>
+              </div>
+              <button class="view-button">View Coursework</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right Sidebar -->
+    <div class="right-sidebar">
+      <!-- To-Do Section -->
+      <div class="todo-section">
+        <div class="section-header">
+          <h3>To-Do List</h3>
+          <button class="add-button">
+            <i class="fas fa-plus"></i>
+          </button>
+        </div>
+        
+        <div class="todo-list">
+          <!-- Todo Item 1 -->
+          <div class="todo-item">
+            <input type="checkbox" class="todo-checkbox">
+            <span class="todo-text">Submit Web Development Assignment</span>
+            <div class="todo-actions">
+              <button>
+                <i class="fas fa-edit"></i>
+              </button>
+              <button>
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Todo Item 2 -->
+          <div class="todo-item">
+            <input type="checkbox" class="todo-checkbox">
+            <span class="todo-text">Read Chapter 3 for Data Structures</span>
+            <div class="todo-actions">
+              <button>
+                <i class="fas fa-edit"></i>
+              </button>
+              <button>
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Todo Item 3 -->
+          <div class="todo-item">
+            <input type="checkbox" class="todo-checkbox">
+            <span class="todo-text">Complete Linear Algebra homework</span>
+            <div class="todo-actions">
+              <button>
+                <i class="fas fa-edit"></i>
+              </button>
+              <button>
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Upcoming Classes Section -->
+      <div class="upcoming-section">
+        <div class="section-header">
+          <h3>Upcoming Classes</h3>
+        </div>
+        
+        <div class="upcoming-list">
+          <!-- Upcoming Class 1 -->
+          <div class="upcoming-item">
+            <div class="upcoming-header">
+              <i class="fas fa-laptop-code"></i>
+              <span class="course-code">WEB-101</span>
+            </div>
+            <div class="upcoming-details">
+              <div>
+                <i class="fas fa-clock"></i>
+                <span>10:00 AM - 12:00 PM</span>
+              </div>
+              <div>
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Room 201</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Upcoming Class 2 -->
+          <div class="upcoming-item">
+            <div class="upcoming-header">
+              <i class="fas fa-code"></i>
+              <span class="course-code">CS-201</span>
+            </div>
+            <div class="upcoming-details">
+              <div>
+                <i class="fas fa-clock"></i>
+                <span>2:00 PM - 4:00 PM</span>
+              </div>
+              <div>
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Lab 302</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Upcoming Class 3 -->
+          <div class="upcoming-item">
+            <div class="upcoming-header">
+              <i class="fas fa-calculator"></i>
+              <span class="course-code">MATH-301</span>
+            </div>
+            <div class="upcoming-details">
+              <div>
+                <i class="fas fa-clock"></i>
+                <span>9:00 AM - 11:00 AM</span>
+              </div>
+              <div>
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Room 105</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
