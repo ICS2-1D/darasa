@@ -1,13 +1,15 @@
 <?php
-session_start(); // Start the session at the beginning
+session_start();
 
-// Include database connection
-require_once 'db_connect.php';
+// Include the database connection
+require_once __DIR__ . '/../connect.php';
+
 
 $errors = [];
 $full_name = '';
 $email = '';
 $role = '';
+
 
 // Check if the form was submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -17,7 +19,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = "Please enter your full name.";
     } else {
         $full_name = trim($_POST["full_name"]);
-        // Basic validation: allow letters and spaces
         if (!preg_match("/^[a-zA-Z\s'-]+$/", $full_name)) {
             $errors[] = "Full name can only contain letters, spaces, hyphens, and apostrophes.";
         }
@@ -74,17 +75,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = "Password must have at least 6 characters.";
     } else {
         $password = trim($_POST["password"]);
-        // Add more password complexity rules if desired (e.g., uppercase, number, special char)
-    }
-
-    // Validate Role
-    if (empty($_POST["role"])) {
-        $errors[] = "Please select your role.";
-    } else {
-        $role = $_POST["role"];
-        if ($role !== 'student' && $role !== 'teacher') {
-            $errors[] = "Invalid role selected.";
-        }
     }
 
     // If there are no errors, proceed with registration
@@ -96,52 +86,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql_insert_user = "INSERT INTO users (full_name, email, password_hash, role) VALUES (?, ?, ?, ?)";
         
         if ($stmt_insert_user = $conn->prepare($sql_insert_user)) {
-            // Bind variables to the prepared statement as parameters
             $stmt_insert_user->bind_param("ssss", $param_fullname, $param_email, $param_password_hash, $param_role);
             
-            // Set parameters
             $param_fullname = $full_name;
             $param_email = $email;
             $param_password_hash = $password_hash;
             $param_role = $role;
             
-            // Attempt to execute the prepared statement
             if ($stmt_insert_user->execute()) {
-                // Registration successful
-                $_SESSION["registration_success"] = "Registration successful! You can now log in.";
-                
-                // It's good practice to redirect to login page after successful registration
-                header("location: ../frontend/login.html");
+                // Registration successful - redirect to login with success message
+                header("location: ../../frontend-darasa/auth/login.html?success=" . urlencode("Registration successful! You can now log in."));
                 exit();
             } else {
                 $errors[] = "Oops! Something went wrong. Please try again later.";
-                // For debugging: error_log("Error executing user insert: " . $stmt_insert_user->error);
+                error_log("Error executing user insert: " . $stmt_insert_user->error);
             }
-            // Close statement
             $stmt_insert_user->close();
         } else {
             $errors[] = "Database error preparing user insert.";
-            // For debugging: error_log("Error preparing user insert: " . $conn->error);
+            error_log("Error preparing user insert: " . $conn->error);
         }
     }
 
-    // If there were errors, store them in session and redirect back to registration form
+    // If there were errors, redirect back with error messages
     if (!empty($errors)) {
-        $_SESSION['register_errors'] = $errors;
-        $_SESSION['register_form_data'] = [
-            'full_name' => $full_name,
-            'email' => $email,
-            'role' => $role
-        ];
-        header("location: ../frontend/register.html"); // Redirect back to registration page
+        $error_string = implode('. ', $errors);
+        header("location: ../../frontend-darasa/auth/register.html?error=" . urlencode($error_string));
         exit();
     }
 
-    // Close connection
     $conn->close();
 } else {
-    // If not a POST request, redirect to registration page or show an error
-    header("location: ../frontend/register.html");
+    // If not a POST request, redirect to registration page
+    header("location: ../../frontend-darasa/auth/register.html");
     exit();
 }
 ?>

@@ -1,108 +1,101 @@
 <?php
-// Start session
 session_start();
 
 // Include database connection
-require_once 'connect.php';
+require_once __DIR__ . '/../connect.php';
 
-$email = ''; // Initialize for repopulating form if needed
 $errors = [];
+$email = '';
 
 // Check if the form was submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Validate email/username (assuming email is used for login)
+    // Validate Email
     if (empty(trim($_POST["email"]))) {
-        $errors[] = "Please enter your email.";
+        $errors[] = "Please enter an email address.";
     } else {
         $email = trim($_POST["email"]);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = "Invalid email format.";
+        }
     }
 
-    // Validate password
+    // Validate Password
     if (empty(trim($_POST["password"]))) {
-        $errors[] = "Please enter your password.";
+        $errors[] = "Please enter a password.";
     } else {
         $password = trim($_POST["password"]);
     }
 
-    // If no validation errors, proceed to check credentials
+    // If there are no errors, proceed with login
     if (empty($errors)) {
-        // Prepare a select statement
-        $sql = "SELECT id, full_name, email, password_hash, role FROM users WHERE email = ?";
+        // Prepare a select statement to get user details
+        $sql_login = "SELECT id, full_name, email, password_hash, role FROM users WHERE email = ?";
         
-        if ($stmt = $conn->prepare($sql)) {
-            // Bind variables to the prepared statement as parameters
-            $stmt->bind_param("s", $param_email);
-            
-            // Set parameters
+        if ($stmt_login = $conn->prepare($sql_login)) {
+            $stmt_login->bind_param("s", $param_email);
             $param_email = $email;
             
-            // Attempt to execute the prepared statement
-            if ($stmt->execute()) {
-                // Store result
-                $stmt->store_result();
+            if ($stmt_login->execute()) {
+                $stmt_login->store_result();
                 
-                // Check if email exists, if yes then verify password
-                if ($stmt->num_rows == 1) {                    
+                if ($stmt_login->num_rows == 1) {
                     // Bind result variables
-                    $stmt->bind_result($id, $full_name_db, $email_db, $hashed_password_db, $role_db);
-                    if ($stmt->fetch()) {
-                        if (password_verify($password, $hashed_password_db)) {
-                            // Password is correct, so start a new session
-                            // session_regenerate_id(); // Regenerate session ID for security
+                    $stmt_login->bind_result($id, $full_name, $email, $password_hash, $role);
+                    
+                    if ($stmt_login->fetch()) {
+                        // Verify password
+                        if (password_verify($password, $password_hash)) {
+                            // Password is correct, start a new session
+                            session_regenerate_id(true);
                             
                             // Store data in session variables
                             $_SESSION["loggedin"] = true;
-                            $_SESSION["user_id"] = $id;
-                            $_SESSION["user_full_name"] = $full_name_db;
-                            $_SESSION["user_email"] = $email_db;
-                            $_SESSION["user_role"] = $role_db;                            
+                            $_SESSION["id"] = $id;
+                            $_SESSION["full_name"] = $full_name;
+                            $_SESSION["email"] = $email;
+                            $_SESSION["role"] = $role;
                             
-                            // Redirect user to appropriate dashboard based on role
-                            if ($role_db == 'teacher') {
-                                header("location: ../frontend/teacher_dashboard.html");
-                                exit();
-                            } elseif ($role_db == 'student') {
-                                header("location: ../frontend/student_dashboard.html");
-                                exit();
+                            // Redirect user to dashboard based on role
+                            if ($role == 'student') {
+                                header("location: ../../frontend-darasa/dashboard/student.html");
+                            } elseif ($role == 'teacher') {
+                                header("location: ../../frontend-darasa/dashboard/teacher.html");
                             } else {
-                                // Should not happen if role is validated
-                                $errors[] = "Unknown user role.";
+                                header("location: ../../frontend-darasa/dashboard/dashboard.html");
                             }
+                            exit();
                         } else {
                             // Password is not valid
-                            $errors[] = "The password you entered was not valid.";
+                            $errors[] = "Invalid email or password.";
                         }
                     }
                 } else {
-                    // Email doesn't exist
-                    $errors[] = "No account found with that email address.";
+                    // No user found with this email
+                    $errors[] = "Invalid email or password.";
                 }
             } else {
                 $errors[] = "Oops! Something went wrong. Please try again later.";
-                // error_log("Error executing login select: " . $stmt->error);
+                error_log("Error executing login query: " . $stmt_login->error);
             }
-            // Close statement
-            $stmt->close();
+            $stmt_login->close();
         } else {
-            $errors[] = "Database error preparing login select.";
-            // error_log("Error preparing login select: " . $conn->error);
+            $errors[] = "Database error preparing login query.";
+            error_log("Error preparing login query: " . $conn->error);
         }
     }
-    
-    // If there were errors, store them in session and redirect back to login form
+
+    // If there were errors, redirect back with error messages
     if (!empty($errors)) {
-        $_SESSION['login_errors'] = $errors;
-        $_SESSION['login_form_data'] = ['email' => $email]; // Store email to repopulate
-        header("location: ../frontend/login.html"); // Redirect back to login page
+        $error_string = implode('. ', $errors);
+        header("location: ../../frontend-darasa/auth/login.html?error=" . urlencode($error_string));
         exit();
     }
 
-    // Close connection
     $conn->close();
 } else {
     // If not a POST request, redirect to login page
-    header("location: ../frontend/login.html");
+    header("location: ../../frontend-darasa/auth/login.html");
     exit();
 }
 ?>
