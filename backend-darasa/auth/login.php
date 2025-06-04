@@ -46,10 +46,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     } else {
         // User not found
+        mysqli_close($conn);
         header("Location: ../../frontend-darasa/auth/login.html?error=User not found.");
         exit();
     }
-
-    mysqli_close($conn);
 }
 ?>

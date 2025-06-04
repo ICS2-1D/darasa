@@ -6,12 +6,44 @@
   <title>Student Dashboard | Darasa</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link rel="stylesheet" href="dashboard.css"> 
-  <link rel="icon" href="/frontend-darasa/assets/images/logo_white.png" type="image/png"> </head>
+  <!-- Assuming dashboard.css contains the necessary styles -->
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="icon" href="/frontend-darasa/assets/images/logo_white.png" type="image/png">
+  <style>
+    /* Additional minimal styles if needed, or can be added to dashboard.css */
+    .list-item {
+      background-color: #fff;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      transition: box-shadow 0.2s ease;
+    }
+    .list-item:hover {
+      box-shadow: 0 1px 3px 0 rgba(60,64,67,0.302), 0 4px 8px 3px rgba(60,64,67,0.149);
+    }
+    .list-item h4 {
+      margin-top: 0;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    .list-item p {
+      font-size: 0.875rem;
+      color: #5f6368;
+      margin-bottom: 0;
+    }
+    .list-item .due-date {
+      font-size: 0.8rem;
+      color: #e67c73; /* Example: Reddish for due dates */
+      font-weight: 500;
+    }
+  </style>
+</head>
 <body>
   <div class="dashboard-container">
     <div class="sidebar">
       <div class="logo">
+        <!-- PHP: Echo platform name/logo if dynamic -->
         <img src="/frontend-darasa/assets/images/logo_blue.png" alt="Darasa Logo"> <span>Darasa</span>
       </div>
       
@@ -19,25 +51,19 @@
         <div class="nav-top">
           <ul>
             <li class="active">
-              <a href="#" data-page="home">
+              <a href="#" data-page="home"> <!-- Link to this main dashboard view -->
                 <i class="fas fa-home"></i>
                 <span>Home</span>
               </a>
             </li>
             <li>
-              <a href="#" data-page="courses">
-                <i class="fas fa-book"></i>
-                <span>Courses</span>
+              <a href="#" data-page="announcements"> <!-- Link to a dedicated announcements page/view -->
+                <i class="fas fa-bullhorn"></i>
+                <span>Announcements</span>
               </a>
             </li>
             <li>
-              <a href="#" data-page="assignments">
-                <i class="fas fa-tasks"></i>
-                <span>Assignments</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" data-page="grades">
+              <a href="#" data-page="grades"> <!-- Link to a dedicated grades page/view -->
                 <i class="fas fa-chart-bar"></i>
                 <span>Grades</span>
               </a>
@@ -60,6 +86,7 @@
               </a>
             </li>
             <li>
+              <!-- PHP: Echo logout URL -->
               <a href="../../backend-darasa/auth/logout.php" data-action="logout">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Logout</span>
@@ -73,11 +100,13 @@
     <div class="main-content-wrapper">
       <header class="main-header">
         <div class="page-title">
-            Welcome, Jolene!
+            <!-- PHP: Echo student's name -->
+            Welcome, <!-- Student Name -->
         </div>
         <div class="user-actions">
             <button class="icon-button" aria-label="Notifications">
                 <i class="fas fa-bell"></i>
+                <!-- PHP: Echo notification count if any -->
             </button>
             <button class="icon-button" aria-label="User Profile">
                 <i class="fas fa-user-circle"></i>
@@ -86,145 +115,75 @@
       </header>
       
       <main class="page-content">
+        <!-- Enrolled Courses Section -->
         <section class="content-section">
           <div class="content-section-header">
-            <h2>My Courses</h2>
-            <a href="#" class="btn btn-text">View All Courses</a>
+            <h2>My Enrolled Courses</h2>
+            <!-- Optional: Link to a page with more course details if needed -->
+            <!-- <a href="#" class="btn btn-text">View All Details</a> -->
           </div>
           <div class="card-grid">
-            <div class="course-card" data-course-id="WEB-101">
-              <div class="course-card-header color-1">
-                <div class="course-number">WEB-101</div>
-                <h3 class="course-title"><a href="#">Web Development Fundamentals</a></h3>
+            <!-- PHP: Loop through student's enrolled courses and render course cards -->
+            <!-- Example Course Card (repeat for each course) -->
+            <div class="course-card" data-course-id="COURSE_ID_FROM_PHP">
+              <div class="course-card-header color-1"> <!-- PHP: Dynamically assign color class or style -->
+                <div class="course-number"><!-- PHP: Echo Course Code -->COURSE_CODE</div>
+                <h3 class="course-title"><a href="#"><!-- PHP: Echo Course Name -->Course Name 1</a></h3>
               </div>
               <div class="course-card-content">
-                <div class="course-info">
-                  <i class="fas fa-user-tie"></i>
-                  <span>Prof. John Smith</span>
-                </div>
-                <div class="course-info">
-                  <i class="fas fa-calendar"></i>
-                  <span>Spring 2025</span>
-                </div>
-              </div>
-              <div class="course-card-footer">
-                <button class="btn btn-secondary btn-text" data-action="view-coursework">
-                  <i class="fas fa-folder-open"></i> Coursework
-                </button>
+                <p class="course-instructor">Lecturer: <!-- PHP: Echo Lecturer Name --></p>
+                <p class="course-summary"><!-- PHP: Echo brief course overview/description --></p>
+                <!-- Add a link to the course specific page if applicable -->
+                <a href="#" class="btn btn-text-primary">Go to Course</a>
               </div>
             </div>
-            
-            <div class="course-card" data-course-id="CS-201">
-              <div class="course-card-header color-2">
-                <div class="course-number">CS-201</div>
-                <h3 class="course-title"><a href="#">Data Structures & Algorithms</a></h3>
-              </div>
-              <div class="course-card-content">
-                <div class="course-info">
-                  <i class="fas fa-user-tie"></i>
-                  <span>Dr. Emily Chen</span>
-                </div>
-                <div class="course-info">
-                  <i class="fas fa-calendar"></i>
-                  <span>Spring 2025</span>
-                </div>
-              </div>
-              <div class="course-card-footer">
-                 <button class="btn btn-secondary btn-text" data-action="view-coursework">
-                  <i class="fas fa-folder-open"></i> Coursework
-                </button>
-              </div>
+            <!-- End Example Course Card -->
+
+            <!-- Placeholder for when no courses are enrolled -->
+            <!-- PHP: If no courses, display a message like:
+            <div class="info-message">
+                You are not currently enrolled in any courses.
             </div>
-            </div>
+            -->
+          </div>
         </section>
 
-        <div style="display: flex; gap: 24px; flex-wrap: wrap;">
-            <section class="content-section" style="flex: 2; min-width: 300px;">
-              <div class="content-section-header">
-                <h2>Recent Activity</h2>
-              </div>
-              <div class="activity-stream">
-                <div class="stream-item">
-                  <div class="stream-item-icon">
-                    <i class="fas fa-file-alt"></i>
-                  </div>
-                  <div class="stream-item-content">
-                    <div class="item-title"><a href="#">Assignment submitted: Web Development Project - Phase 2</a></div>
-                    <div class="item-meta">WEB-101 | 2 hours ago</div>
-                  </div>
-                </div>
-                <div class="stream-item">
-                  <div class="stream-item-icon accent-gold">
-                    <i class="fas fa-comments"></i>
-                  </div>
-                  <div class="stream-item-content">
-                    <div class="item-title"><a href="#">New announcement in CS-201</a></div>
-                    <div class="item-description">Midterm exam schedule updated.</div>
-                    <div class="item-meta">CS-201 | 1 day ago</div>
-                  </div>
-                </div>
-                 <div class="stream-item">
-                  <div class="stream-item-icon">
-                    <i class="fas fa-trophy"></i>
-                  </div>
-                  <div class="stream-item-content">
-                    <div class="item-title"><a href="#">Grade received for Linear Algebra Quiz 3</a></div>
-                    <div class="item-description">Score: 92/100</div>
-                    <div class="item-meta">MATH-301 | 2 days ago</div>
-                  </div>
-                </div>
-              </div>
-            </section>
+        <!-- Assignments/To-Do List Section -->
+        <section class="content-section">
+          <div class="content-section-header">
+            <h2>Assignments & To-Do</h2>
+            <!-- Optional: Link to a full assignments page -->
+            <!-- <a href="#" class="btn btn-text">View All Assignments</a> -->
+          </div>
+          <div class="todo-list">
+            <!-- PHP: Loop through pending assignments and render list items -->
+            <!-- Example Assignment Item (repeat for each assignment) -->
+            <div class="list-item">
+              <h4><!-- PHP: Echo Assignment Title -->Assignment Title 1 (<!-- PHP: Echo Course Name/Code -->)</h4>
+              <p>Due: <span class="due-date"><!-- PHP: Echo Due Date -->October 26, 2025</span></p>
+              <!-- <a href="#" class="btn btn-sm btn-outline">View Details</a> -->
+            </div>
+            <div class="list-item">
+              <h4><!-- PHP: Echo Assignment Title -->Quiz 2 (<!-- PHP: Echo Course Name/Code -->)</h4>
+              <p>Due: <span class="due-date"><!-- PHP: Echo Due Date -->October 28, 2025</span></p>
+            </div>
+            <!-- End Example Assignment Item -->
 
-            <aside style="flex: 1; min-width: 250px;">
-                <section class="content-section">
-                    <div class="content-section-header">
-                        <h2>To-Do</h2>
-                        <button class="btn btn-text" data-action="add-todo"><i class="fas fa-plus"></i> Add</button>
-                    </div>
-                    <div class="activity-stream"> <div class="stream-item">
-                            <div class="stream-item-icon"><i class="fas fa-clipboard-check"></i></div>
-                            <div class="stream-item-content">
-                                <div class="item-title">Submit Web Dev Assignment</div>
-                                <div class="item-meta">Due: Tomorrow</div>
-                            </div>
-                        </div>
-                        <div class="stream-item">
-                            <div class="stream-item-icon"><i class="fas fa-book-open"></i></div>
-                            <div class="stream-item-content">
-                                <div class="item-title">Read Chapter 3 for Data Structures</div>
-                                <div class="item-meta">Due: Wednesday</div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+            <!-- Placeholder for when no pending assignments -->
+            <!-- PHP: If no assignments, display a message like:
+            <div class="info-message">
+                You have no pending assignments. Great job!
+            </div>
+            -->
+          </div>
+        </section>
 
-                <section class="content-section">
-                    <div class="content-section-header">
-                        <h2>Upcoming</h2>
-                    </div>
-                     <div class="activity-stream">
-                        <div class="stream-item">
-                            <div class="stream-item-icon"><i class="fas fa-laptop-code"></i></div>
-                            <div class="stream-item-content">
-                                <div class="item-title">WEB-101 Lecture</div>
-                                <div class="item-meta">Today, 10:00 AM</div>
-                            </div>
-                        </div>
-                        <div class="stream-item">
-                            <div class="stream-item-icon"><i class="fas fa-chalkboard-teacher"></i></div>
-                            <div class="stream-item-content">
-                                <div class="item-title">CS-201 Lab</div>
-                                <div class="item-meta">Tomorrow, 2:00 PM</div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </aside>
-        </div>
+        <!-- Note: Announcements and Grades are accessed via sidebar links to keep this main view minimal -->
+        <!-- If you prefer them on this page, you can add sections similar to the above -->
+
       </main>
     </div>
   </div>
-
-  </body>
+  <!-- PHP: Include any necessary JS files or scripts -->
+</body>
 </html>
