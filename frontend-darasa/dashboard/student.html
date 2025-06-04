@@ -4,72 +4,45 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Dashboard | Darasa</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Make sure to use a modern font like Roboto or Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <!-- Assuming dashboard.css contains the necessary styles -->
+  <!-- Link to the new Google Classroom styled CSS -->
   <link rel="stylesheet" href="dashboard.css">
   <link rel="icon" href="/frontend-darasa/assets/images/logo_white.png" type="image/png">
-  <style>
-    /* Additional minimal styles if needed, or can be added to dashboard.css */
-    .list-item {
-      background-color: #fff;
-      border: 1px solid #dadce0;
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 16px;
-      transition: box-shadow 0.2s ease;
-    }
-    .list-item:hover {
-      box-shadow: 0 1px 3px 0 rgba(60,64,67,0.302), 0 4px 8px 3px rgba(60,64,67,0.149);
-    }
-    .list-item h4 {
-      margin-top: 0;
-      font-size: 1rem;
-      font-weight: 500;
-    }
-    .list-item p {
-      font-size: 0.875rem;
-      color: #5f6368;
-      margin-bottom: 0;
-    }
-    .list-item .due-date {
-      font-size: 0.8rem;
-      color: #e67c73; /* Example: Reddish for due dates */
-      font-weight: 500;
-    }
-  </style>
 </head>
 <body>
   <div class="dashboard-container">
-    <div class="sidebar">
+    <aside class="sidebar">
       <div class="logo">
         <!-- PHP: Echo platform name/logo if dynamic -->
-        <img src="/frontend-darasa/assets/images/logo_blue.png" alt="Darasa Logo"> <span>Darasa</span>
+        <img src="/frontend-darasa/assets/images/logo_blue.png" alt="Darasa Logo">
+        <span>Darasa</span>
       </div>
       
       <nav class="nav-menu">
         <div class="nav-top">
           <ul>
             <li class="active">
-              <a href="#" data-page="home"> <!-- Link to this main dashboard view -->
+              <a href="#" data-page="home-student">
                 <i class="fas fa-home"></i>
                 <span>Home</span>
               </a>
             </li>
             <li>
-              <a href="#" data-page="announcements"> <!-- Link to a dedicated announcements page/view -->
+              <a href="#" data-page="announcements-student">
                 <i class="fas fa-bullhorn"></i>
                 <span>Announcements</span>
               </a>
             </li>
             <li>
-              <a href="#" data-page="grades"> <!-- Link to a dedicated grades page/view -->
-                <i class="fas fa-chart-bar"></i>
+              <a href="#" data-page="grades-student">
+                <i class="fas fa-graduation-cap"></i> <!-- Changed icon for grades -->
                 <span>Grades</span>
               </a>
             </li>
             <li>
-              <a href="#" data-page="calendar">
+              <a href="#" data-page="calendar-student">
                 <i class="fas fa-calendar-alt"></i>
                 <span>Calendar</span>
               </a>
@@ -80,14 +53,14 @@
         <div class="nav-bottom">
           <ul>
             <li>
-              <a href="#" data-page="account">
-                <i class="fas fa-user-cog"></i>
-                <span>Account</span>
+              <a href="#" data-page="account-student">
+                <i class="fas fa-cog"></i> <!-- Changed icon for settings/account -->
+                <span>Settings</span>
               </a>
             </li>
             <li>
               <!-- PHP: Echo logout URL -->
-              <a href="../../backend-darasa/auth/logout.php" data-action="logout">
+              <a href="../../backend-darasa/auth/logout.php" data-action="logout-student">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Logout</span>
               </a>
@@ -95,18 +68,18 @@
           </ul>
         </div>
       </nav>
-    </div>
+    </aside>
     
     <div class="main-content-wrapper">
       <header class="main-header">
         <div class="page-title">
-            <!-- PHP: Echo student's name -->
+            <!-- PHP: Echo student's name if available, otherwise "Dashboard" -->
             Welcome, <!-- Student Name -->
         </div>
         <div class="user-actions">
             <button class="icon-button" aria-label="Notifications">
                 <i class="fas fa-bell"></i>
-                <!-- PHP: Echo notification count if any -->
+                <!-- PHP: Echo notification count if any, e.g., <span class="badge">3</span> -->
             </button>
             <button class="icon-button" aria-label="User Profile">
                 <i class="fas fa-user-circle"></i>
@@ -119,30 +92,44 @@
         <section class="content-section">
           <div class="content-section-header">
             <h2>My Enrolled Courses</h2>
-            <!-- Optional: Link to a page with more course details if needed -->
-            <!-- <a href="#" class="btn btn-text">View All Details</a> -->
           </div>
           <div class="card-grid">
             <!-- PHP: Loop through student's enrolled courses and render course cards -->
             <!-- Example Course Card (repeat for each course) -->
-            <div class="course-card" data-course-id="COURSE_ID_FROM_PHP">
-              <div class="course-card-header color-1"> <!-- PHP: Dynamically assign color class or style -->
+            <article class="course-card" data-course-id="COURSE_ID_FROM_PHP">
+              <div class="course-card-header color-1"> <!-- PHP: Dynamically assign color class like .color-1, .color-2 etc. -->
                 <div class="course-number"><!-- PHP: Echo Course Code -->COURSE_CODE</div>
-                <h3 class="course-title"><a href="#"><!-- PHP: Echo Course Name -->Course Name 1</a></h3>
+                <h3 class="course-title"><a href="#"><!-- PHP: Echo Course Name -->Introduction to Programming</a></h3>
               </div>
               <div class="course-card-content">
                 <p class="course-instructor">Lecturer: <!-- PHP: Echo Lecturer Name --></p>
-                <p class="course-summary"><!-- PHP: Echo brief course overview/description --></p>
-                <!-- Add a link to the course specific page if applicable -->
-                <a href="#" class="btn btn-text-primary">Go to Course</a>
+                <p class="course-summary"><!-- PHP: Echo brief course overview/description (keep it short) --></p>
               </div>
-            </div>
+              <div class="course-card-actions">
+                  <a href="#" class="btn btn-text btn-text-primary">View Course</a>
+                  <!-- PHP: Maybe a quick link to assignments for this course -->
+              </div>
+            </article>
             <!-- End Example Course Card -->
 
-            <!-- Placeholder for when no courses are enrolled -->
-            <!-- PHP: If no courses, display a message like:
+            <!-- Example 2 -->
+            <article class="course-card" data-course-id="COURSE_ID_FROM_PHP_2">
+              <div class="course-card-header color-2">
+                <div class="course-number">MATH202</div>
+                <h3 class="course-title"><a href="#">Calculus II</a></h3>
+              </div>
+              <div class="course-card-content">
+                <p class="course-instructor">Dr. Elara Vance</p>
+                <p class="course-summary">Advanced topics in integral calculus and series.</p>
+              </div>
+              <div class="course-card-actions">
+                  <a href="#" class="btn btn-text btn-text-primary">View Course</a>
+              </div>
+            </article>
+
+            <!-- PHP: If no courses, display a message:
             <div class="info-message">
-                You are not currently enrolled in any courses.
+                You are not currently enrolled in any courses. Explore available courses?
             </div>
             -->
           </div>
@@ -152,35 +139,37 @@
         <section class="content-section">
           <div class="content-section-header">
             <h2>Assignments & To-Do</h2>
-            <!-- Optional: Link to a full assignments page -->
-            <!-- <a href="#" class="btn btn-text">View All Assignments</a> -->
           </div>
           <div class="todo-list">
             <!-- PHP: Loop through pending assignments and render list items -->
             <!-- Example Assignment Item (repeat for each assignment) -->
             <div class="list-item">
-              <h4><!-- PHP: Echo Assignment Title -->Assignment Title 1 (<!-- PHP: Echo Course Name/Code -->)</h4>
-              <p>Due: <span class="due-date"><!-- PHP: Echo Due Date -->October 26, 2025</span></p>
-              <!-- <a href="#" class="btn btn-sm btn-outline">View Details</a> -->
+              <div class="list-item-content">
+                <h4><!-- PHP: Echo Assignment Title -->Project Proposal (<!-- PHP: Echo Course Name/Code -->)</h4>
+                <p>Due: <span class="due-date"><!-- PHP: Echo Due Date -->October 26, 2025</span></p>
+              </div>
+              <div class="list-item-actions">
+                  <a href="#" class="btn-icon" title="View Assignment"><i class="fas fa-chevron-right"></i></a>
+              </div>
             </div>
             <div class="list-item">
-              <h4><!-- PHP: Echo Assignment Title -->Quiz 2 (<!-- PHP: Echo Course Name/Code -->)</h4>
-              <p>Due: <span class="due-date"><!-- PHP: Echo Due Date -->October 28, 2025</span></p>
+              <div class="list-item-content">
+                <h4><!-- PHP: Echo Assignment Title -->Chapter 5 Quiz (<!-- PHP: Echo Course Name/Code -->)</h4>
+                <p>Due: <span class="due-date"><!-- PHP: Echo Due Date -->October 28, 2025</span></p>
+              </div>
+               <div class="list-item-actions">
+                  <a href="#" class="btn-icon" title="Start Quiz"><i class="fas fa-chevron-right"></i></a>
+              </div>
             </div>
             <!-- End Example Assignment Item -->
 
-            <!-- Placeholder for when no pending assignments -->
-            <!-- PHP: If no assignments, display a message like:
+            <!-- PHP: If no assignments, display a message:
             <div class="info-message">
                 You have no pending assignments. Great job!
             </div>
             -->
           </div>
         </section>
-
-        <!-- Note: Announcements and Grades are accessed via sidebar links to keep this main view minimal -->
-        <!-- If you prefer them on this page, you can add sections similar to the above -->
-
       </main>
     </div>
   </div>

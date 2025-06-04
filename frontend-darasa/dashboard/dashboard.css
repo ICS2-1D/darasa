@@ -1,14 +1,14 @@
-/* General Reset & Body Styles */
+/* General Reset & Body Styles - Google Classroom Inspired */
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f8f9fa; /* Lighter background */
+    font-family: 'Inter', 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background-color: #f8f9fa; /* Very light gray, similar to GC background */
     margin: 0;
     padding: 0;
-    color: #3c4043; /* Google-like text color */
+    color: #3c4043; /* Standard Google text color */
     line-height: 1.6;
-    display: flex; /* For the main layout */
+    display: flex;
     height: 100vh;
-    overflow: hidden; /* Prevent body scroll, individual sections will scroll */
+    overflow: hidden;
 }
 
 /* Main Dashboard Layout */
@@ -18,16 +18,16 @@ body {
     height: 100%;
 }
 
-/* Sidebar */
+/* Sidebar - GC Style */
 .sidebar {
-    width: 256px; /* Google Classroom like width */
+    width: 256px; /* Common width for GC-like sidebars */
     background-color: #ffffff;
     border-right: 1px solid #dadce0; /* Subtle border */
     display: flex;
     flex-direction: column;
     padding: 0;
-    height: 100vh; /* Full height */
-    position: fixed; /* Fixed sidebar */
+    height: 100vh;
+    position: fixed;
     top: 0;
     left: 0;
     z-index: 1000;
@@ -35,139 +35,153 @@ body {
 }
 
 .sidebar .logo {
-    padding: 18px 24px;
+    padding: 18px 24px; /* GC like padding */
     display: flex;
     align-items: center;
-    gap: 12px;
-    border-bottom: 1px solid #dadce0;
-    height: 64px; /* Standard height */
+    gap: 12px; /* Space between logo and text */
+    border-bottom: 1px solid #dadce0; /* Separator */
+    height: 64px; /* Align with header height */
     box-sizing: border-box;
 }
 
 .sidebar .logo img {
-    width: 28px; /* Slightly smaller */
-    height: 28px;
+    height: 32px; /* Adjust as needed */
+    width: auto;
 }
 
 .sidebar .logo span {
     font-size: 1.375rem; /* 22px */
     font-weight: 500;
-    color: #5f6368; /* Google's secondary text color */
+    color: #5f6368; /* Google secondary text color */
 }
 
-.sidebar .nav-menu {
+.nav-menu {
     flex-grow: 1;
-    padding: 8px 0;
-    overflow-y: auto; /* Scroll if many items */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 8px; /* Small padding at the top of nav items */
 }
 
-.sidebar .nav-menu ul {
+.nav-menu ul {
     list-style: none;
-    margin: 0;
     padding: 0;
-}
-
-.sidebar .nav-menu li {
     margin: 0;
 }
 
-.sidebar .nav-menu a {
-    color: #3c4043;
-    text-decoration: none;
+.nav-menu li a {
     display: flex;
     align-items: center;
-    gap: 20px; /* More space for icon */
-    font-size: 0.875rem; /* 14px */
+    padding: 10px 24px; /* Consistent padding */
+    text-decoration: none;
+    color: #3c4043;
     font-weight: 500;
-    padding: 12px 24px;
-    border-radius: 0; /* No rounded corners inside */
+    font-size: 0.875rem; /* 14px */
+    border-radius: 0 25px 25px 0; /* GC style active/hover indicator */
+    margin-right: 8px; /* Space for the rounded edge */
     transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.sidebar .nav-menu a i {
+.nav-menu li a i {
+    margin-right: 20px; /* More space for icon */
     font-size: 1.25rem; /* 20px */
-    width: 24px; /* Ensure alignment */
+    width: 24px; /* Fixed width for alignment */
     text-align: center;
-    color: #5f6368;
+    color: #5f6368; /* Icon color */
 }
 
-.sidebar .nav-menu a:hover {
-    background-color: #e8f0fe; /* Google's hover blue */
+.nav-menu li a:hover {
+    background-color: #e8f0fe; /* Light blue hover, GC style */
+    color: #1967d2; /* Darker blue text on hover */
 }
-
-.sidebar .nav-menu li.active a {
-    background-color: #e8f0fe; /* Light blue for active */
-    color: #1967d2; /* Google's primary blue */
-    font-weight: 500;
-}
-
-.sidebar .nav-menu li.active a i {
+.nav-menu li a:hover i {
     color: #1967d2;
 }
 
-.sidebar .nav-bottom {
-    border-top: 1px solid #dadce0;
-    padding: 8px 0;
+.nav-menu li.active a {
+    background-color: #e8f0fe; /* Light blue for active */
+    color: #1967d2; /* Darker blue text */
+    font-weight: 700; /* Bolder active link */
+}
+.nav-menu li.active a i {
+    color: #1967d2;
 }
 
-/* Main Content Area */
+
+.nav-bottom {
+    padding-bottom: 8px; /* Padding at the bottom */
+    border-top: 1px solid #dadce0; /* Separator */
+}
+
+/* Main Content Wrapper */
 .main-content-wrapper {
     flex-grow: 1;
-    margin-left: 256px; /* Space for the sidebar */
+    padding: 0;
+    margin-left: 256px; /* Same as sidebar width */
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    height: 100vh; /* Full height */
-    overflow: hidden; /* Wrapper doesn't scroll */
+    overflow: hidden; /* Prevent wrapper scroll, content will scroll */
 }
 
+/* Main Header - GC Style */
 .main-header {
-    height: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
+    height: 64px; /* Standard GC header height */
     background-color: #ffffff;
     border-bottom: 1px solid #dadce0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 24px;
     box-sizing: border-box;
-    flex-shrink: 0; /* Header should not shrink */
+    position: sticky; /* Make header sticky */
+    top: 0;
+    z-index: 900;
 }
 
 .main-header .page-title {
     font-size: 1.375rem; /* 22px */
-    font-weight: 400; /* Google uses lighter weight for titles */
+    font-weight: 400; /* Lighter than GC, but good for titles */
     color: #3c4043;
 }
 
 .main-header .user-actions {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 8px;
 }
 
-.main-header .user-actions .icon-button {
+.main-header .icon-button {
     background: none;
     border: none;
     color: #5f6368;
     font-size: 1.5rem; /* 24px */
-    cursor: pointer;
     padding: 8px;
     border-radius: 50%;
-}
-.main-header .user-actions .icon-button:hover {
-    background-color: rgba(0,0,0,0.05);
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
 }
 
+.main-header .icon-button:hover {
+    background-color: rgba(60, 64, 67, 0.08); /* Subtle hover */
+}
 
+/* Page Content Area */
 .page-content {
     flex-grow: 1;
     padding: 24px;
-    overflow-y: auto; /* This is where content scrolls */
-    background-color: #f8f9fa;
+    overflow-y: auto; /* Allow content to scroll */
+    background-color: #f8f9fa; /* Match body background */
 }
 
-/* Section Styling */
+/* Content Sections */
 .content-section {
-    margin-bottom: 32px;
+    margin-bottom: 32px; /* More spacing between sections */
 }
 
 .content-section-header {
@@ -176,20 +190,20 @@ body {
     align-items: center;
     margin-bottom: 16px;
     padding-bottom: 8px;
-    border-bottom: 1px solid #dadce0;
+    /* border-bottom: 1px solid #dadce0; */ /* Optional: if you want a line under section headers */
 }
 
 .content-section-header h2 {
-    font-size: 1.25rem; /* 20px */
+    font-size: 1.125rem; /* 18px */
     font-weight: 500;
     color: #3c4043;
     margin: 0;
 }
 
-/* Card Styling (Inspired by Google Classroom) */
+/* Card Grid - GC Style for Courses */
 .card-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Responsive cards */
     gap: 24px;
 }
 
@@ -197,51 +211,45 @@ body {
     background-color: #ffffff;
     border: 1px solid #dadce0;
     border-radius: 8px;
-    overflow: hidden;
+    overflow: hidden; /* To contain the header color */
     display: flex;
     flex-direction: column;
-    transition: box-shadow 0.2s ease;
+    transition: box-shadow 0.2s ease-in-out;
 }
 
 .course-card:hover {
-    box-shadow: 0 1px 3px 0 rgba(60,64,67,0.302), 0 4px 8px 3px rgba(60,64,67,0.149);
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 2px 6px 2px rgba(60,64,67,0.149); /* GC hover shadow */
 }
 
-.course-card-header {
+.course-card-header { /* This will be the colored strip */
     padding: 16px;
-    /* background-color: #1967d2;  Example: Use for a colored banner */
     color: #ffffff;
-    position: relative;
-    min-height: 80px; /* For banner image/color */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    /* PHP will add a background-color class e.g., .color-1, .color-2 */
 }
-/* Default banner colors - can be overridden inline for specific courses */
+/* Example color classes for course card headers */
 .course-card-header.color-1 { background-color: #1a73e8; } /* Google Blue */
-.course-card-header.color-2 { background-color: #e67c73; } /* Google Red */
-.course-card-header.color-3 { background-color: #f7cb4d; color: #3c4043; } /* Google Yellow */
-.course-card-header.color-4 { background-color: #549f57; } /* Google Green */
+.course-card-header.color-2 { background-color: #1e8e3e; } /* Google Green */
+.course-card-header.color-3 { background-color: #d93025; } /* Google Red */
+.course-card-header.color-4 { background-color: #f9ab00; } /* Google Yellow */
+.course-card-header.color-5 { background-color: #5f6368; } /* Google Grey */
 
 
 .course-card-header .course-number {
     font-size: 0.75rem; /* 12px */
     font-weight: 500;
-    opacity: 0.8;
     margin-bottom: 4px;
+    opacity: 0.9;
 }
 
 .course-card-header .course-title {
     font-size: 1.25rem; /* 20px */
     font-weight: 500;
+    margin: 0;
     line-height: 1.3;
 }
 .course-card-header .course-title a {
-    color: inherit;
+    color: #ffffff;
     text-decoration: none;
-}
-.course-card-header .course-title a:hover {
-    text-decoration: underline;
 }
 
 
@@ -250,47 +258,119 @@ body {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    gap: 10px;
 }
 
-.course-card-content .course-info {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.course-card-content .course-instructor,
+.course-card-content .course-summary {
     font-size: 0.875rem; /* 14px */
     color: #5f6368;
+    margin-bottom: 8px;
+}
+.course-card-content .course-summary {
+    flex-grow: 1; /* Pushes actions to the bottom */
+    margin-bottom: 16px;
 }
 
-.course-card-content .course-info i {
-    font-size: 1rem; /* 16px */
-    width: 18px;
-    text-align: center;
-    color: #5f6368;
-}
-
-.course-card-footer {
-    padding: 8px 16px;
+.course-card-actions {
     border-top: 1px solid #dadce0;
+    padding: 8px 16px;
     display: flex;
-    justify-content: flex-end; /* Align buttons to the right */
+    justify-content: flex-end; /* Align actions to the right */
     gap: 8px;
 }
 
-/* Button Styles */
-.btn {
-    font-family: 'Inter', sans-serif;
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-size: 0.875rem; /* 14px */
+/* Simple List for Assignments/To-Do - GC Style */
+.list-item {
+    background-color: #fff;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: box-shadow 0.2s ease;
+}
+.list-item:hover {
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149);
+}
+
+.list-item-content h4 {
+    font-size: 0.9375rem; /* 15px */
     font-weight: 500;
-    cursor: pointer;
+    color: #3c4043;
+    margin: 0 0 4px 0;
+}
+.list-item-content p {
+    font-size: 0.8125rem; /* 13px */
+    color: #5f6368;
+    margin: 0;
+}
+.list-item-content .due-date {
+    color: #d93025; /* Red for due dates */
+    font-weight: 500;
+}
+.list-item-actions .btn-icon { /* For small action icons like 'view' or 'submit' */
+    color: #1967d2;
     text-decoration: none;
+    font-size: 1.25rem;
+}
+.list-item-actions .btn-icon:hover {
+    color: #174ea6;
+}
+
+
+/* Teacher Action Cards - GC Style */
+.action-card {
+    background-color: #ffffff;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
+    transition: box-shadow 0.2s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.action-card:hover {
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 2px 6px 2px rgba(60,64,67,0.149);
+}
+.action-card i.main-icon { /* Class for the big icon in action card */
+    font-size: 2.5rem; /* 40px */
+    margin-bottom: 16px;
+    color: #1967d2; /* Accent color */
+}
+.action-card h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 1.125rem; /* 18px */
+    font-weight: 500;
+    color: #3c4043;
+}
+.action-card p {
+    font-size: 0.875rem; /* 14px */
+    color: #5f6368;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+/* Buttons - GC Style */
+.btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    transition: background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    font-family: 'Inter', 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 0.875rem; /* 14px */
+    padding: 8px 24px; /* GC button padding */
+    border-radius: 4px;
     border: 1px solid transparent;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    min-height: 36px; /* GC button min height */
+    box-sizing: border-box;
 }
 
 .btn-primary {
@@ -299,306 +379,156 @@ body {
     border-color: #1a73e8;
 }
 .btn-primary:hover {
-    background-color: #185abc;
-    border-color: #185abc;
-    box-shadow: 0 1px 2px 0 rgba(26,115,232,0.451);
+    background-color: #174ea6; /* Darker blue */
+    border-color: #174ea6;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149);
 }
 
-.btn-secondary {
+.btn-secondary, .btn-outline { /* GC "outline" style button */
     background-color: #ffffff;
     color: #1a73e8;
-    border: 1px solid #dadce0;
+    border-color: #dadce0; /* Light border */
 }
-.btn-secondary:hover {
-    background-color: #f8f9fa;
-    border-color: #c6c9cc;
+.btn-secondary:hover, .btn-outline:hover {
+    background-color: rgba(26,115,232,0.04); /* Very light blue background */
+    border-color: #1a73e8; /* Blue border on hover */
+    color: #174ea6;
 }
 
 .btn-text { /* For less prominent actions */
     background: none;
-    color: #1a73e8;
     border: none;
-    padding: 8px; /* Smaller padding for text buttons */
+    color: #1a73e8;
+    padding: 8px 12px;
 }
 .btn-text:hover {
-    background-color: rgba(26,115,232,0.05);
+    background-color: rgba(26,115,232,0.08);
+    color: #174ea6;
+}
+.btn-text-primary { /* If you need a text button that's more prominent */
+    color: #1a73e8;
+    font-weight: 500;
 }
 
 
-/* Stream/Activity List */
-.activity-stream {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+/* Simple List Group for Teacher's Courses */
+.list-group-item {
+    background-color: #fff;
+    border: 1px solid #dadce0;
+    border-radius: 4px; /* Less rounded than full cards */
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    text-decoration: none;
+    color: #3c4043;
+    display: block;
+    transition: background-color 0.15s ease-in-out;
 }
+.list-group-item:hover {
+    background-color: #f1f3f4; /* Slight hover for list items */
+}
+.list-group-item h5 {
+    margin: 0 0 4px 0;
+    font-size: 1rem;
+    font-weight: 500;
+}
+.list-group-item p {
+    font-size: 0.875rem;
+    color: #5f6368;
+    margin-bottom: 2px;
+}
+.list-group-item small.text-muted {
+    font-size: 0.8125rem;
+    color: #5f6368;
+}
+.d-flex { display: flex !important; }
+.w-100 { width: 100% !important; }
+.justify-content-between { justify-content: space-between !important; }
+.mb-1 { margin-bottom: 0.25rem !important; }
 
-.stream-item {
-    background-color: #ffffff;
+
+/* Info Messages */
+.info-message {
+    background-color: #f1f3f4; /* Light grey background */
     border: 1px solid #dadce0;
     border-radius: 8px;
     padding: 16px;
-    display: flex;
-    gap: 16px;
-    align-items: flex-start;
+    text-align: center;
+    color: #5f6368;
+    font-size: 0.9375rem;
+    margin-top: 16px;
 }
-
-.stream-item-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #e8f0fe; /* Light blue */
-    color: #1967d2; /* Darker blue */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.25rem; /* 20px */
-    flex-shrink: 0;
-}
-.stream-item-icon.accent-gold { background-color: #feefc3; color: #f29900; } /* Gold accent */
-
-
-.stream-item-content {
-    flex-grow: 1;
-}
-
-.stream-item-content .item-title {
-    font-size: 1rem; /* 16px */
+.info-message a {
+    color: #1a73e8;
     font-weight: 500;
-    color: #3c4043;
-    margin-bottom: 4px;
-}
-.stream-item-content .item-title a {
-    color: inherit;
     text-decoration: none;
 }
-.stream-item-content .item-title a:hover {
+.info-message a:hover {
     text-decoration: underline;
 }
 
-.stream-item-content .item-description {
-    font-size: 0.875rem; /* 14px */
-    color: #5f6368;
-    margin-bottom: 8px;
-}
-
-.stream-item-content .item-meta {
-    font-size: 0.75rem; /* 12px */
-    color: #5f6368;
-}
-
-/* Table Styles */
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #ffffff;
-    border: 1px solid #dadce0;
-    border-radius: 8px;
-    overflow: hidden; /* For border-radius on table */
-}
-
-.data-table th,
-.data-table td {
-    padding: 12px 16px;
-    text-align: left;
-    border-bottom: 1px solid #dadce0;
-    font-size: 0.875rem; /* 14px */
-}
-
-.data-table th {
-    font-weight: 500;
-    color: #5f6368;
-    background-color: #f8f9fa; /* Light grey for header */
-}
-
-.data-table td {
-    color: #3c4043;
-}
-
-.data-table tbody tr:last-child td {
-    border-bottom: none;
-}
-
-.data-table tbody tr:hover {
-    background-color: #f1f3f4; /* Subtle hover for rows */
-}
-
-/* Form Styles */
-.form-section {
-    background-color: #ffffff;
-    border: 1px solid #dadce0;
-    border-radius: 8px;
-    padding: 24px;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    font-size: 0.875rem; /* 14px */
-    font-weight: 500;
-    color: #3c4043;
-    margin-bottom: 8px;
-}
-
-.form-group input[type="text"],
-.form-group input[type="email"],
-.form-group input[type="password"],
-.form-group textarea,
-.form-group select {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #dadce0;
-    border-radius: 4px;
-    font-size: 0.875rem; /* 14px */
-    box-sizing: border-box;
-    transition: border-color 0.2s ease;
-}
-.form-group input[type="text"]:focus,
-.form-group input[type="email"]:focus,
-.form-group input[type="password"]:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-    border-color: #1a73e8; /* Blue focus border */
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(26,115,232,0.2);
-}
-
-.form-group textarea {
-    min-height: 100px;
-    resize: vertical;
-}
-
-/* Quick Actions (Teacher Dashboard) */
-.quick-actions-container {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    margin-bottom: 24px;
-}
-
-/* Right Sidebar (To-Do, Upcoming - if kept, needs to be simpler) */
-/* For now, this is removed from the main layout. If needed, it would be integrated differently. */
-/*
-.right-sidebar-content {
-    width: 300px;
-    padding: 24px;
-    background-color: #ffffff;
-    border-left: 1px solid #dadce0;
-    overflow-y: auto;
-    height: calc(100vh - 65px); // Adjust based on header height
-}
-.right-sidebar-content .widget-section {
-    margin-bottom: 24px;
-}
-.right-sidebar-content .widget-title {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #3c4043;
-    margin-bottom: 12px;
-}
-.todo-list-item, .upcoming-class-item {
-    font-size: 0.875rem;
-    padding: 8px 0;
-    border-bottom: 1px solid #e0e0e0;
-}
-.todo-list-item:last-child, .upcoming-class-item:last-child {
-    border-bottom: none;
-}
-*/
 
 /* Responsive Adjustments */
 @media (max-width: 992px) { /* Tablet and smaller */
     .sidebar {
-        width: 72px; /* Icon only */
+        width: 72px; /* Icon-only sidebar */
     }
-    .sidebar .logo span,
-    .sidebar .nav-menu a span {
-        display: none;
+    .sidebar .logo span, .sidebar .nav-menu li a span {
+        display: none; /* Hide text */
     }
     .sidebar .logo {
-        justify-content: center;
-        padding: 18px 0;
+        justify-content: center; /* Center icon */
+        padding: 18px 12px;
     }
-    .sidebar .nav-menu a {
+    .sidebar .nav-menu li a {
         justify-content: center;
-        padding: 16px 0; /* More padding for touch */
-        gap: 0;
+        padding: 12px; /* Adjust padding for icons */
+        margin-right: 0;
+        border-radius: 4px; /* Simpler radius for icon only */
+        margin: 4px 8px;
     }
-    .sidebar .nav-menu a i {
+    .sidebar .nav-menu li a i {
         margin-right: 0;
     }
     .main-content-wrapper {
-        margin-left: 72px;
-    }
-    .card-grid {
-        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        margin-left: 72px; /* Adjust for icon-only sidebar */
     }
 }
 
-@media (max-width: 768px) { /* Mobile */
-    .main-header {
-        padding: 0 16px;
-    }
+@media (max-width: 768px) { /* Smaller tablets / Landscape phones */
     .main-header .page-title {
-        font-size: 1.25rem; /* 20px */
-    }
-    .page-content {
-        padding: 16px;
+        font-size: 1.25rem; /* Slightly smaller title */
     }
     .card-grid {
-        grid-template-columns: 1fr; /* Single column */
-        gap: 16px;
+        grid-template-columns: 1fr; /* Single column for cards */
     }
-    .quick-actions-container .btn {
-        width: 100%; /* Full width buttons */
-    }
-    .data-table { /* Allow table horizontal scroll on mobile */
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-    .data-table th, .data-table td {
-        white-space: nowrap; /* Prevent text wrapping in cells when scrolling */
+    .quick-actions-grid {
+        grid-template-columns: 1fr;
     }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 576px) { /* Mobile phones */
     .sidebar {
-        /* Could be hidden by default and toggled with a button */
-        /* For now, keeping it icon-only */
-        width: 0; /* Hide sidebar completely on very small screens */
+        /* Could be hidden by default and toggled with a button if desired */
+        /* For this iteration, keep it icon-only or completely hide */
+        width: 0;
         overflow: hidden;
         border-right: none;
     }
     .main-content-wrapper {
         margin-left: 0;
     }
-    /* Add a toggle button for sidebar if needed */
-    .main-header .menu-toggle { /* Example for a toggle button */
-        display: inline-block; /* Show it on mobile */
-        margin-right: 10px;
+    .main-header {
+        padding: 0 16px;
     }
+    .page-content {
+        padding: 16px;
+    }
+    /* Add a menu toggle button if sidebar is to be toggled */
+    /* .main-header .menu-toggle { display: inline-block; margin-right: 10px; } */
 }
 
-/* Utility Classes */
-.text-muted {
-    color: #5f6368 !important;
-}
-.font-weight-normal {
-    font-weight: 400 !important;
-}
-.font-weight-medium {
-    font-weight: 500 !important;
-}
-.mb-1 { margin-bottom: 0.25rem !important; }
-.mb-2 { margin-bottom: 0.5rem !important; }
-.mb-3 { margin-bottom: 1rem !important; }
-.mt-auto { margin-top: auto !important; }
-
-/* Hide elements meant for larger screens */
-.menu-toggle {
-    display: none; /* Hidden by default */
-}
+/* Utility Classes that might be useful from GC */
+.text-muted { color: #5f6368 !important; }
+.font-weight-normal { font-weight: 400 !important; }
+.font-weight-medium { font-weight: 500 !important; } /* GC uses 500 for medium */
 
