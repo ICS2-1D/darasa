@@ -1,106 +1,125 @@
+/* Base Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
+    color: #333;
 }
 
 .container {
-    width: 80%;
+    width: 85%;
+    max-width: 1200px;
     margin: auto;
     overflow: hidden;
+    padding: 20px 0;
 }
 
+/* Header */
 header {
     background: #35424a;
     color: #ffffff;
     padding: 20px 0;
     text-align: center;
+    border-bottom: 4px solid #df9c2a;
 }
 
+header h1 {
+    margin-bottom: 5px;
+    font-size: 2rem;
+}
+
+header p {
+    font-size: 1rem;
+    color: #ddd;
+}
+
+/* Navigation */
 nav {
     background: #35424a;
     color: #ffffff;
     padding: 10px 0;
+    text-align: center;
 }
 
 nav ul {
     list-style: none;
     padding: 0;
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
 nav ul li {
     display: inline;
-    margin: 0 15px;
 }
 
 nav ul li a {
     color: #ffffff;
     text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
 }
 
+nav ul li a:hover {
+    background: #df9c2a;
+    color: #fff;
+}
+
+/* Section Styling */
 .section {
     background: #ffffff;
     margin: 20px 0;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    position: relative;
 }
 
-h2 {
+.section h2 {
     color: #35424a;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
-footer {
-    text-align: center;
-    padding: 10px 0;
-    background: #35424a;
-}
-.grades-table {
-            width: 100%;
-            border-collapse: collapse;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            overflow: hidden;
-            background-color: #ffffff;
-        }
-        .grades-table thead th {
-            background-color: #f7fafc;
-            color: #4a5568;
-            padding: 12px;
-            text-align: left;
-            border-bottom: 2px solid #e2e8f0;
-        }
-        .grades-table tbody td {
-            padding: 12px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .grades-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-        .grades-table tbody tr:nth-child(odd) {
-            background-color: #edf2f7;
-        }
-.grades-container:hover {
-    background-color: #e0e0e0;
+.btn {
+    padding: 8px 16px;
+    background-color: #35424a;
+    color: white;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
-    padding-left: 10px;
-    transition: all 0.2s ease;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-/* Scrollable section styling */
+
+.btn:hover {
+    background-color: #df9c2a;
+    transform: scale(1.05);
+}
+
+/* Scrollable Content Area */
 .convo {
-    max-height: 200px; /* Adjust based on how tall you want the scroll area to be */
-    overflow-y: auto; /* Enable vertical scrolling */
-    border: 1px solid #ddd; /* Light border */
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #e2e2e2;
     padding: 10px;
     background-color: #f9f9f9;
     border-radius: 6px;
     margin-top: 10px;
-    font-family: Arial, sans-serif;
-    overflow-y: auto;
 }
 
-/* Optional: Style list items inside .convo */
 .convo ul {
     list-style-type: disc;
     padding-left: 20px;
@@ -109,30 +128,75 @@ footer {
 
 .convo li {
     margin-bottom: 8px;
+    transition: all 0.3s ease;
 }
+
 .convo li:hover {
-    background-color: #e0e0e0;
-    cursor: pointer;
+    background-color: #efefef;
     padding-left: 10px;
-    transition: all 0.2s ease;
 }
+
+/* Grades Table */
+.grades-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.grades-table thead th {
+    background-color: #f7fafc;
+    color: #4a5568;
+    padding: 14px;
+    text-align: left;
+    border-bottom: 2px solid #e2e8f0;
+    font-weight: 600;
+}
+
+.grades-table tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.grades-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.grades-table tbody tr:nth-child(odd) {
+    background-color: #edf2f7;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 15px 0;
+    background: #35424a;
+    color: #fff;
+    font-size: 0.9rem;
+    border-top: 2px solid #df9c2a;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .section h2 {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .btn {
+        width: 100%;
+        margin-top: 8px;
+        text-align: center;
+    }
+
     .convo {
         max-height: 150px;
-    }
-}
-.btn{
-      padding: 8px 16px;
-      background-color: #35424a;;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      justify-content: flex-start;
-      align-items: right;
-      transform: scale(1.05);
-      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
-}
-.btn:hover{
-    background-color: #0056b3;
-}
+    }}
