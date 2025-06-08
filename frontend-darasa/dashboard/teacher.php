@@ -6,34 +6,55 @@ include_once('../../backend-darasa/auth/session_check.php');
 // Handle form submission for creating a class
 if ($_POST && isset($_POST['class_name'])) {
     $class_name = trim($_POST['class_name']);
-    $class_description = trim($_POST['class_description']);
+    $class_description = trim($_POST['class_description']);    if (!empty($class_name)) {
+        // Validate session
+        if (!isset($_SESSION['user_id'])) {
+            $error_message = "Session expired. Please login again.";
+            header("Location: ../../frontend-darasa/auth/login.html");
+            exit;
+        }
 
-    if (!empty($class_name)) {
         // Generate a unique class code
-        $class_code = strtoupper(substr(md5(uniqid()), 0, 6));
+        do {
+            $class_code = strtoupper(substr(md5(uniqid()), 0, 6));
+            // Check if code exists
+            $checkCode = "SELECT id FROM classes WHERE class_code = ?";
+            $stmt = mysqli_prepare($conn, $checkCode);
+            mysqli_stmt_bind_param($stmt, "s", $class_code);
+            mysqli_stmt_execute($stmt);
+            $codeResult = mysqli_stmt_get_result($stmt);
+        } while (mysqli_num_rows($codeResult) > 0);
 
-        // Get the lecturer_id from the lecturers table using the session user_id
-        $getLecturerQuery = "SELECT id FROM lecturers WHERE user_id = ?";
-        $stmt = mysqli_prepare($conn, $getLecturerQuery);
+        // Get the teacher_id from the teachers table using the session user_id
+        $getteacherQuery = "SELECT id, full_name, email FROM teachers WHERE user_id = ?";
+        $stmt = mysqli_prepare($conn, $getteacherQuery);
         mysqli_stmt_bind_param($stmt, "i", $_SESSION['user_id']);
         mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        if ($lecturer_row = mysqli_fetch_assoc($result)) {
-            $lecturer_id = $lecturer_row['id'];
-
-            // Insert the new class
-            $insertClassQuery = "INSERT INTO classes (name, description, class_code, lecturer_id) VALUES (?, ?, ?, ?)";
+        $result = mysqli_stmt_get_result($stmt);        if ($teacher_row = mysqli_fetch_assoc($result)) {
+            $teacher_id = $teacher_row['id'];
+            
+            // Clean and validate the description
+            $class_description = !empty($_POST['class_description']) ? trim($_POST['class_description']) : '';
+            
+            // Insert the new class with proper error handling
+            $insertClassQuery = "INSERT INTO classes (name, description, class_code, teacher_id, created_at) VALUES (?, ?, ?, ?, NOW())";
             $stmt = mysqli_prepare($conn, $insertClassQuery);
-            mysqli_stmt_bind_param($stmt, "sssi", $class_name, $class_description, $class_code, $lecturer_id);
-
-            if (mysqli_stmt_execute($stmt)) {
-                $success_message = "Class created successfully! Class code: " . $class_code;
+            
+            if (!$stmt) {
+                $error_message = "Database error: " . mysqli_error($conn);
             } else {
-                $error_message = "Failed to create class. Please try again.";
+                mysqli_stmt_bind_param($stmt, "sssi", $class_name, $class_description, $class_code, $teacher_id);
+                
+                if (mysqli_stmt_execute($stmt)) {
+                    $success_message = "Class created successfully! Class code: " . $class_code;
+                } else {
+                    $error_message = "Failed to create class: " . mysqli_stmt_error($stmt);
+                }
             }
         } else {
-            $error_message = "Error: Lecturer record not found. Please contact support.";
+            // Log the error for debugging
+            error_log("Teacher record not found for user_id: " . $_SESSION['user_id']);
+            $error_message = "Error: Unable to find teacher record. Please ensure you're logged in with a teacher account.";
         }
     } else {
         $error_message = "Class name is required.";
@@ -46,7 +67,7 @@ if (isset($_SESSION['user_id'])) {
     $getClassesQuery = "
         SELECT c.id, c.name, c.description, c.class_code, c.created_at 
         FROM classes c 
-        INNER JOIN lecturers l ON c.lecturer_id = l.id 
+        INNER JOIN teachers l ON c.teacher_id = l.id 
         WHERE l.user_id = ? 
         ORDER BY c.created_at DESC
     ";
