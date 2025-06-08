@@ -129,7 +129,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 24px;
+    padding: 18px 36px;
     height: 64px; /* Standard GC header height */
     background-color: #ffffff;
     border-bottom: 1px solid #dadce0;

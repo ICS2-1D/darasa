@@ -32,9 +32,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             // Redirect based on user role
             if ($user['role'] == 'student') {
-                header("Location: ../../frontend-darasa/dashboard/student.html");
+                header("Location: ../../frontend-darasa/dashboard/student.php");
             } elseif ($user['role'] == 'teacher') {
-                header("Location: ../../frontend-darasa/dashboard/teacher.html");
+                header("Location: ../../frontend-darasa/dashboard/teacher.php");
             } else {
                 header("Location: ../../frontend-darasa/dashboard/dashboard.html");
             }
