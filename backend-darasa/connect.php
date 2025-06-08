@@ -1,15 +1,19 @@
 <?php
-// Database configuration
-$Db_Server = "localhost";
-$Db_User = "root";
-$Db_Password = '@rem$Adrian123';
-$Db_Name = "darasa";
+require_once __DIR__ . '/vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$Db_Server = $_ENV['DB_SERVER'];
+$Db_User = $_ENV['DB_USER'];
+$Db_Password = $_ENV['DB_PASSWORD'];
+$Db_Name = $_ENV['DB_NAME'];
 
 $conn = new mysqli($Db_Server, $Db_User, $Db_Password, $Db_Name);
 
-if ($conn) {
-    echo "Connection to the database was successful.";
+if ($conn->connect_error) {
+    die("Connection to the database failed: " . $conn->connect_error);
 } else {
-    echo "Connection to the database failed: " . $conn->connect_error;
+    echo "Connection to the database was successful.";
 }
 ?>

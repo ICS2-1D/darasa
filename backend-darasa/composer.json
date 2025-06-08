@@ -1,0 +1,17 @@
+{
+    "name": "jeremiahsentomero/backend-darasa",
+    "autoload": {
+        "psr-4": {
+            "Jeremiahsentomero\\BackendDarasa\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jeremiah",
+            "email": "sentomerojeremy@gmail.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
