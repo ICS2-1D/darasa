@@ -6,7 +6,7 @@ $showAlert = false;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     require_once __DIR__ . '/../connect.php';
-
+    
     $fullname = $_POST['fullname'];
     $email = $_POST['email'];
     $password = $_POST['password'];

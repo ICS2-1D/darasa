@@ -13,9 +13,11 @@ A web-based student management system built to help students and lecturers effic
 ## Getting Started
 
 ### Prerequisites
-- Node.js installed (v14 or higher)
+- PHP 7.4 or higher
+- Composer installed
 - Git installed
-- Supabase account
+- MySQL/MariaDB database
+- Apache/Nginx server
 
 ### Installation Steps
 
@@ -27,26 +29,31 @@ cd darasa
 
 2. Install dependencies
 ```bash
-npm install
+composer install
 ```
 
 3. Configure database settings
 - Create a `.env` file in root directory
-- Add your Supabase credentials:
+- Add your database credentials:
 ```
-SUPABASE_URL=your_supabase_url
-SUPABASE_KEY=your_supabase_key
+DB_HOST=localhost
+DB_NAME=darasa
+DB_USER=your_username
+DB_PASS=your_password
 ```
 
-4. Run the application
-```bash
-npm start
-```
-The application will be available at `http://localhost:3000`
+4. Configure web server
+- Point your web server to the `public` directory
+- Ensure mod_rewrite is enabled for Apache
+
+5. Run the application
+- Access through your web server
+- Example: `http://localhost/darasa`
 
 ## Technologies
 
 - Frontend: HTML, CSS, JavaScript
-- Backend: Node js with express
-- Database:Superbase
+- Backend: PHP
+- Database: MySQL/MariaDB
+- Package Manager: Composer
 
