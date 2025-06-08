@@ -1,60 +1,66 @@
 <?php
-
 include_once('../../backend-darasa/connect.php');
 include_once('../../backend-darasa/auth/session_check.php');
+
+// Initialize messages
+$success_message = '';
+$error_message = '';
 
 // Handle form submission for creating a class
 if ($_POST && isset($_POST['class_name'])) {
     $class_name = trim($_POST['class_name']);
     $class_description = trim($_POST['class_description']);    if (!empty($class_name)) {
         // Validate session
-        if (!isset($_SESSION['user_id'])) {
+        if (!isset($_SESSION['loggedin']) || !isset($_SESSION['user_id'])) {
             $error_message = "Session expired. Please login again.";
             header("Location: ../../frontend-darasa/auth/login.html");
             exit;
-        }
-
-        // Generate a unique class code
-        do {
-            $class_code = strtoupper(substr(md5(uniqid()), 0, 6));
-            // Check if code exists
-            $checkCode = "SELECT id FROM classes WHERE class_code = ?";
-            $stmt = mysqli_prepare($conn, $checkCode);
-            mysqli_stmt_bind_param($stmt, "s", $class_code);
-            mysqli_stmt_execute($stmt);
-            $codeResult = mysqli_stmt_get_result($stmt);
-        } while (mysqli_num_rows($codeResult) > 0);
-
-        // Get the teacher_id from the teachers table using the session user_id
-        $getteacherQuery = "SELECT id, full_name, email FROM teachers WHERE user_id = ?";
-        $stmt = mysqli_prepare($conn, $getteacherQuery);
-        mysqli_stmt_bind_param($stmt, "i", $_SESSION['user_id']);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);        if ($teacher_row = mysqli_fetch_assoc($result)) {
-            $teacher_id = $teacher_row['id'];
-            
-            // Clean and validate the description
-            $class_description = !empty($_POST['class_description']) ? trim($_POST['class_description']) : '';
-            
-            // Insert the new class with proper error handling
-            $insertClassQuery = "INSERT INTO classes (name, description, class_code, teacher_id, created_at) VALUES (?, ?, ?, ?, NOW())";
-            $stmt = mysqli_prepare($conn, $insertClassQuery);
-            
-            if (!$stmt) {
-                $error_message = "Database error: " . mysqli_error($conn);
-            } else {
-                mysqli_stmt_bind_param($stmt, "sssi", $class_name, $class_description, $class_code, $teacher_id);
-                
-                if (mysqli_stmt_execute($stmt)) {
-                    $success_message = "Class created successfully! Class code: " . $class_code;
-                } else {
-                    $error_message = "Failed to create class: " . mysqli_stmt_error($stmt);
-                }
-            }
         } else {
-            // Log the error for debugging
-            error_log("Teacher record not found for user_id: " . $_SESSION['user_id']);
-            $error_message = "Error: Unable to find teacher record. Please ensure you're logged in with a teacher account.";
+            // Generate a unique class code
+            do {
+                $class_code = strtoupper(substr(md5(uniqid()), 0, 6));
+                // Check if code exists
+                $checkCode = "SELECT id FROM classes WHERE class_code = ?";
+                $stmt = mysqli_prepare($conn, $checkCode);
+                mysqli_stmt_bind_param($stmt, "s", $class_code);
+                mysqli_stmt_execute($stmt);
+                $codeResult = mysqli_stmt_get_result($stmt);
+            } while (mysqli_num_rows($codeResult) > 0);
+
+            // Get the teacher_id from the teachers table using the session user_id
+            $getTeacherQuery = "SELECT id, full_name, email FROM teachers WHERE user_id = ?";
+            $stmt = mysqli_prepare($conn, $getTeacherQuery);
+            mysqli_stmt_bind_param($stmt, "i", $_SESSION['user_id']);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+
+            if ($teacher_row = mysqli_fetch_assoc($result)) {
+                $teacher_id = $teacher_row['id'];
+
+                // Clean and validate the description
+                $class_description = !empty($_POST['class_description']) ? trim($_POST['class_description']) : '';
+
+                // Insert the new class with proper error handling
+                $insertClassQuery = "INSERT INTO classes (name, description, class_code, teacher_id, created_at) VALUES (?, ?, ?, ?, NOW())";
+                $stmt = mysqli_prepare($conn, $insertClassQuery);
+
+                if (!$stmt) {
+                    $error_message = "Database error: " . mysqli_error($conn);
+                } else {
+                    mysqli_stmt_bind_param($stmt, "sssi", $class_name, $class_description, $class_code, $teacher_id);
+
+                    if (mysqli_stmt_execute($stmt)) {
+                        $success_message = "Class created successfully! Class code: " . $class_code;
+                    } else {
+                        $error_message = "Failed to create class: " . mysqli_stmt_error($stmt);
+                    }
+                    mysqli_stmt_close($stmt);
+                }
+            } else {
+                // Log the error for debugging
+                error_log("Teacher record not found for user_id: " . $_SESSION['user_id']);
+                $error_message = "Error: Unable to find teacher record. Please ensure you're logged in with a teacher account.";
+            }
         }
     } else {
         $error_message = "Class name is required.";
@@ -67,18 +73,21 @@ if (isset($_SESSION['user_id'])) {
     $getClassesQuery = "
         SELECT c.id, c.name, c.description, c.class_code, c.created_at 
         FROM classes c 
-        INNER JOIN teachers l ON c.teacher_id = l.id 
-        WHERE l.user_id = ? 
+        INNER JOIN teachers t ON c.teacher_id = t.id 
+        WHERE t.user_id = ? 
         ORDER BY c.created_at DESC
     ";
 
     $stmt = mysqli_prepare($conn, $getClassesQuery);
-    mysqli_stmt_bind_param($stmt, "i", $_SESSION['user_id']);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, "i", $_SESSION['user_id']);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
 
-    while ($row = mysqli_fetch_assoc($result)) {
-        $classes[] = $row;
+        while ($row = mysqli_fetch_assoc($result)) {
+            $classes[] = $row;
+        }
+        mysqli_stmt_close($stmt);
     }
 }
 ?>
@@ -130,7 +139,8 @@ if (isset($_SESSION['user_id'])) {
         <div class="main-content-wrapper">
             <header class="main-header">
                 <div class="page-title">
-                    Welcome, <?php echo htmlspecialchars($_SESSION["fullname"]); ?>!
+                    Welcome,
+                    <?php echo isset($_SESSION["fullname"]) ? htmlspecialchars($_SESSION["fullname"]) : 'Teacher'; ?>!
                 </div>
                 <div class="user-actions">
                     <button class="icon-button" aria-label="Notifications" title="Notifications"><i
@@ -142,13 +152,13 @@ if (isset($_SESSION['user_id'])) {
 
             <main class="page-content">
                 <!-- Messages -->
-                <?php if (isset($success_message)): ?>
+                <?php if (!empty($success_message)): ?>
                     <div class="alert alert-success">
                         <i class="fas fa-check-circle"></i> <?php echo htmlspecialchars($success_message); ?>
                     </div>
                 <?php endif; ?>
 
-                <?php if (isset($error_message)): ?>
+                <?php if (!empty($error_message)): ?>
                     <div class="alert alert-error">
                         <i class="fas fa-exclamation-circle"></i> <?php echo htmlspecialchars($error_message); ?>
                     </div>
@@ -168,7 +178,7 @@ if (isset($_SESSION['user_id'])) {
                     </button>
 
                     <!-- Create Class Form (initially hidden) -->
-                    <div class="create-class-form" id="createClassForm">
+                    <div class="create-class-form" id="createClassForm" style="display: none;">
                         <h3>Create New Class</h3>
                         <form method="POST" action="">
                             <div class="form-group">
@@ -206,9 +216,11 @@ if (isset($_SESSION['user_id'])) {
                                         <p><?php echo htmlspecialchars($class['description']); ?></p>
                                     <?php endif; ?>
                                     <div class="class-code">
-                                        Code: <?php echo htmlspecialchars($class['class_code']); ?>
-                                        <button onclick="copyToClipboard('<?php echo $class['class_code']; ?>')"
-                                            style="margin-left: 10px; background: none; border: none; cursor: pointer;">
+                                        Code: <strong><?php echo htmlspecialchars($class['class_code']); ?></strong>
+                                        <button
+                                            onclick="copyToClipboard('<?php echo htmlspecialchars($class['class_code']); ?>')"
+                                            style="margin-left: 10px; background: none; border: none; cursor: pointer;"
+                                            title="Copy class code">
                                             <i class="fas fa-copy"></i>
                                         </button>
                                     </div>
@@ -221,7 +233,51 @@ if (isset($_SESSION['user_id'])) {
             </main>
         </div>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        // Toggle create form visibility
+        function toggleCreateForm() {
+            const form = document.getElementById('createClassForm');
+            if (form.style.display === 'none' || form.style.display === '') {
+                form.style.display = 'block';
+                document.getElementById('class_name').focus();
+            } else {
+                form.style.display = 'none';
+                // Reset form
+                document.getElementById('class_name').value = '';
+                document.getElementById('class_description').value = '';
+            }
+        }
+
+        // Copy to clipboard function
+        function copyToClipboard(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(function () {
+                    alert('Class code copied to clipboard: ' + text);
+                }).catch(function () {
+                    // Fallback
+                    copyToClipboardFallback(text);
+                });
+            } else {
+                copyToClipboardFallback(text);
+            }
+        }
+
+        // Fallback copy function
+        function copyToClipboardFallback(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                alert('Class code copied to clipboard: ' + text);
+            } catch (err) {
+                alert('Class code: ' + text);
+            }
+            document.body.removeChild(textArea);
+        }
+    </script>
 </body>
 
 </html>
