@@ -1,283 +1,215 @@
 <?php
-include_once('../../backend-darasa/connect.php');
-include_once('../../backend-darasa/auth/session_check.php');
+session_start();
+require_once __DIR__ . '/../../backend-darasa/connect.php';
 
-// Initialize messages
-$success_message = '';
-$error_message = '';
-
-// Handle form submission for creating a class
-if ($_POST && isset($_POST['class_name'])) {
-    $class_name = trim($_POST['class_name']);
-    $class_description = trim($_POST['class_description']);    if (!empty($class_name)) {
-        // Validate session
-        if (!isset($_SESSION['loggedin']) || !isset($_SESSION['user_id'])) {
-            $error_message = "Session expired. Please login again.";
-            header("Location: ../../frontend-darasa/auth/login.html");
-            exit;
-        } else {
-            // Generate a unique class code
-            do {
-                $class_code = strtoupper(substr(md5(uniqid()), 0, 6));
-                // Check if code exists
-                $checkCode = "SELECT id FROM classes WHERE class_code = ?";
-                $stmt = mysqli_prepare($conn, $checkCode);
-                mysqli_stmt_bind_param($stmt, "s", $class_code);
-                mysqli_stmt_execute($stmt);
-                $codeResult = mysqli_stmt_get_result($stmt);
-            } while (mysqli_num_rows($codeResult) > 0);
-
-            // Get the teacher_id from the teachers table using the session user_id
-            $getTeacherQuery = "SELECT id, full_name, email FROM teachers WHERE user_id = ?";
-            $stmt = mysqli_prepare($conn, $getTeacherQuery);
-            mysqli_stmt_bind_param($stmt, "i", $_SESSION['user_id']);
-            mysqli_stmt_execute($stmt);
-            $result = mysqli_stmt_get_result($stmt);
-
-            if ($teacher_row = mysqli_fetch_assoc($result)) {
-                $teacher_id = $teacher_row['id'];
-
-                // Clean and validate the description
-                $class_description = !empty($_POST['class_description']) ? trim($_POST['class_description']) : '';
-
-                // Insert the new class with proper error handling
-                $insertClassQuery = "INSERT INTO classes (name, description, class_code, teacher_id, created_at) VALUES (?, ?, ?, ?, NOW())";
-                $stmt = mysqli_prepare($conn, $insertClassQuery);
-
-                if (!$stmt) {
-                    $error_message = "Database error: " . mysqli_error($conn);
-                } else {
-                    mysqli_stmt_bind_param($stmt, "sssi", $class_name, $class_description, $class_code, $teacher_id);
-
-                    if (mysqli_stmt_execute($stmt)) {
-                        $success_message = "Class created successfully! Class code: " . $class_code;
-                    } else {
-                        $error_message = "Failed to create class: " . mysqli_stmt_error($stmt);
-                    }
-                    mysqli_stmt_close($stmt);
-                }
-            } else {
-                // Log the error for debugging
-                error_log("Teacher record not found for user_id: " . $_SESSION['user_id']);
-                $error_message = "Error: Unable to find teacher record. Please ensure you're logged in with a teacher account.";
-            }
-        }
-    } else {
-        $error_message = "Class name is required.";
-    }
+// Check authentication
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'teacher') {
+    header("Location: ../auth/login.html");
+    exit;
 }
 
-// Fetch classes from database for the current teacher
-$classes = [];
-if (isset($_SESSION['user_id'])) {
-    $getClassesQuery = "
-        SELECT c.id, c.name, c.description, c.class_code, c.created_at 
-        FROM classes c 
-        INNER JOIN teachers t ON c.teacher_id = t.id 
-        WHERE t.user_id = ? 
-        ORDER BY c.created_at DESC
-    ";
+// Get teacher info
+$user_id = $_SESSION['user_id'];
+$stmt = $conn->prepare("SELECT id, full_name FROM teachers WHERE user_id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$teacher = $stmt->get_result()->fetch_assoc();
+$stmt->close();
 
-    $stmt = mysqli_prepare($conn, $getClassesQuery);
-    if ($stmt) {
-        mysqli_stmt_bind_param($stmt, "i", $_SESSION['user_id']);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        while ($row = mysqli_fetch_assoc($result)) {
-            $classes[] = $row;
-        }
-        mysqli_stmt_close($stmt);
-    }
+if (!$teacher) {
+    die("Teacher profile not found.");
 }
+
+// Get classes
+$stmt = $conn->prepare("
+    SELECT c.*, COUNT(cs.student_id) as student_count 
+    FROM classes c 
+    LEFT JOIN class_students cs ON c.id = cs.class_id 
+    WHERE c.teacher_id = ? 
+    GROUP BY c.id 
+    ORDER BY c.created_at DESC
+");
+$stmt->bind_param("i", $teacher['id']);
+$stmt->execute();
+$classes = $stmt->get_result();
+$stmt->close();
+$conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Dashboard | Darasa</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Inter:wght@400;500;700&display=swap"
-        rel="stylesheet">
+    <title>Darasa Classroom</title>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="../dashboard/dashboard.css">
-    <link rel="stylesheet" href="../dashboard/teacher.css">
+    <link rel="stylesheet" href="teacher.css">
     <link rel="icon" href="../assets/images/logo_white.png" type="image/png">
 </head>
 
 <body>
-    <div class="dashboard-container">
-        <aside class="sidebar">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
             <div class="logo">
                 <img src="../assets/images/logo_blue.png" alt="Darasa Logo">
-                <span>Darasa</span>
+                <span>Darasa Classroom</span>
             </div>
-            <nav class="nav-menu">
-                <div class="nav-top">
-                    <ul>
-                        <li class="active"><a href="#"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a>
-                        </li>
-                        <li><a href="#"><i class="fas fa-chalkboard-teacher"></i><span>Classes</span></a></li>
-                        <li><a href="#"><i class="fas fa-tasks"></i><span>Assignments</span></a></li>
-                        <li><a href="#"><i class="fas fa-marker"></i><span>Grading</span></a></li>
-                        <li><a href="#"><i class="fas fa-users"></i><span>Students</span></a></li>
-                        <li><a href="#"><i class="fas fa-bullhorn"></i><span>Announce</span></a></li>
-                    </ul>
-                </div>
-                <div class="nav-bottom">
-                    <ul>
-                        <li><a href="#"><i class="fas fa-cog"></i><span>Settings</span></a></li>
-                        <li><a href="../../backend-darasa/auth/logout.php"><i
-                                    class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
-                    </ul>
-                </div>
-            </nav>
-        </aside>
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <span style="color: #5f6368;">Hello, <?= htmlspecialchars($teacher['full_name']) ?>!</span>
+                <a href="../../backend-darasa/auth/logout.php" class="btn btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </header>
 
-        <div class="main-content-wrapper">
-            <header class="main-header">
-                <div class="page-title">
-                    Welcome,
-                    <?php echo isset($_SESSION["fullname"]) ? htmlspecialchars($_SESSION["fullname"]) : 'Teacher'; ?>!
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Welcome Section -->
+        <div style="background: linear-gradient(135deg, #1a73e8 0%, #4285f4 100%); 
+                    color: white; padding: 32px; border-radius: 8px; margin-bottom: 24px; text-align: center;">
+            <h1 style="font-size: 28px; font-weight: 400; margin-bottom: 8px;">
+                Welcome back, <?= htmlspecialchars($teacher['full_name']) ?>!
+            </h1>
+            <p style="font-size: 16px; opacity: 0.9;">Manage your classes and connect with your students</p>
+        </div>
+
+        <!-- Status Messages -->
+        <?php if (isset($_GET['status'])): ?>
+            <div class="alert alert-<?= $_GET['status'] === 'success' ? 'success' : 'error' ?>">
+                <i class="fas fa-<?= $_GET['status'] === 'success' ? 'check' : 'exclamation' ?>-circle"></i>
+                <?= $_GET['status'] === 'success' ? 'Operation completed successfully!' : 'An error occurred. Please try again.' ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Create Class Button -->
+        <button class="btn btn-primary" onclick="toggleForm()" style="margin-bottom: 24px;">
+            <i class="fas fa-plus"></i> Create New Class
+        </button>
+
+        <!-- Create Class Form -->
+        <div id="createForm"
+            style="display: none; background: white; padding: 24px; border-radius: 8px; 
+                                   box-shadow: 0 1px 3px rgba(0,0,0,0.12); margin-bottom: 24px; border: 1px solid #e8eaed;">
+            <h3 style="margin-bottom: 20px; color: #1a73e8; font-size: 18px; font-weight: 500;">
+                <i class="fas fa-chalkboard-teacher"></i> Create New Class
+            </h3>
+            <form action="../../backend-darasa/handlers/class_handler.php" method="POST">
+                <input type="hidden" name="action" value="create">
+                <div class="form-group">
+                    <label>Class Name</label>
+                    <input type="text" name="name" placeholder="e.g., Form 4 Physics" required>
                 </div>
-                <div class="user-actions">
-                    <button class="icon-button" aria-label="Notifications" title="Notifications"><i
-                            class="fas fa-bell"></i></button>
-                    <button class="icon-button" aria-label="User Profile" title="Profile"><i
-                            class="fas fa-user-circle"></i></button>
+                <div class="form-group">
+                    <label>Description (Optional)</label>
+                    <textarea name="description" rows="3" placeholder="Brief description of the class"></textarea>
                 </div>
-            </header>
+                <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                    <button type="button" onclick="toggleForm()" style="background: #f8f9fa; color: #3c4043; border: 1px solid #dadce0; 
+                                   padding: 10px 20px; border-radius: 20px; cursor: pointer;">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Create Class
+                    </button>
+                </div>
+            </form>
+        </div>
 
-            <main class="page-content">
-                <!-- Messages -->
-                <?php if (!empty($success_message)): ?>
-                    <div class="alert alert-success">
-                        <i class="fas fa-check-circle"></i> <?php echo htmlspecialchars($success_message); ?>
-                    </div>
-                <?php endif; ?>
+        <!-- Classes Section -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h2 style="font-size: 24px; font-weight: 400; color: #3c4043;">Your Classes</h2>
+            <div style="background: white; padding: 12px 16px; border-radius: 8px; border: 1px solid #e8eaed; 
+                        display: flex; align-items: center; gap: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <i class="fas fa-chalkboard-teacher" style="color: #1a73e8;"></i>
+                <div>
+                    <strong><?= $classes->num_rows ?></strong>
+                    <span style="color: #5f6368; font-size: 14px;"> Total Classes</span>
+                </div>
+            </div>
+        </div>
 
-                <?php if (!empty($error_message)): ?>
-                    <div class="alert alert-error">
-                        <i class="fas fa-exclamation-circle"></i> <?php echo htmlspecialchars($error_message); ?>
-                    </div>
-                <?php endif; ?>
+        <!-- Classes Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
+            <?php if ($classes->num_rows > 0): ?>
+                <?php while ($class = $classes->fetch_assoc()): ?>
+                    <div class="class-card">
+                        <!-- Class Header -->
+                        <div class="class-header">
+                            <h3><?= htmlspecialchars($class['name']) ?></h3>
+                            <?php if (!empty($class['description'])): ?>
+                                <p><?= htmlspecialchars($class['description']) ?></p>
+                            <?php endif; ?>
+                        </div>
 
-                <section class="content-section">
-                    <div class="content-section-header">
-                        <h2>My Classes</h2>
-                        <div class="class-stats">
-                            <span><?php echo count($classes); ?> classes</span>
+                        <!-- Class Body -->
+                        <div class="class-body">
+                            <!-- Class Code -->
+                            <div class="class-code">
+                                <div>
+                                    <small style="color: #5f6368;">Class Code</small><br>
+                                    <span class="class-code-text"><?= $class['class_code'] ?></span>
+                                </div>
+                                <button class="copy-btn" onclick="copyCode('<?= $class['class_code'] ?>')"
+                                    title="Copy class code">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+
+                            <!-- Class Meta -->
+                            <div style="display: flex; justify-content: space-between; align-items: center; 
+                                        margin-bottom: 12px; font-size: 14px; color: #5f6368;">
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <i class="fas fa-users"></i>
+                                    <span><?= $class['student_count'] ?> students</span>
+                                </div>
+                                <small>Created: <?= date('M j, Y', strtotime($class['created_at'])) ?></small>
+                            </div>
+
+                            <!-- Class Actions -->
+                            <div class="class-actions">
+                                <div class="class-tools">
+                                    <a href="#" class="tool-btn" onclick="alert('Assignment feature coming soon!')">
+                                        <i class="fas fa-tasks"></i> Assignments
+                                    </a>
+                                    <a href="#" class="tool-btn" onclick="alert('Materials feature coming soon!')">
+                                        <i class="fas fa-folder"></i> Materials
+                                    </a>
+                                </div>
+                                <form action="../../backend-darasa/handlers/class_handler.php" method="POST"
+                                    onsubmit="return confirm('Are you sure you want to delete this class?')"
+                                    style="display: inline;">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="class_id" value="<?= $class['id'] ?>">
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-
-                    <!-- Create Class Button -->
-                    <button class="btn btn-primary" onclick="toggleCreateForm()">
-                        <i class="fas fa-plus"></i> Create New Class
+                <?php endwhile; ?>
+            <?php else: ?>
+                <!-- Empty State -->
+                <div style="text-align: center; padding: 48px 24px; background: white; border-radius: 8px; 
+                           border: 1px solid #e8eaed; grid-column: 1 / -1;">
+                    <i class="fas fa-chalkboard-teacher" style="font-size: 48px; color: #dadce0; margin-bottom: 16px;"></i>
+                    <h3 style="font-size: 20px; font-weight: 400; margin-bottom: 8px; color: #5f6368;">No classes yet</h3>
+                    <p style="color: #80868b; margin-bottom: 24px;">Create your first class to get started with teaching!
+                    </p>
+                    <button class="btn btn-primary" onclick="toggleForm()">
+                        <i class="fas fa-plus"></i> Create Your First Class
                     </button>
-
-                    <!-- Create Class Form (initially hidden) -->
-                    <div class="create-class-form" id="createClassForm" style="display: none;">
-                        <h3>Create New Class</h3>
-                        <form method="POST" action="">
-                            <div class="form-group">
-                                <label for="class_name">Class Name *</label>
-                                <input type="text" id="class_name" name="class_name" required maxlength="100"
-                                    placeholder="e.g., Introduction to Web Development">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="class_description">Description (Optional)</label>
-                                <textarea id="class_description" name="class_description" rows="3"
-                                    placeholder="Brief description of the class"></textarea>
-                            </div>
-
-                            <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-plus"></i> Create Class
-                                </button>
-                                <button type="button" class="btn btn-secondary" onclick="toggleCreateForm()">
-                                    Cancel
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <!-- Classes Display -->
-                    <div class="classes-container">
-                        <?php if (empty($classes)): ?>
-                            <p>You have not created any classes yet. Click "Create New Class" to get started.</p>
-                        <?php else: ?>
-                            <?php foreach ($classes as $class): ?>
-                                <div class="class-card">
-                                    <h3><?php echo htmlspecialchars($class['name']); ?></h3>
-                                    <?php if (!empty($class['description'])): ?>
-                                        <p><?php echo htmlspecialchars($class['description']); ?></p>
-                                    <?php endif; ?>
-                                    <div class="class-code">
-                                        Code: <strong><?php echo htmlspecialchars($class['class_code']); ?></strong>
-                                        <button
-                                            onclick="copyToClipboard('<?php echo htmlspecialchars($class['class_code']); ?>')"
-                                            style="margin-left: 10px; background: none; border: none; cursor: pointer;"
-                                            title="Copy class code">
-                                            <i class="fas fa-copy"></i>
-                                        </button>
-                                    </div>
-                                    <small>Created: <?php echo date('M j, Y', strtotime($class['created_at'])); ?></small>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </div>
-                </section>
-            </main>
+                </div>
+            <?php endif; ?>
         </div>
-    </div>
+    </main>
 
-    <script>
-        // Toggle create form visibility
-        function toggleCreateForm() {
-            const form = document.getElementById('createClassForm');
-            if (form.style.display === 'none' || form.style.display === '') {
-                form.style.display = 'block';
-                document.getElementById('class_name').focus();
-            } else {
-                form.style.display = 'none';
-                // Reset form
-                document.getElementById('class_name').value = '';
-                document.getElementById('class_description').value = '';
-            }
-        }
-
-        // Copy to clipboard function
-        function copyToClipboard(text) {
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(text).then(function () {
-                    alert('Class code copied to clipboard: ' + text);
-                }).catch(function () {
-                    // Fallback
-                    copyToClipboardFallback(text);
-                });
-            } else {
-                copyToClipboardFallback(text);
-            }
-        }
-
-        // Fallback copy function
-        function copyToClipboardFallback(text) {
-            const textArea = document.createElement('textarea');
-            textArea.value = text;
-            document.body.appendChild(textArea);
-            textArea.select();
-            try {
-                document.execCommand('copy');
-                alert('Class code copied to clipboard: ' + text);
-            } catch (err) {
-                alert('Class code: ' + text);
-            }
-            document.body.removeChild(textArea);
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 
 </html>
