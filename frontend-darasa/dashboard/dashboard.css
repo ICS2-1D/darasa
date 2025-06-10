@@ -1,8 +1,6 @@
-/* General Reset & Body Styles - Google Classroom Inspired */
 body {
-  font-family: "Inter", "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Helvetica, Arial, sans-serif;
-  background-color: #f8f9fa; /* Very light gray, similar to GC background */
+  font-family: "Inter", "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI",Helvetica, Arial, sans-serif;
+  background-color: #f8f9fa;
   margin: 0;
   padding: 0;
   color: #3c4043; /* Standard Google text color */

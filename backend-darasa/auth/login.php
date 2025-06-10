@@ -19,12 +19,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($numRows == 1) {
         // User found, get user data
         $user = mysqli_fetch_assoc($result);
-        
-        // Check if password is correct
+          // Check if password is correct
         if (password_verify($password, $user['password'])) {
-            // Password is correct, login the user            $_SESSION["loggedin"] = true;
+            // Password is correct, login the user
+            $_SESSION["loggedin"] = true;
             $_SESSION['last_activity'] = time();
-            $_SESSION["user_id"] = $user['id'];  // Added this line
+            $_SESSION["user_id"] = $user['id'];
             $_SESSION["id"] = $user['id'];
             $_SESSION["fullname"] = $user['fullname'];
             $_SESSION["email"] = $user['email'];
