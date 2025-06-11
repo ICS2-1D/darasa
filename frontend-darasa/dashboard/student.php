@@ -1,188 +1,258 @@
 <?php
-// Ensures a user is logged in before they can access this page.
-// You might want to add specific role checks here (e.g., ensure user is a student).
-include_once('../../backend-darasa/auth/session_check.php');
+session_start();
+require_once __DIR__ . '/../../backend-darasa/connect.php';
+
+// Check authentication
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'student') {
+    header("Location: ../auth/login.html");
+    exit;
+}
+
+// Get student info
+$user_id = $_SESSION['user_id'];
+$stmt = $conn->prepare("SELECT id, full_name FROM students WHERE user_id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$student = $stmt->get_result()->fetch_assoc();
+$stmt->close();
+
+if (!$student) {
+    die("Student profile not found.");
+}
+
+// Get enrolled classes
+$stmt = $conn->prepare("
+    SELECT c.*, t.full_name as teacher_name, cs.enrolled_at
+    FROM classes c 
+    JOIN class_students cs ON c.id = cs.class_id 
+    JOIN teachers t ON c.teacher_id = t.id
+    WHERE cs.student_id = ? 
+    ORDER BY cs.enrolled_at DESC
+");
+$stmt->bind_param("i", $student['id']);
+$stmt->execute();
+$classes = $stmt->get_result();
+$stmt->close();
+$conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Dashboard | Darasa</title>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="dashboard.css">
-  <link rel="icon" href="/frontend-darasa/assets/images/logo_white.png" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darasa Classroom - Student</title>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="student.css">
+    <link rel="icon" href="../assets/images/logo_white.png" type="image/png">
 </head>
+
 <body>
-  <div class="dashboard-container">
-    <aside class="sidebar">
-      <div class="logo">
-        <img src="/frontend-darasa/assets/images/logo_blue.png" alt="Darasa Logo">
-        <span>Darasa</span>
-      </div>
-      
-      <nav class="nav-menu">
-        <div class="nav-top">
-          <ul>
-            <li class="active">
-              <a href="#" data-page="home-student">
-                <i class="fas fa-home"></i>
-                <span>Home</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" data-page="announcements-student">
-                <i class="fas fa-bullhorn"></i>
-                <span>Announcements</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" data-page="grades-student">
-                <i class="fas fa-graduation-cap"></i>
-                <span>Grades</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" data-page="calendar-student">
-                <i class="fas fa-calendar-alt"></i>
-                <span>Calendar</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-        
-        <div class="nav-bottom">
-          <ul>
-            <li>
-              <a href="#" data-page="account-student">
-                <i class="fas fa-cog"></i>
-                <span>Settings</span>
-              </a>
-            </li>
-            <li>
-              <!-- Static link to the logout script -->
-              <a href="../../backend-darasa/auth/logout.php" data-action="logout-student">
-                <i class="fas fa-sign-out-alt"></i>
-                <span>Logout</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-    </aside>
-    
-    <div class="main-content-wrapper">
-      <header class="main-header">
-        <div class="page-title">
-            <!-- PHP: Fetch and display the logged-in student's name from the session. -->
-            Welcome, <?php echo htmlspecialchars($_SESSION["fullname"] ?? 'Student'); ?>
-        </div>
-        <div class="user-actions">
-            <button class="icon-button" aria-label="Notifications">
-                <i class="fas fa-bell"></i>
-                <!-- PHP: Fetch notification count for the student.
-                <?php
-                  // $notification_count = fetch_student_notification_count($_SESSION['user_id']);
-                  // if ($notification_count > 0) {
-                  //   echo '<span class="badge">' . $notification_count . '</span>';
-                  // }
-                ?>
-                -->
-            </button>
-            <button class="icon-button" aria-label="User Profile">
-                <i class="fas fa-user-circle"></i>
-            </button>
-        </div>
-      </header>
-      
-      <main class="page-content">
-        <!-- Enrolled Courses Section -->
-        <section class="content-section">
-          <div class="content-section-header">
-            <h2>My Enrolled Courses</h2>
-          </div>
-          <div class="card-grid">
-            <!-- PHP: Backend logic to fetch and loop through the student's enrolled courses. -->
-            <?php
-              // 1. Fetch enrolled courses for the student from the database.
-              // $student_id = $_SESSION['user_id'];
-              // $enrolled_courses = fetch_student_courses($student_id);
-              
-              // 2. Check if there are any courses.
-              // if (empty($enrolled_courses)) {
-              //   echo '<div class="info-message">You are not currently enrolled in any courses.</div>';
-              // } else {
-              //   // 3. Loop through the courses and display them as cards.
-              //   $color_index = 1;
-              //   foreach ($enrolled_courses as $course) {
-            ?>
-            <!-- Example Course Card (This block should be inside the PHP loop) -->
-            <article class="course-card" data-course-id="<?php /* echo $course['id']; */ ?>">
-              <div class="course-card-header color-1"> <!-- PHP: You can cycle through colors: color-<?php /* echo ($color_index++ % 5) + 1; */ ?> -->
-                <div class="course-number"><?php /* echo htmlspecialchars($course['code']); */ ?>COURSE_CODE</div>
-                <h3 class="course-title"><a href="course.php?id=<?php /* echo $course['id']; */ ?>"><?php /* echo htmlspecialchars($course['name']); */ ?>Introduction to Programming</a></h3>
-              </div>
-              <div class="course-card-content">
-                <p class="course-instructor">Lecturer: <?php /* echo htmlspecialchars($course['lecturer_name']); */ ?></p>
-                <p class="course-summary"><?php /* echo htmlspecialchars($course['summary']); */ ?></p>
-              </div>
-              <div class="course-card-actions">
-                  <a href="course.php?id=<?php /* echo $course['id']; */ ?>" class="btn btn-text btn-text-primary">View Course</a>
-              </div>
-            </article>
-            <!-- End Example Course Card -->
-            <?php
-              //   } // End foreach loop
-              // } // End else
-            ?>
-          </div>
-        </section>
-
-        <!-- Assignments/To-Do List Section -->
-        <section class="content-section">
-          <div class="content-section-header">
-            <h2>Assignments & To-Do</h2>
-          </div>
-          <div class="todo-list">
-            <!-- PHP: Backend logic to fetch and loop through pending assignments. -->
-            <?php
-              // 1. Fetch pending assignments for the student.
-              // $pending_assignments = fetch_pending_assignments($student_id);
-
-              // 2. Check if there are any assignments.
-              // if (empty($pending_assignments)) {
-              //   echo '<div class="info-message">You have no pending assignments. Great job!</div>';
-              // } else {
-              //   // 3. Loop through assignments and display them.
-              //   foreach ($pending_assignments as $assignment) {
-            ?>
-            <!-- Example Assignment Item (This block should be inside the PHP loop) -->
-            <div class="list-item">
-              <div class="list-item-content">
-                <h4><?php /* echo htmlspecialchars($assignment['title']); */ ?> (<?php /* echo htmlspecialchars($assignment['course_code']); */ ?>)</h4>
-                <p>Due: <span class="due-date"><?php /* echo date('F j, Y', strtotime($assignment['due_date'])); */ ?></span></p>
-              </div>
-              <div class="list-item-actions">
-                  <a href="assignment.php?id=<?php /* echo $assignment['id']; */ ?>" class="btn-icon" title="View Assignment"><i class="fas fa-chevron-right"></i></a>
-              </div>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <img src="../assets/images/logo_blue.png" alt="Darasa Logo">
+                <span>Darasa Classroom</span>
             </div>
-            <?php
-              //   } // End foreach
-              // } // End else
-            ?>
-          </div>
-        </section>
-      </main>
-    </div>
-  </div>
-  <!-- PHP: You can include JS files that might need session data. -->
-  <script>
-    // Example of passing a PHP variable to JavaScript
-    const currentUserId = <?php echo json_encode($_SESSION['user_id'] ?? null); ?>;
-  </script>
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <span style="color: #5f6368;">Hello, <?= htmlspecialchars($student['full_name']) ?>!</span>
+                <a href="../../backend-darasa/auth/logout.php" class="btn btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Welcome Section -->
+        <div style="background: linear-gradient(135deg, #34a853 0%, #4caf50 100%); 
+                    color: white; padding: 32px; border-radius: 8px; margin-bottom: 24px; text-align: center;">
+            <h1 style="font-size: 28px; font-weight: 400; margin-bottom: 8px;">
+                Welcome back, <?= htmlspecialchars($student['full_name']) ?>!
+            </h1>
+            <p style="font-size: 16px; opacity: 0.9;">Join classes and access your assignments</p>
+        </div>
+
+        <!-- Status Messages -->
+        <?php if (isset($_GET['status'])): ?>
+            <div class="alert alert-<?= $_GET['status'] === 'success' ? 'success' : 'error' ?>">
+                <i class="fas fa-<?= $_GET['status'] === 'success' ? 'check' : 'exclamation' ?>-circle"></i>
+                <?php if ($_GET['status'] === 'success'): ?>
+                    <?= isset($_GET['message']) ? htmlspecialchars($_GET['message']) : 'Operation completed successfully!' ?>
+                <?php else: ?>
+                    <?= isset($_GET['message']) ? htmlspecialchars($_GET['message']) : 'An error occurred. Please try again.' ?>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Join Class Button -->
+        <button class="btn btn-primary" onclick="toggleJoinForm()" style="margin-bottom: 24px;">
+            <i class="fas fa-plus"></i> Join Class
+        </button>
+
+        <!-- Join Class Form -->
+        <div id="joinForm"
+            style="display: none; background: white; padding: 24px; border-radius: 8px; 
+                   box-shadow: 0 1px 3px rgba(0,0,0,0.12); margin-bottom: 24px; border: 1px solid #e8eaed;">
+            <h3 style="margin-bottom: 20px; color: #34a853; font-size: 18px; font-weight: 500;">
+                <i class="fas fa-graduation-cap"></i> Join a Class
+            </h3>
+            <form action="../../backend-darasa/handlers/student_class_handler.php" method="POST">
+                <input type="hidden" name="action" value="join">
+                <div class="form-group">
+                    <label>Class Code</label>
+                    <input type="text" name="class_code" placeholder="Enter the 6-character class code" 
+                           style="text-transform: uppercase;" maxlength="6" required>
+                    <small style="color: #5f6368; font-size: 14px;">
+                        <i class="fas fa-info-circle"></i> Ask your teacher for the class code
+                    </small>
+                </div>
+                <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                    <button type="button" onclick="toggleJoinForm()" 
+                            style="background: #f8f9fa; color: #3c4043; border: 1px solid #dadce0; 
+                                   padding: 10px 20px; border-radius: 20px; cursor: pointer;">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i> Join Class
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Classes Section -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h2 style="font-size: 24px; font-weight: 400; color: #3c4043;">Your Classes</h2>
+            <div style="background: white; padding: 12px 16px; border-radius: 8px; border: 1px solid #e8eaed; 
+                        display: flex; align-items: center; gap: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                <i class="fas fa-graduation-cap" style="color: #34a853;"></i>
+                <div>
+                    <strong><?= $classes->num_rows ?></strong>
+                    <span style="color: #5f6368; font-size: 14px;"> Enrolled Classes</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Classes Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
+            <?php if ($classes->num_rows > 0): ?>
+                <?php while ($class = $classes->fetch_assoc()): ?>
+                    <div class="class-card">
+                        <!-- Class Header -->
+                        <div class="class-header">
+                            <h3><?= htmlspecialchars($class['name']) ?></h3>
+                            <?php if (!empty($class['description'])): ?>
+                                <p><?= htmlspecialchars($class['description']) ?></p>
+                            <?php endif; ?>
+                            <div class="teacher-info">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                                <span><?= htmlspecialchars($class['teacher_name']) ?></span>
+                            </div>
+                        </div>
+
+                        <!-- Class Body -->
+                        <div class="class-body">
+                            <!-- Class Code -->
+                            <div class="class-code">
+                                <div>
+                                    <small style="color: #5f6368;">Class Code</small><br>
+                                    <span class="class-code-text"><?= $class['class_code'] ?></span>
+                                </div>
+                                <button class="copy-btn" onclick="copyCode('<?= $class['class_code'] ?>')"
+                                    title="Copy class code">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+
+                            <!-- Class Meta -->
+                            <div style="display: flex; justify-content: space-between; align-items: center; 
+                                        margin-bottom: 12px; font-size: 14px; color: #5f6368;">
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>Joined: <?= date('M j, Y', strtotime($class['enrolled_at'])) ?></span>
+                                </div>
+                            </div>
+
+                            <!-- Class Actions -->
+                            <div class="class-actions">
+                                <div class="class-tools">
+                                    <a href="#" class="tool-btn" onclick="alert('Assignment feature coming soon!')">
+                                        <i class="fas fa-tasks"></i> Assignments
+                                    </a>
+                                    <a href="#" class="tool-btn" onclick="alert('Materials feature coming soon!')">
+                                        <i class="fas fa-folder"></i> Materials
+                                    </a>
+                                    <a href="#" class="tool-btn" onclick="alert('Grades feature coming soon!')">
+                                        <i class="fas fa-chart-line"></i> Grades
+                                    </a>
+                                </div>
+                                <form action="../../backend-darasa/handlers/student_class_handler.php" method="POST"
+                                    onsubmit="return confirm('Are you sure you want to leave this class?')"
+                                    style="display: inline;">
+                                    <input type="hidden" name="action" value="leave">
+                                    <input type="hidden" name="class_id" value="<?= $class['id'] ?>">
+                                    <button type="submit" class="btn btn-danger" title="Leave class">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <!-- Empty State -->
+                <div style="text-align: center; padding: 48px 24px; background: white; border-radius: 8px; 
+                           border: 1px solid #e8eaed; grid-column: 1 / -1;">
+                    <i class="fas fa-graduation-cap" style="font-size: 48px; color: #dadce0; margin-bottom: 16px;"></i>
+                    <h3 style="font-size: 20px; font-weight: 400; margin-bottom: 8px; color: #5f6368;">No classes yet</h3>
+                    <p style="color: #80868b; margin-bottom: 24px;">Join your first class to get started with learning!
+                    </p>
+                    <button class="btn btn-primary" onclick="toggleJoinForm()">
+                        <i class="fas fa-plus"></i> Join Your First Class
+                    </button>
+                </div>
+            <?php endif; ?>
+        </div>
+    </main>
+
+    <script>
+        function toggleJoinForm() {
+            const form = document.getElementById('joinForm');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function copyCode(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                // Show temporary success message
+                const btn = event.target.closest('.copy-btn');
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i>';
+                btn.style.color = '#34a853';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.style.color = '';
+                }, 2000);
+            }).catch(() => {
+                alert('Failed to copy code');
+            });
+        }
+
+        // Auto-uppercase class code input
+        document.addEventListener('DOMContentLoaded', function() {
+            const classCodeInput = document.querySelector('input[name="class_code"]');
+            if (classCodeInput) {
+                classCodeInput.addEventListener('input', function() {
+                    this.value = this.value.toUpperCase();
+                });
+            }
+        });
+    </script>
 </body>
+
 </html>

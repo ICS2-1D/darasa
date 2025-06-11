@@ -1,0 +1,311 @@
+/* Student Dashboard CSS - Google Classroom inspired */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #3c4043;
+    line-height: 1.5;
+}
+
+/* Header */
+.header {
+    background: white;
+    border-bottom: 1px solid #e8eaed;
+    padding: 16px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 22px;
+    font-weight: 500;
+    color: #1a73e8;
+}
+
+.logo img {
+    width: 32px;
+    height: 32px;
+}
+
+/* Main Content */
+.main-content {
+    max-width: 1200px;
+    margin: 24px auto;
+    padding: 0 24px;
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background: #34a853;
+    color: white;
+    box-shadow: 0 1px 3px rgba(52, 168, 83, 0.4);
+}
+
+.btn-primary:hover {
+    background: #2d8f47;
+    box-shadow: 0 2px 8px rgba(52, 168, 83, 0.4);
+}
+
+.btn-danger {
+    background: #ea4335;
+    color: white;
+    font-size: 12px;
+    padding: 8px 12px;
+}
+
+.btn-danger:hover {
+    background: #d33b2c;
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #3c4043;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #34a853;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 4px;
+}
+
+/* Class Cards */
+.class-card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    transition: all 0.2s;
+    border: 1px solid #e8eaed;
+}
+
+.class-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-1px);
+}
+
+.class-header {
+    background: linear-gradient(135deg, #34a853, #4caf50);
+    color: white;
+    padding: 20px;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+.class-header h3 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.class-header p {
+    opacity: 0.9;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.teacher-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    opacity: 0.9;
+    margin-top: auto;
+}
+
+.class-body {
+    padding: 16px;
+}
+
+.class-code {
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #e8eaed;
+}
+
+.class-code-text {
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    color: #34a853;
+}
+
+.copy-btn {
+    background: none;
+    border: none;
+    color: #5f6368;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.copy-btn:hover {
+    background: #e8f5e8;
+    color: #34a853;
+}
+
+/* Class Actions */
+.class-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #f1f3f4;
+}
+
+.class-tools {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.tool-btn {
+    background: #f8f9fa;
+    border: 1px solid #e8eaed;
+    border-radius: 6px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #5f6368;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.tool-btn:hover {
+    background: #e8f5e8;
+    color: #34a853;
+    border-color: #34a853;
+}
+
+/* Alerts */
+.alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    border-left: 4px solid;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.alert-success {
+    background: #e8f5e8;
+    color: #137333;
+    border-left-color: #34a853;
+}
+
+.alert-error {
+    background: #fce8e6;
+    color: #d93025;
+    border-left-color: #ea4335;
+}
+
+/* Student-specific styles */
+.student-welcome {
+    background: linear-gradient(135deg, #34a853 0%, #4caf50 100%);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .main-content {
+        padding: 0 16px;
+        margin: 16px auto;
+    }
+    
+    .header-content {
+        padding: 0 16px;
+    }
+    
+    .class-tools {
+        flex-direction: column;
+        gap: 4px;
+        width: 100%;
+    }
+    
+    .class-actions {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+    
+    .tool-btn {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .class-tools {
+        gap: 8px;
+    }
+    
+    .tool-btn {
+        flex: 1;
+        min-width: 0;
+    }
+}
