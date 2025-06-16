@@ -3,42 +3,703 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Assignment Dashboard</title>
+    <title>Teacher Dashboard | Assignment Manager</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="teacher_style.css">
+    <style>
+        :root {
+            --primary: #007bff;
+            --primary-dark: #0062cc;
+            --secondary: #6c757d;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e6f2ff 0%, #cce6ff 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: grid;
+            grid-template-rows: auto 1fr;
+            min-height: 95vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 25px 30px;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.1;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .user-info {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #fff;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .user-details {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .user-role {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f0f5ff;
+            border-bottom: 2px solid #d6e4ff;
+            padding: 0 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 18px 30px;
+            background: transparent;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+        }
+
+        .nav-tab:hover {
+            background: #d6e4ff;
+        }
+
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: white;
+        }
+
+        .content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 30px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .assignments-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .assignment-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 25px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .assignment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--primary);
+            transform: scaleY(0);
+            transition: var(--transition);
+        }
+
+        .assignment-card:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .assignment-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .assignment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .assignment-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #000;
+            flex: 1;
+        }
+
+        .teacher-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: #f0f5ff;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .icon-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .assignment-meta {
+            margin-bottom: 20px;
+        }
+
+        .assignment-meta p {
+            margin-bottom: 8px;
+            color: #000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .submission-stats {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            flex: 1;
+            min-width: 100px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat.submitted {
+            background: #e6ffed;
+            border: 2px solid var(--success);
+        }
+
+        .stat.pending {
+            background: #fff9e6;
+            border: 2px solid var(--warning);
+        }
+
+        .stat.missing {
+            background: #ffe6e6;
+            border: 2px solid var(--danger);
+        }
+
+        .stat-count {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+        }
+
+        .assignment-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        /* Form Styling */
+        .form-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .form-col {
+            flex: 1;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        /* Grading Interface */
+        .grading-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .student-list {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .student-card {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .student-card:hover {
+            border-color: var(--primary);
+        }
+
+        .student-card.active {
+            border-color: var(--primary);
+            background: #f0f5ff;
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .student-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .grade-status {
+            font-weight: 600;
+        }
+
+        .graded {
+            color: var(--success);
+        }
+
+        .ungraded {
+            color: var(--danger);
+        }
+
+        .grading-area {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .grade-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .grade-input input {
+            width: 100px;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .feedback-section textarea {
+            width: 100%;
+            height: 180px;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            margin: 10px 0;
+            resize: vertical;
+        }
+
+        .common-comments {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .comment-btn {
+            padding: 8px 15px;
+            background: #f0f5ff;
+            border: 2px solid #d6e4ff;
+            border-radius: 20px;
+            color: var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .comment-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .grading-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        /* Integration Points */
+        .integration-point {
+            position: relative;
+        }
+
+        .integration-point::after {
+            content: 'JS/PHP';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--primary);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .grading-container {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 20px;
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .user-info {
+                margin-top: 15px;
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .user-details {
+                text-align: center;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .assignment-actions {
+                flex-direction: column;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+
+        /* Animation for page load */
+        .assignment-card, .form-container, .grading-container {
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <header class="header">
-            <h1><i class="fas fa-chalkboard-teacher"></i> Assignment Manager</h1>
-            <p>ICS 3678: Introduction to Programming - Instructor: John Smith</p>
+            <div class="header-content">
+                <h1><i class="fas fa-chalkboard-teacher"></i> Teacher Dashboard</h1>
+                <p>ICS 3678: Introduction to Programming</p>
+            </div>
+            <div class="user-info">
+                <div class="user-avatar">JS</div>
+                <div class="user-details">
+                    <div class="user-name">Dr. John Smith</div>
+                    <div class="user-role">Professor</div>
+                </div>
+            </div>
         </header>
         
-        <nav class="teacher-nav">
-            <button class="nav-btn active"><i class="fas fa-tasks"></i> Assignments</button>
-            <button class="nav-btn"><i class="fas fa-user-graduate"></i> Students</button>
-            <button class="nav-btn"><i class="fas fa-chart-bar"></i> Analytics</button>
-            <button class="nav-btn"><i class="fas fa-cog"></i> Settings</button>
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="assignments">
+                <i class="fas fa-tasks"></i> Assignments
+            </button>
+            <button class="nav-tab" data-tab="create">
+                <i class="fas fa-plus-circle"></i> Create Assignment
+            </button>
+            <button class="nav-tab" data-tab="grading">
+                <i class="fas fa-check-circle"></i> Grading
+            </button>
+            <button class="nav-tab" data-tab="analytics">
+                <i class="fas fa-chart-bar"></i> Analytics
+            </button>
         </nav>
         
         <main class="content">
             <!-- Assignment Management Section -->
-            <section class="section">
+            <section class="section" id="assignments-section">
                 <div class="section-header">
                     <h2 class="section-title">
                         <i class="fas fa-clipboard-list"></i>
                         Assignment Management
                     </h2>
-                    <button class="btn btn-primary">
+                    <button class="btn btn-primary" id="new-assignment-btn">
                         <i class="fas fa-plus"></i> New Assignment
                     </button>
                 </div>
                 
                 <div class="assignments-grid">
-                    <!-- Assignment cards with teacher controls -->
-                    <div class="assignment-card">
+                    <!-- Assignment Card 1 -->
+                    <div class="assignment-card integration-point">
                         <div class="assignment-header">
-                            <h3 class="assignment-title">Assignment 1: Intro to Python</h3>
+                            <h3 class="assignment-title">Assignment 1: Introduction to Python</h3>
                             <div class="teacher-controls">
                                 <button class="icon-btn"><i class="fas fa-edit"></i></button>
                                 <button class="icon-btn"><i class="fas fa-trash"></i></button>
@@ -77,160 +738,216 @@
                         </div>
                     </div>
                     
-                    <!-- Additional assignment cards would go here -->
+                    <!-- Assignment Card 2 -->
+                    <div class="assignment-card integration-point">
+                        <div class="assignment-header">
+                            <h3 class="assignment-title">Assignment 2: Data Structures</h3>
+                            <div class="teacher-controls">
+                                <button class="icon-btn"><i class="fas fa-edit"></i></button>
+                                <button class="icon-btn"><i class="fas fa-trash"></i></button>
+                                <button class="icon-btn"><i class="fas fa-copy"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="assignment-meta">
+                            <p><i class="fas fa-calendar-alt"></i> <strong>Due:</strong> June 30, 2025</p>
+                            <p><i class="fas fa-star"></i> <strong>Points:</strong> 150</p>
+                            <p><i class="fas fa-users"></i> <strong>Students:</strong> 45</p>
+                        </div>
+                        
+                        <div class="submission-stats">
+                            <div class="stat submitted">
+                                <span class="stat-count">12</span>
+                                <span class="stat-label">Submitted</span>
+                            </div>
+                            <div class="stat pending">
+                                <span class="stat-count">30</span>
+                                <span class="stat-label">Pending</span>
+                            </div>
+                            <div class="stat missing">
+                                <span class="stat-count">3</span>
+                                <span class="stat-label">Missing</span>
+                            </div>
+                        </div>
+                        
+                        <div class="assignment-actions">
+                            <button class="btn btn-outline">
+                                <i class="fas fa-eye"></i> View Submissions
+                            </button>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-download"></i> Download All
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </section>
             
-            <!-- Grading Interface Section -->
-            <section class="section">
+            <!-- Create Assignment Form -->
+            <section class="form-container" id="create-section" style="display: none;">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-plus-circle"></i>
+                        Create New Assignment
+                    </h2>
+                </div>
+                
+                <form id="assignment-form" class="integration-point">
+                    <div class="form-group">
+                        <label for="assignment-title">Assignment Title</label>
+                        <input type="text" id="assignment-title" class="form-control" name="title" placeholder="Enter assignment title">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="assignment-description">Description</label>
+                        <textarea id="assignment-description" class="form-control" name="description" placeholder="Provide assignment details and instructions"></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="due-date">Due Date</label>
+                                <input type="datetime-local" id="due-date" class="form-control" name="due_date">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="max-points">Maximum Points</label>
+                                <input type="number" id="max-points" class="form-control" name="max_points" value="100" min="1">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="assignment-type">Assignment Type</label>
+                        <select id="assignment-type" class="form-control" name="type">
+                            <option value="homework">Homework</option>
+                            <option value="project">Project</option>
+                            <option value="quiz">Quiz</option>
+                            <option value="exam">Exam</option>
+                            <option value="lab">Lab Work</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="attachments">Attachments</label>
+                        <input type="file" id="attachments" class="form-control" name="attachments" multiple>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="reset" class="btn btn-outline">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Create Assignment
+                        </button>
+                    </div>
+                </form>
+            </section>
+            
+            <!-- Grading Interface -->
+            <section class="grading-container" id="grading-section" style="display: none;">
                 <div class="section-header">
                     <h2 class="section-title">
                         <i class="fas fa-check-circle"></i>
                         Grading Interface
                     </h2>
-                    <div class="assignment-selector">
-                        <select>
-                            <option>Assignment 1: Intro to Python</option>
+                    <div class="assignment-selector integration-point">
+                        <select id="grading-assignment" class="form-control">
+                            <option>Assignment 1: Introduction to Python</option>
                             <option>Assignment 2: Data Structures</option>
+                            <option>Midterm Exam: Python Fundamentals</option>
                         </select>
                     </div>
                 </div>
                 
-                <div class="grading-container">
-                    <div class="student-list">
-                        <div class="student-card active">
-                            <div class="student-info">
-                                <span class="student-avatar">JD</span>
-                                <div>
-                                    <h4>John Doe</h4>
-                                    <p>Submitted: May 12, 2023</p>
-                                </div>
-                            </div>
-                            <div class="grade-status">
-                                <span class="grade-badge">90/100</span>
+                <div class="student-list integration-point">
+                    <div class="student-card active">
+                        <div class="student-info">
+                            <span class="student-avatar">JD</span>
+                            <div>
+                                <h4>John Doe</h4>
+                                <p>Submitted: May 12, 2025</p>
                             </div>
                         </div>
-                        
-                        <div class="student-card">
-                            <div class="student-info">
-                                <span class="student-avatar">SJ</span>
-                                <div>
-                                    <h4>Sarah Johnson</h4>
-                                    <p>Not submitted</p>
-                                </div>
-                            </div>
-                            <div class="grade-status">
-                                <span class="status-badge missing">Missing</span>
-                            </div>
+                        <div class="grade-status graded">
+                            <i class="fas fa-check-circle"></i> Graded: 90/100
                         </div>
-                        
-                        <!-- More student cards -->
                     </div>
                     
-                    <div class="grading-area">
-                        <div class="submission-viewer">
-                            <h3>Assignment Submission</h3>
-                            <div class="submission-content">
-                                <!-- Student submission would appear here -->
-                                <p>Python code and documentation...</p>
+                    <div class="student-card">
+                        <div class="student-info">
+                            <span class="student-avatar">SJ</span>
+                            <div>
+                                <h4>Sarah Johnson</h4>
+                                <p>Submitted: May 14, 2025</p>
                             </div>
                         </div>
-                        
-                        <div class="grading-controls">
-                            <div class="grade-input">
-                                <label>Grade:</label>
-                                <input type="number" min="0" max="100" value="90">
-                                <span>/100</span>
+                        <div class="grade-status ungraded">
+                            <i class="fas fa-exclamation-circle"></i> Not Graded
+                        </div>
+                    </div>
+                    
+                    <div class="student-card">
+                        <div class="student-info">
+                            <span class="student-avatar">MK</span>
+                            <div>
+                                <h4>Michael Kim</h4>
+                                <p>Submitted: May 13, 2025</p>
                             </div>
-                            
-                            <div class="feedback-section">
-                                <label>Feedback:</label>
-                                <textarea placeholder="Add your feedback for the student..."></textarea>
+                        </div>
+                        <div class="grade-status ungraded">
+                            <i class="fas fa-exclamation-circle"></i> Not Graded
+                        </div>
+                    </div>
+                    
+                    <div class="student-card">
+                        <div class="student-info">
+                            <span class="student-avatar">ER</span>
+                            <div>
+                                <h4>Emma Rodriguez</h4>
+                                <p>Not submitted</p>
                             </div>
-                            
-                            <div class="common-comments">
-                                <button class="comment-btn">Good job!</button>
-                                <button class="comment-btn">Needs improvement</button>
-                                <button class="comment-btn">See me after class</button>
-                            </div>
-                            
-                            <div class="grading-actions">
-                                <button class="btn btn-outline">
-                                    <i class="fas fa-save"></i> Save Draft
-                                </button>
-                                <button class="btn btn-success">
-                                    <i class="fas fa-paper-plane"></i> Submit Grade
-                                </button>
-                            </div>
+                        </div>
+                        <div class="grade-status missing">
+                            <i class="fas fa-exclamation-triangle"></i> Missing
                         </div>
                     </div>
                 </div>
-            </section>
-            
-            <!-- Analytics Section -->
-            <section class="section">
-                <h2 class="section-title">
-                    <i class="fas fa-chart-bar"></i>
-                    Class Analytics
-                </h2>
                 
-                <div class="analytics-grid">
-                    <div class="analytics-card">
-                        <h3>Assignment Completion</h3>
-                        <div class="completion-chart">
-                            <!-- Visual chart would go here -->
-                            <div class="chart-bar" style="height: 85%; background: #007bff;"></div>
-                            <div class="chart-bar" style="height: 65%; background: #ffc107;"></div>
-                            <div class="chart-bar" style="height: 92%; background: #28a745;"></div>
-                        </div>
-                        <div class="chart-labels">
-                            <span>Assignment 1</span>
-                            <span>Assignment 2</span>
-                            <span>Assignment 3</span>
-                        </div>
+                <div class="grading-area integration-point">
+                    <div class="grade-input">
+                        <label for="grade">Grade:</label>
+                        <input type="number" id="grade" min="0" max="100" value="90">
+                        <span>/100</span>
                     </div>
                     
-                    <div class="analytics-card">
-                        <h3>Grade Distribution</h3>
-                        <div class="grade-distribution">
-                            <!-- Visual distribution would go here -->
-                            <div class="dist-bar a" style="width: 25%;"></div>
-                            <div class="dist-bar b" style="width: 40%;"></div>
-                            <div class="dist-bar c" style="width: 25%;"></div>
-                            <div class="dist-bar d" style="width: 10%;"></div>
-                        </div>
-                        <div class="dist-labels">
-                            <span>A (90-100)</span>
-                            <span>B (80-89)</span>
-                            <span>C (70-79)</span>
-                            <span>D/F (<70)</span>
-                        </div>
+                    <div class="feedback-section">
+                        <label for="feedback">Feedback:</label>
+                        <textarea id="feedback" placeholder="Add your feedback for the student..."></textarea>
                     </div>
                     
-                    <div class="analytics-card">
-                        <h3>Late Submissions</h3>
-                        <div class="late-stats">
-                            <div class="stat">
-                                <span class="stat-value">12</span>
-                                <span class="stat-label">Total Late</span>
-                            </div>
-                            <div class="stat">
-                                <span class="stat-value">3</span>
-                                <span class="stat-label">This Week</span>
-                            </div>
-                        </div>
-                        <div class="top-late">
-                            <h4>Frequent Late Submitters</h4>
-                            <ul>
-                                <li>Michael Chen (4 assignments)</li>
-                                <li>Emma Rodriguez (3 assignments)</li>
-                                <li>David Kim (2 assignments)</li>
-                            </ul>
-                        </div>
+                    <div class="common-comments">
+                        <button class="comment-btn">Excellent work!</button>
+                        <button class="comment-btn">Needs improvement</button>
+                        <button class="comment-btn">See me after class</button>
+                        <button class="comment-btn">Good problem solving</button>
+                    </div>
+                    
+                    <div class="grading-actions">
+                        <button class="btn btn-outline">
+                            <i class="fas fa-save"></i> Save Draft
+                        </button>
+                        <button class="btn btn-success">
+                            <i class="fas fa-paper-plane"></i> Submit Grade
+                        </button>
                     </div>
                 </div>
             </section>
         </main>
     </div>
+
+    <script>
+        
+    </script>
 </body>
 </html>
