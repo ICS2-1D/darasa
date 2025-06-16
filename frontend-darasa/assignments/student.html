@@ -1,39 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Student Assignment Dashboard</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Assignment Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    
 </head>
 <body>
-  <div class="container">
-    <aside class="sidebar">
-      <h2><i class="fas fa-tasks"></i> Assignments</h2>
-      <ul class="assignment-list">
-        <li class="assignment submitted"><i class="fas fa-check-circle"></i> Math Homework</li>
-        <li class="assignment pending"><i class="fas fa-clock"></i> Science Report</li>
-        <li class="assignment submitted"><i class="fas fa-check-circle"></i> History Essay</li>
-        <li class="assignment missing"><i class="fas fa-times-circle"></i> Ethics Journal</li>
-      </ul>
-    </aside>
+    <div class="container">
+        <!-- Header section with course title and instructor name -->
+        <header class="header">
+            <h1><i class="fas fa-tasks"></i> Assignments</h1>
+            <p>ICS 3678: Introduction to Programming - John Smith</p>
+        </header>
+        
+        <!-- Main content section -->
+        <main class="content">
 
-    <main class="content">
-      <div class="card">
-        <h1>Science Report</h1>
-        <div class="details">
-          <p><strong>Due Date:</strong> May 10, 2025</p>
-          <p><strong>Status:</strong> <span class="status pending">Pending</span></p>
-        </div>
+            <!-- Assignment section with list of assignments and their status -->
+            <section class="assignments-section">
+                <h2 class="section-title">
+                    <i class="fas fa-clipboard-list"></i>
+                    My Assignments
+                </h2>
 
-        <div class="upload-section">
-          <label for="upload"><i class="fas fa-upload"></i> Upload Your Work</label>
-          <input type="file" id="upload" />
-          <button class="submit-btn"><i class="fas fa-paper-plane"></i> Submit</button>
-        </div>
-      </div>
-    </main>
-  </div>
+                <!-- Filter tabs for different types of assignments -->
+                <div class="filter-tabs">
+                    <div class="filter-tab active">All</div>
+                    <div class="filter-tab">Pending</div>
+                    <div class="filter-tab">Submitted</div>
+                    <div class="filter-tab">Missing</div>
+                </div>
+
+                <!-- Grid of assignment cards -->
+                <div class="assignments-grid">
+                    <!-- Assignment card 1: submitted -->
+                    <div class="assignment-card submitted">
+                        <div class="assignment-header">
+                            <h3 class="assignment-title">Assignment 1: Introduction to Python</h3>
+                            <span class="status-badge submitted">
+                                <i class="fas fa-check-circle"></i> Submitted
+                            </span>
+                        </div>
+                        <div class="assignment-details">
+                            <p><i class="fas fa-calendar-alt"></i> <strong>Due:</strong> May 15, 2025</p>
+                            <p><i class="fas fa-clock"></i> <strong>Submitted:</strong> May 12, 2025</p>
+                            <p><i class="fas fa-star"></i> <strong>Grade:</strong> 90/100</p>
+                            <p><i class="fas fa-user"></i> <strong>Instructor:</strong> Dr. Kennedy K</p>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 100%"></div>
+                        </div>
+                        <div class="assignment-actions">
+                            <a href="#" class="btn btn-outline">
+                                <i class="fas fa-eye"></i> View Feedback
+                            </a>
+                            <a href="#" class="btn btn-outline">
+                                <i class="fas fa-download"></i> Download
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Assignment card 2: pending -->
+                    <div class="assignment-card pending">
+                        <div class="assignment-header">
+                            <h3 class="assignment-title">Assignment 2: Data Structures</h3>
+                            <span class="status-badge pending">
+                                <i class="fas fa-clock"></i> Pending
+                            </span>
+                        </div>
+                        <div class="assignment-details">
+                            <p><i class="fas fa-calendar-alt"></i> <strong>Due:</strong> June 30, 2025</p>
+                            <p><i class="fas fa-clock"></i> <strong>Time Left:</strong> 20 days</p>
+                            <p><i class="fas fa-file-alt"></i> <strong>Type:</strong> Programming Project</p>
+                            <p><i class="fas fa-user"></i> <strong>Instructor:</strong> Dr. Tom Ford</p>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <div class="upload-section">
+                            <p><i class="fas fa-upload"></i> Ready to submit your work?</p>
+                            <input type="file" id="upload2" class="file-input" accept=".pdf,.doc,.docx,.py,.zip">
+                            <label for="upload2" class="file-label">
+                                <i class="fas fa-paperclip"></i> Choose File
+                            </label>
+                        </div>
+                        <div class="assignment-actions">
+                            <a href="#" class="btn btn-primary">
+                                <i class="fas fa-eye"></i> View Details
+                            </a>
+                            <a href="#" class="btn btn-success">
+                                <i class="fas fa-paper-plane"></i> Submit Work
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Assignment card 3: completed -->
+                    <div class="assignment-card submitted">
+                        <div class="assignment-header">
+                            <h3 class="assignment-title">Midterm Exam: Python Fundamentals</h3>
+                            <span class="status-badge submitted">
+                                <i class="fas fa-check-circle"></i> Completed
+                            </span>
+                        </div>
+                        <div class="assignment-details">
+                            <p><i class="fas fa-calendar-alt"></i> <strong>Due:</strong> May 20, 2025</p>
+                            <p><i class="fas fa-clock"></i> <strong>Completed:</strong> May 20, 2025</p>
+                            <p><i class="fas fa-star"></i> <strong>Grade:</strong> 85/100</p>
+                            <p><i class="fas fa-stopwatch"></i> <strong>Duration:</strong> 2 hours</p>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 100%"></div>
+                        </div>
+                        <div class="assignment-actions">
+                            <a href="#" class="btn btn-outline">
+                                <i class="fas fa-chart-line"></i> View Results
+                            </a>
+                            <a href="#" class="btn btn-outline">
+                                <i class="fas fa-redo"></i> Review Answers
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Assignment card 4: missing -->
+                    <div class="assignment-card missing">
+                        <div class="assignment-header">
+                            <h3 class="assignment-title">Lab Report: Algorithm Analysis</h3>
+                            <span class="status-badge missing">
+                                <i class="fas fa-exclamation-triangle"></i> Missing
+                            </span>
+                        </div>
+                        <div class="assignment-details">
+                            <p><i class="fas fa-calendar-alt"></i> <strong>Due:</strong> May 25, 2025</p>
+                            <p><i class="fas fa-exclamation-circle"></i> <strong>Status:</strong> Overdue by 16 days</p>
+                            <p><i class="fas fa-percentage"></i> <strong>Late Penalty:</strong> -10% per day</p>
+                            <p><i class="fas fa-user"></i> <strong>Instructor:</strong> Dr. Tom Ford</p>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <div class="upload-section">
+                            <p><i class="fas fa-exclamation-triangle"></i> Late submission available</p>
+                            <input type="file" id="upload4" class="file-input" accept=".pdf,.doc,.docx">
+                            <label for="upload4" class="file-label">
+                                <i class="fas fa-paperclip"></i> Choose File
+                            </label>
+                        </div>
+                        <div class="assignment-actions">
+                            <a href="#" class="btn btn-primary">
+                                <i class="fas fa-eye"></i> View Requirements
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+
+
 </body>
 </html>

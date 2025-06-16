@@ -14,19 +14,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Hash the password before storing
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    // Check if email already exists
-    $checkQuery = "SELECT * FROM users WHERE email = ?";
-    $stmt = mysqli_prepare($conn, $checkQuery);
-    mysqli_stmt_bind_param($stmt, "s", $email);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    $numRows = mysqli_num_rows($result);
+    try {
+        // Check if email already exists
+        $checkQuery = "SELECT COUNT(*) FROM users WHERE email = ?";
+        $stmt = $pdo->prepare($checkQuery);
+        $stmt->execute([$email]);
+        $emailExists = $stmt->fetchColumn();
 
-    if ($numRows == 0) {
-        // Start transaction to ensure both inserts succeed or both fail
-        mysqli_begin_transaction($conn);
+        if ($emailExists == 0) {
+            // Start transaction to ensure both inserts succeed or both fail
+            $pdo->beginTransaction();
 
-        try {
             // Simple auto-role assignment
             $role = 'user'; // Default role
             if (preg_match('/^[a-zA-Z]+\.[a-zA-Z]+@strathmore\.edu$/', $email)) {
@@ -37,50 +35,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Insert user into users table with hashed password
             $insertUserQuery = "INSERT INTO users (fullname, email, password, role) VALUES (?, ?, ?, ?)";
-            $stmt = mysqli_prepare($conn, $insertUserQuery);
-            mysqli_stmt_bind_param($stmt, "ssss", $fullname, $email, $hashedPassword, $role);
-
-            if (!mysqli_stmt_execute($stmt)) {
-                throw new Exception("Failed to create user");
-            }
+            $stmt = $pdo->prepare($insertUserQuery);
+            $stmt->execute([$fullname, $email, $hashedPassword, $role]);
 
             // Get the newly created user's ID
-            $user_id = mysqli_insert_id($conn);            // Insert into respective role table
+            $user_id = $pdo->lastInsertId();
+
+            // Insert into respective role table
             if ($role == 'student') {
                 $insertRoleQuery = "INSERT INTO students (user_id, full_name, email) VALUES (?, ?, ?)";
-                $stmt2 = mysqli_prepare($conn, $insertRoleQuery);
-                mysqli_stmt_bind_param($stmt2, "iss", $user_id, $fullname, $email);
-
-                if (!mysqli_stmt_execute($stmt2)) {
-                    throw new Exception("Failed to create student record");
-                }
+                $stmt2 = $pdo->prepare($insertRoleQuery);
+                $stmt2->execute([$user_id, $fullname, $email]);
             } elseif ($role == 'teacher') {
                 $insertRoleQuery = "INSERT INTO teachers (user_id, full_name, email) VALUES (?, ?, ?)";
-                $stmt2 = mysqli_prepare($conn, $insertRoleQuery);
-                mysqli_stmt_bind_param($stmt2, "iss", $user_id, $fullname, $email);
-
-                if (!mysqli_stmt_execute($stmt2)) {
-                    throw new Exception("Failed to create teacher record");
-                }
+                $stmt2 = $pdo->prepare($insertRoleQuery);
+                $stmt2->execute([$user_id, $fullname, $email]);
             }
 
             // If we get here, both inserts succeeded
-            mysqli_commit($conn);
+            $pdo->commit();
 
             $showAlert = true;
             header("Location: ../../frontend-darasa/auth/login.html?success=Registered successfully!");
             exit();
 
-        } catch (Exception $e) {
-            // If anything failed, roll back the transaction
-            mysqli_rollback($conn);
-            echo "Error creating account: " . $e->getMessage();
+        } else {
+            // Email already exists
+            header("Location: ../../frontend-darasa/auth/register.html?error=Email already registered.");
+            exit();
         }
-    } else {
-        // Email already exists
-        header("Location: ../../frontend-darasa/auth/register.html?error=Email already registered.");
-        exit();
+
+    } catch (PDOException $e) {
+        // If anything failed, roll back the transaction
+        if ($pdo->inTransaction()) {
+            $pdo->rollback();
+        }
+        echo "Error creating account: " . $e->getMessage();
+    } catch (Exception $e) {
+        // Handle other exceptions
+        if ($pdo->inTransaction()) {
+            $pdo->rollback();
+        }
+        echo "Error creating account: " . $e->getMessage();
     }
-    mysqli_close($conn);
 }
 ?>

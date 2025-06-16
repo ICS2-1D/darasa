@@ -9,57 +9,55 @@ $error_message = '';
 // Handle form submission for creating a class
 if ($_POST && isset($_POST['class_name'])) {
     $class_name = trim($_POST['class_name']);
-    $class_description = trim($_POST['class_description']);    if (!empty($class_name)) {
+    $class_description = trim($_POST['class_description']);
+    
+    if (!empty($class_name)) {
         // Validate session
         if (!isset($_SESSION['loggedin']) || !isset($_SESSION['user_id'])) {
             $error_message = "Session expired. Please login again.";
             header("Location: ../../frontend-darasa/auth/login.html");
             exit;
         } else {
-            // Generate a unique class code
-            do {
-                $class_code = strtoupper(substr(md5(uniqid()), 0, 6));
-                // Check if code exists
-                $checkCode = "SELECT id FROM classes WHERE class_code = ?";
-                $stmt = mysqli_prepare($conn, $checkCode);
-                mysqli_stmt_bind_param($stmt, "s", $class_code);
-                mysqli_stmt_execute($stmt);
-                $codeResult = mysqli_stmt_get_result($stmt);
-            } while (mysqli_num_rows($codeResult) > 0);
+            try {
+                // Generate a unique class code
+                do {
+                    $class_code = strtoupper(substr(md5(uniqid()), 0, 6));
+                    // Check if code exists
+                    $checkCode = "SELECT id FROM classes WHERE class_code = ?";
+                    $stmt = $pdo->prepare($checkCode);
+                    $stmt->execute([$class_code]);
+                    $codeExists = $stmt->rowCount() > 0;
+                } while ($codeExists);
 
-            // Get the teacher_id from the teachers table using the session user_id
-            $getTeacherQuery = "SELECT id, full_name, email FROM teachers WHERE user_id = ?";
-            $stmt = mysqli_prepare($conn, $getTeacherQuery);
-            mysqli_stmt_bind_param($stmt, "i", $_SESSION['user_id']);
-            mysqli_stmt_execute($stmt);
-            $result = mysqli_stmt_get_result($stmt);
+                // Get the teacher_id from the teachers table using the session user_id
+                $getTeacherQuery = "SELECT id, full_name, email FROM teachers WHERE user_id = ?";
+                $stmt = $pdo->prepare($getTeacherQuery);
+                $stmt->execute([$_SESSION['user_id']]);
+                $teacher_row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($teacher_row = mysqli_fetch_assoc($result)) {
-                $teacher_id = $teacher_row['id'];
+                if ($teacher_row) {
+                    $teacher_id = $teacher_row['id'];
 
-                // Clean and validate the description
-                $class_description = !empty($_POST['class_description']) ? trim($_POST['class_description']) : '';
+                    // Clean and validate the description
+                    $class_description = !empty($_POST['class_description']) ? trim($_POST['class_description']) : '';
 
-                // Insert the new class with proper error handling
-                $insertClassQuery = "INSERT INTO classes (name, description, class_code, teacher_id, created_at) VALUES (?, ?, ?, ?, NOW())";
-                $stmt = mysqli_prepare($conn, $insertClassQuery);
-
-                if (!$stmt) {
-                    $error_message = "Database error: " . mysqli_error($conn);
-                } else {
-                    mysqli_stmt_bind_param($stmt, "sssi", $class_name, $class_description, $class_code, $teacher_id);
-
-                    if (mysqli_stmt_execute($stmt)) {
+                    // Insert the new class
+                    $insertClassQuery = "INSERT INTO classes (name, description, class_code, teacher_id, created_at) VALUES (?, ?, ?, ?, NOW())";
+                    $stmt = $pdo->prepare($insertClassQuery);
+                    
+                    if ($stmt->execute([$class_name, $class_description, $class_code, $teacher_id])) {
                         $success_message = "Class created successfully! Class code: " . $class_code;
                     } else {
-                        $error_message = "Failed to create class: " . mysqli_stmt_error($stmt);
+                        $error_message = "Failed to create class.";
                     }
-                    mysqli_stmt_close($stmt);
+                } else {
+                    // Log the error for debugging
+                    error_log("Teacher record not found for user_id: " . $_SESSION['user_id']);
+                    $error_message = "Error: Unable to find teacher record. Please ensure you're logged in with a teacher account.";
                 }
-            } else {
-                // Log the error for debugging
-                error_log("Teacher record not found for user_id: " . $_SESSION['user_id']);
-                $error_message = "Error: Unable to find teacher record. Please ensure you're logged in with a teacher account.";
+            } catch (PDOException $e) {
+                error_log("Database error: " . $e->getMessage());
+                $error_message = "Database error occurred. Please try again.";
             }
         }
     } else {
@@ -70,27 +68,26 @@ if ($_POST && isset($_POST['class_name'])) {
 // Fetch classes from database for the current teacher
 $classes = [];
 if (isset($_SESSION['user_id'])) {
-    $getClassesQuery = "
-        SELECT c.id, c.name, c.description, c.class_code, c.created_at 
-        FROM classes c 
-        INNER JOIN teachers t ON c.teacher_id = t.id 
-        WHERE t.user_id = ? 
-        ORDER BY c.created_at DESC
-    ";
+    try {
+        $getClassesQuery = "
+            SELECT c.id, c.name, c.description, c.class_code, c.created_at 
+            FROM classes c 
+            INNER JOIN teachers t ON c.teacher_id = t.id 
+            WHERE t.user_id = ? 
+            ORDER BY c.created_at DESC
+        ";
 
-    $stmt = mysqli_prepare($conn, $getClassesQuery);
-    if ($stmt) {
-        mysqli_stmt_bind_param($stmt, "i", $_SESSION['user_id']);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
-
-        while ($row = mysqli_fetch_assoc($result)) {
-            $classes[] = $row;
-        }
-        mysqli_stmt_close($stmt);
+        $stmt = $pdo->prepare($getClassesQuery);
+        $stmt->execute([$_SESSION['user_id']]);
+        $classes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        error_log("Database error fetching classes: " . $e->getMessage());
+        $error_message = "Error loading classes. Please refresh the page.";
     }
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -234,7 +231,7 @@ if (isset($_SESSION['user_id'])) {
         </div>
     </div>
 
-    <script>
+    <!-- <script>
         // Toggle create form visibility
         function toggleCreateForm() {
             const form = document.getElementById('createClassForm');
@@ -277,7 +274,7 @@ if (isset($_SESSION['user_id'])) {
             }
             document.body.removeChild(textArea);
         }
-    </script>
+    </script> -->
 </body>
 
 </html>
