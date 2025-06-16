@@ -1,138 +1,207 @@
+/* === Base Styles === */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
 }
 
 .container {
-    width: 80%;
-    margin: auto;
-    overflow: hidden;
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+  overflow: hidden;
+  padding: 20px 0;
 }
 
+h1, h2 {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* === Header & Nav === */
 header {
-    background: #35424a;
-    color: #ffffff;
-    padding: 20px 0;
-    text-align: center;
+  background: #35424a;
+  color: #ffffff;
+  padding: 20px 0;
+  text-align: center;
 }
 
 nav {
-    background: #35424a;
-    color: #ffffff;
-    padding: 10px 0;
+  background: #35424a;
+  color: #ffffff;
+  padding: 10px 0;
 }
 
 nav ul {
-    list-style: none;
-    padding: 0;
-}
-
-nav ul li {
-    display: inline;
-    margin: 0 15px;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
 nav ul li a {
-    color: #ffffff;
-    text-decoration: none;
+  color: #ffffff;
+  transition:background-color 0.3s ease, padding 0.3s ease;
+}
+nav ul li a.hover{
+   background-color: #df9c2a;
+   padding:6px 12 px;
+   border-radius: 4px;
+
+}
+nav ul li a.active {
+  background-color: #df9c2a !important; /* Same as button hover */
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: bold;
 }
 
+/* === Sections === */
 .section {
-    background: #ffffff;
-    margin: 20px 0;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  margin: 20px 0;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
-    color: #35424a;
+  color: #35424a;
+  margin-bottom: 10px;
 }
 
-footer {
-    text-align: center;
-    padding: 10px 0;
-    background: #35424a;
+/* === Buttons === */
+.btn {
+  padding: 8px 16px;
+  background-color: #35424a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
 }
+
+.btn:hover {
+  background-color: #df9c2a;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+/* === Tables === */
+.table-responsive {
+  overflow-x: auto;
+}
+
 .grades-table {
-            width: 100%;
-            border-collapse: collapse;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            overflow: hidden;
-            background-color: #ffffff;
-        }
-        .grades-table thead th {
-            background-color: #f7fafc;
-            color: #4a5568;
-            padding: 12px;
-            text-align: left;
-            border-bottom: 2px solid #e2e8f0;
-        }
-        .grades-table tbody td {
-            padding: 12px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .grades-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-        .grades-table tbody tr:nth-child(odd) {
-            background-color: #edf2f7;
-        }
-.grades-container:hover {
-    background-color: #e0e0e0;
-    cursor: pointer;
-    padding-left: 10px;
-    transition: all 0.2s ease;
-}
-/* Scrollable section styling */
-.convo {
-    max-height: 200px; /* Adjust based on how tall you want the scroll area to be */
-    overflow-y: auto; /* Enable vertical scrolling */
-    border: 1px solid #ddd; /* Light border */
-    padding: 10px;
-    background-color: #f9f9f9;
-    border-radius: 6px;
-    margin-top: 10px;
-    font-family: Arial, sans-serif;
-    overflow-y: auto;
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #ffffff;
 }
 
-/* Optional: Style list items inside .convo */
+.grades-table thead th {
+  background-color: #f7fafc;
+  color: #4a5568;
+  padding: 12px;
+  text-align: left;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.grades-table tbody td {
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.grades-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.grades-table tbody tr:nth-child(odd) {
+  background-color: #edf2f7;
+}
+
+/* === Scrollable Lists === */
+.convo {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
 .convo ul {
-    list-style-type: disc;
-    padding-left: 20px;
-    margin: 0;
+  list-style-type: disc;
+  padding-left: 20px;
+  margin: 0;
 }
 
 .convo li {
-    margin-bottom: 8px;
+  margin-bottom: 8px;
+  transition: all 0.2s ease;
 }
+
 .convo li:hover {
-    background-color: #e0e0e0;
-    cursor: pointer;
-    padding-left: 10px;
-    transition: all 0.2s ease;
+  background-color: #e0e0e0;
+  padding-left: 10px;
+  cursor: pointer;
 }
+
+/* === Responsive Design === */
 @media (max-width: 768px) {
-    .convo {
-        max-height: 150px;
-    }
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .convo {
+    max-height: 150px;
+  }
+
+  .grades-table {
+    min-width: 600px;
+  }
 }
-.btn{
-      padding: 8px 16px;
-      background-color: #35424a;;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      justify-content: flex-start;
-      align-items: right;
-      transform: scale(1.05);
-      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+
+/* === Icons === */
+.icon-sm {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
 }
-.btn:hover{
-    background-color: #0056b3;
+
+.tilt-file {
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.tilt-file:hover {
+  transform: rotate(10deg) scale(1.05);
+}
+
+/* === Footer === */
+footer {
+  text-align: center;
+  padding: 10px 0;
+  background: #35424a;
+  color: white;
+}
+
+html {
+  scroll-behavior: smooth;
 }
