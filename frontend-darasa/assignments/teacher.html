@@ -3,9 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Teacher Assignment Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="teacher_style.css">
 </head>
 <body>
-    
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-chalkboard-teacher"></i> Assignment Manager</h1>
+            <p>ICS 3678: Introduction to Programming - Instructor: John Smith</p>
+        </header>
+        
+        <nav class="teacher-nav">
+            <button class="nav-btn active"><i class="fas fa-tasks"></i> Assignments</button>
+            <button class="nav-btn"><i class="fas fa-user-graduate"></i> Students</button>
+            <button class="nav-btn"><i class="fas fa-chart-bar"></i> Analytics</button>
+            <button class="nav-btn"><i class="fas fa-cog"></i> Settings</button>
+        </nav>
+        
+        <main class="content">
+            <!-- Assignment Management Section -->
+            <section class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-clipboard-list"></i>
+                        Assignment Management
+                    </h2>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i> New Assignment
+                    </button>
+                </div>
+                
+                <div class="assignments-grid">
+                    <!-- Assignment cards with teacher controls -->
+                    <div class="assignment-card">
+                        <div class="assignment-header">
+                            <h3 class="assignment-title">Assignment 1: Intro to Python</h3>
+                            <div class="teacher-controls">
+                                <button class="icon-btn"><i class="fas fa-edit"></i></button>
+                                <button class="icon-btn"><i class="fas fa-trash"></i></button>
+                                <button class="icon-btn"><i class="fas fa-copy"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="assignment-meta">
+                            <p><i class="fas fa-calendar-alt"></i> <strong>Due:</strong> May 15, 2025</p>
+                            <p><i class="fas fa-star"></i> <strong>Points:</strong> 100</p>
+                            <p><i class="fas fa-users"></i> <strong>Students:</strong> 45</p>
+                        </div>
+                        
+                        <div class="submission-stats">
+                            <div class="stat submitted">
+                                <span class="stat-count">38</span>
+                                <span class="stat-label">Submitted</span>
+                            </div>
+                            <div class="stat pending">
+                                <span class="stat-count">5</span>
+                                <span class="stat-label">Pending</span>
+                            </div>
+                            <div class="stat missing">
+                                <span class="stat-count">2</span>
+                                <span class="stat-label">Missing</span>
+                            </div>
+                        </div>
+                        
+                        <div class="assignment-actions">
+                            <button class="btn btn-outline">
+                                <i class="fas fa-eye"></i> View Submissions
+                            </button>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-download"></i> Download All
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Additional assignment cards would go here -->
+                </div>
+            </section>
+            
+            <!-- Grading Interface Section -->
+            <section class="section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i class="fas fa-check-circle"></i>
+                        Grading Interface
+                    </h2>
+                    <div class="assignment-selector">
+                        <select>
+                            <option>Assignment 1: Intro to Python</option>
+                            <option>Assignment 2: Data Structures</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="grading-container">
+                    <div class="student-list">
+                        <div class="student-card active">
+                            <div class="student-info">
+                                <span class="student-avatar">JD</span>
+                                <div>
+                                    <h4>John Doe</h4>
+                                    <p>Submitted: May 12, 2023</p>
+                                </div>
+                            </div>
+                            <div class="grade-status">
+                                <span class="grade-badge">90/100</span>
+                            </div>
+                        </div>
+                        
+                        <div class="student-card">
+                            <div class="student-info">
+                                <span class="student-avatar">SJ</span>
+                                <div>
+                                    <h4>Sarah Johnson</h4>
+                                    <p>Not submitted</p>
+                                </div>
+                            </div>
+                            <div class="grade-status">
+                                <span class="status-badge missing">Missing</span>
+                            </div>
+                        </div>
+                        
+                        <!-- More student cards -->
+                    </div>
+                    
+                    <div class="grading-area">
+                        <div class="submission-viewer">
+                            <h3>Assignment Submission</h3>
+                            <div class="submission-content">
+                                <!-- Student submission would appear here -->
+                                <p>Python code and documentation...</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grading-controls">
+                            <div class="grade-input">
+                                <label>Grade:</label>
+                                <input type="number" min="0" max="100" value="90">
+                                <span>/100</span>
+                            </div>
+                            
+                            <div class="feedback-section">
+                                <label>Feedback:</label>
+                                <textarea placeholder="Add your feedback for the student..."></textarea>
+                            </div>
+                            
+                            <div class="common-comments">
+                                <button class="comment-btn">Good job!</button>
+                                <button class="comment-btn">Needs improvement</button>
+                                <button class="comment-btn">See me after class</button>
+                            </div>
+                            
+                            <div class="grading-actions">
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-save"></i> Save Draft
+                                </button>
+                                <button class="btn btn-success">
+                                    <i class="fas fa-paper-plane"></i> Submit Grade
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Analytics Section -->
+            <section class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-bar"></i>
+                    Class Analytics
+                </h2>
+                
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h3>Assignment Completion</h3>
+                        <div class="completion-chart">
+                            <!-- Visual chart would go here -->
+                            <div class="chart-bar" style="height: 85%; background: #007bff;"></div>
+                            <div class="chart-bar" style="height: 65%; background: #ffc107;"></div>
+                            <div class="chart-bar" style="height: 92%; background: #28a745;"></div>
+                        </div>
+                        <div class="chart-labels">
+                            <span>Assignment 1</span>
+                            <span>Assignment 2</span>
+                            <span>Assignment 3</span>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <h3>Grade Distribution</h3>
+                        <div class="grade-distribution">
+                            <!-- Visual distribution would go here -->
+                            <div class="dist-bar a" style="width: 25%;"></div>
+                            <div class="dist-bar b" style="width: 40%;"></div>
+                            <div class="dist-bar c" style="width: 25%;"></div>
+                            <div class="dist-bar d" style="width: 10%;"></div>
+                        </div>
+                        <div class="dist-labels">
+                            <span>A (90-100)</span>
+                            <span>B (80-89)</span>
+                            <span>C (70-79)</span>
+                            <span>D/F (<70)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <h3>Late Submissions</h3>
+                        <div class="late-stats">
+                            <div class="stat">
+                                <span class="stat-value">12</span>
+                                <span class="stat-label">Total Late</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">3</span>
+                                <span class="stat-label">This Week</span>
+                            </div>
+                        </div>
+                        <div class="top-late">
+                            <h4>Frequent Late Submitters</h4>
+                            <ul>
+                                <li>Michael Chen (4 assignments)</li>
+                                <li>Emma Rodriguez (3 assignments)</li>
+                                <li>David Kim (2 assignments)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
 </body>
 </html>
