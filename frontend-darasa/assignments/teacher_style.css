@@ -44,10 +44,11 @@ body {
     padding: 25px 30px;
     position: relative;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     flex-wrap: wrap;
     gap: 20px;
+    text-align: center;
 }
 
 .header::before {
@@ -71,6 +72,7 @@ body {
     margin-bottom: 8px;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 15px;
 }
 
@@ -115,26 +117,33 @@ body {
 }
 
 .nav-tabs {
+    border-color: var(--primary);
     display: flex;
+    justify-content: center;
     background: #f0f5ff;
     border-bottom: 2px solid #d6e4ff;
-    padding: 0 30px;
+    padding: 15px 30px;
     flex-wrap: wrap;
+    gap: 10px;
+    margin: 0 30px;
+    border-radius: 15px 15px 0 0;
 }
 
 .nav-tab {
-    padding: 18px 30px;
+    padding: 12px 20px;
     background: transparent;
     border: none;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--primary);
     cursor: pointer;
     transition: var(--transition);
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     position: relative;
+    border-radius: 8px;
+    min-width: auto;
 }
 
 .nav-tab:hover {
@@ -144,16 +153,11 @@ body {
 .nav-tab.active {
     background: var(--primary);
     color: white;
+    border-radius: 8px;
 }
 
 .nav-tab.active::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: white;
+    display: none;
 }
 
 .content {
@@ -623,6 +627,16 @@ textarea.form-control {
     .form-row {
         flex-direction: column;
         gap: 0;
+    }
+    
+    .nav-tabs {
+        margin: 0 15px;
+        padding: 10px 15px;
+    }
+    
+    .nav-tab {
+        padding: 10px 15px;
+        font-size: 0.9rem;
     }
 }
 
