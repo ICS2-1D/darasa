@@ -88,7 +88,7 @@ function getFileIcon($filePath) {
             <nav class="sidebar-nav">
                 <a href="../dashboard/student.php" class="nav-link active"><i class="fas fa-home"></i> <span>My Classes</span></a>
                 <a href="../dashboard/grades.php" class="nav-link"><i class="fas fa-chart-line"></i> <span>My Grades</span></a>
-                <a href="#" class="nav-link"><i class="fas fa-user"></i> <span>Profile</span></a>
+                <a href="../profile/profile.php" class="nav-link"><i class="fas fa-user"></i> <span>Profile</span></a>
             </nav>
             <div class="sidebar-footer">
                 <a href="../../backend-darasa/auth/logout.php" class="nav-link logout">

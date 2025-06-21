@@ -34,6 +34,7 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,6 +44,7 @@ try {
     <link rel="stylesheet" href="materials.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
     <div class="page-wrapper">
         <!-- Sidebar Navigation -->
@@ -55,8 +57,12 @@ try {
             </div>
             <nav class="sidebar-nav">
                 <a href="../dashboard/teacher.php" class="nav-link"><i class="fas fa-home"></i> <span>Home</span></a>
-                <a href="../assignment/view-assignments.php" class="nav-link"><i class="fas fa-tasks"></i> <span>Assignments</span></a>
-                <a href="materials.php" class="nav-link active"><i class="fas fa-book-open"></i> <span>Materials</span></a>
+                <a href="../assignment/view-assignments.php" class="nav-link"><i class="fas fa-tasks"></i>
+                    <span>Assignments</span></a>
+                <a href="materials.php" class="nav-link active"><i class="fas fa-book-open"></i>
+                    <span>Materials</span></a>
+                <a href="../profile/profile.php" class="nav-link active"><i class="fas fa-user"></i>
+                    <span>Profile</span></a>
             </nav>
             <div class="sidebar-footer">
                 <a href="../../backend-darasa/auth/logout.php" class="nav-link logout">
@@ -76,8 +82,8 @@ try {
             </header>
             <main class="container">
                 <div class="page-header">
-                     <h1 class="page-title">Upload New Material</h1>
-                     <a href="materials.php" class="btn btn-secondary">Cancel</a>
+                    <h1 class="page-title">Upload New Material</h1>
+                    <a href="materials.php" class="btn btn-secondary">Cancel</a>
                 </div>
 
                 <div class="upload-container">
@@ -90,13 +96,15 @@ try {
                         </div>
                     <?php endif; ?>
 
-                    <form action="../../backend-darasa/handlers/material_handler.php" method="POST" enctype="multipart/form-data" id="uploadMaterialForm">
+                    <form action="../../backend-darasa/handlers/material_handler.php" method="POST"
+                        enctype="multipart/form-data" id="uploadMaterialForm">
                         <input type="hidden" name="action" value="upload">
 
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="title">Material Title</label>
-                                <input type="text" id="title" name="title" placeholder="e.g., Chapter 3 Photosynthesis Notes" required>
+                                <input type="text" id="title" name="title"
+                                    placeholder="e.g., Chapter 3 Photosynthesis Notes" required>
                             </div>
                             <div class="form-group">
                                 <label for="class_id">Select Class</label>
@@ -117,7 +125,8 @@ try {
                                     <p><b>Drag & Drop</b> your file here or <b>click to select</b></p>
                                     <small>Max file size: 10MB. Allowed types: PDF, DOCX, PPTX, JPG, PNG</small>
                                 </div>
-                                <input type="file" name="material_file" id="materialFile" class="drop-zone-input" required>
+                                <input type="file" name="material_file" id="materialFile" class="drop-zone-input"
+                                    required>
                             </div>
                         </div>
 
@@ -131,6 +140,36 @@ try {
             </main>
         </div>
     </div>
-    <script src="materials.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('materialFile');
+            const prompt = dropZone ? dropZone.querySelector('.drop-zone-prompt') : null;
+            if (!dropZone || !fileInput || !prompt) return;
+
+            dropZone.addEventListener('click', function () { fileInput.click(); });
+            fileInput.addEventListener('change', function () {
+                if (fileInput.files.length > 0) showFile(fileInput.files[0]);
+            });
+            dropZone.addEventListener('dragover', function (e) {
+                e.preventDefault(); dropZone.classList.add('drag-over');
+            });
+            ['dragleave', 'dragend'].forEach(type => dropZone.addEventListener(type, function () {
+                dropZone.classList.remove('drag-over');
+            }));
+            dropZone.addEventListener('drop', function (e) {
+                e.preventDefault(); dropZone.classList.remove('drag-over');
+                if (e.dataTransfer.files.length > 0) {
+                    fileInput.files = e.dataTransfer.files;
+                    showFile(e.dataTransfer.files[0]);
+                }
+            });
+            function showFile(file) {
+                prompt.classList.add('file-selected');
+                prompt.innerHTML = `<i class='fas fa-check-circle'></i><p>${file.name}</p><small>Size: ${(file.size / 1024 / 1024).toFixed(2)} MB. Click to change.</small>`;
+            }
+        });
+    </script>
 </body>
+
 </html>

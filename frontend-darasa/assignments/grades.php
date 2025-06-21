@@ -61,22 +61,17 @@ try {
 <body>
     <div class="page-wrapper">
         <!-- Sidebar Navigation -->
-         <aside class="sidebar" id="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <div class="logo">
+                <a href="#" class="logo">
                     <img src="../assets/images/logo_blue.png" alt="Darasa Logo">
                     <span>Darasa</span>
-                </div>
+                </a>
             </div>
             <nav class="sidebar-nav">
-                <a href="../dashboard/teacher.php" class="nav-link active"><i class="fas fa-home"></i>
-                    <span>Home</span></a>
-                <a href="../assignments/view-assignments.php" class="nav-link"><i class="fas fa-tasks"></i>
-                    <span>Assignments</span></a>
-                <a href="../materials/materials.php" class="nav-link"><i class="fas fa-book-open"></i>
-                    <span>Materials</span></a>
-                <a href="../announcements/announcements.php" class="nav-link"><i class="fas fa-bullhorn"></i>
-                    <span>Announcements</span></a>
+                <a href="../dashboard/student.php" class="nav-link active"><i class="fas fa-home"></i> <span>My Classes</span></a>
+                <a href="grades.php" class="nav-link"><i class="fas fa-chart-line"></i> <span>My Grades</span></a>
+                <a href="../announcements/announcements.php" class="nav-link"><i class="fas fa-bullhorn"></i> <span>Announcements</span></a>
                 <a href="../profile/profile.php" class="nav-link"><i class="fas fa-user"></i> <span>Profile</span></a>
             </nav>
             <div class="sidebar-footer">

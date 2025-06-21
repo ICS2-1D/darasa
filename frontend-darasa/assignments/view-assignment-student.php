@@ -59,7 +59,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assignments for <?= htmlspecialchars($className) ?> - Darasa</title>
-    <link rel="stylesheet" href="../dashboard/teacher.css">
+    <link rel="stylesheet" href="../dashboard/student.css">
     <link rel="stylesheet" href="assignment.css"> 
     <link rel="stylesheet" href="student-assignment.css"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -67,7 +67,25 @@ try {
 </head>
 <body>
     <div class="page-wrapper">
-        
+          <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="#" class="logo">
+                    <img src="../assets/images/logo_blue.png" alt="Darasa Logo">
+                    <span>Darasa</span>
+                </a>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="../dashboard/student.php" class="nav-link active"><i class="fas fa-home"></i> <span>My Classes</span></a>
+                <a href="grades.php" class="nav-link"><i class="fas fa-chart-line"></i> <span>My Grades</span></a>
+                <a href="../announcements/announcements.php" class="nav-link"><i class="fas fa-bullhorn"></i> <span>Announcements</span></a>
+                <a href="../profile/profile.php" class="nav-link"><i class="fas fa-user"></i> <span>Profile</span></a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../../backend-darasa/auth/logout.php" class="nav-link logout">
+                    <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+                </a>
+            </div>
+        </aside>
         <div class="main-content">
             <header class="header">
                  <div class="header-content">
