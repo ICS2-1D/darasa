@@ -1,0 +1,87 @@
+/* frontend-darasa/materials/materials.css */
+
+/* --- Upload Form Styles (upload-material.php) --- */
+.upload-container {
+    max-width: 800px;
+    margin: 0 auto; /* Centered layout */
+    background: var(--card-bg);
+    padding: 2.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.form-title { font-size: 1.75rem; font-weight: 400; text-align: center; margin-bottom: 0.5rem; }
+.form-subtitle { text-align: center; color: var(--text-secondary); margin-bottom: 2rem; }
+.form-row { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.form-row .form-group { flex: 1; min-width: 250px; }
+.form-actions { display: flex; justify-content: flex-end; margin-top: 1.5rem; }
+.alert { padding: 1rem; border-radius: 4px; margin-bottom: 1.5rem; }
+.alert-success { background: #e6f4ea; color: #1e8e3e; border: 1px solid #a8d5b5; }
+.alert-error { background: #fce8e6; color: #d93025; border: 1px solid #f2b0a9; }
+
+/* --- Select Dropdown Styling --- */
+.form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 16px;
+    font-family: inherit;
+    color: var(--text-primary);
+    background-color: #fff;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M5%208l5%205%205-5z%22%20fill%3D%22%235f6368%22/%3E%3C/svg%3E');
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+    cursor: pointer;
+}
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+}
+
+
+/* Drop Zone UI */
+.drop-zone {
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+    position: relative;
+}
+.drop-zone:hover { border-color: var(--primary-color); }
+.drop-zone.drag-over { background-color: #e8f0fe; border-color: var(--primary-color); border-style: solid; }
+.drop-zone-prompt i { font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem; }
+.drop-zone-prompt p { margin: 0; font-size: 1.1rem; }
+.drop-zone-prompt small { font-size: 0.85rem; }
+.drop-zone-input { display: none; }
+.drop-zone-prompt.file-selected p { font-size: 1.1rem; font-weight: 500; color: var(--text-primary); }
+.drop-zone-prompt.file-selected i { color: #4caf50; }
+
+/* --- Material List Styles (materials.php) --- */
+.materials-list { display: flex; flex-direction: column; gap: 1rem; }
+.material-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: box-shadow 0.2s;
+    flex-wrap: wrap; /* Allows actions to wrap on small screens */
+}
+.material-card:hover { box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
+.material-icon { font-size: 2rem; color: var(--primary-color); width: 40px; text-align: center; }
+.material-details { flex-grow: 1; }
+.material-title { font-size: 1.1rem; font-weight: 500; margin: 0 0 4px 0; }
+.material-meta { color: var(--text-secondary); font-size: 0.9rem; margin: 0; }
+.material-actions { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; /* Pushes actions to the right */ }
+.btn-sm { padding: 6px 12px; font-size: 13px; }
+.btn-icon.danger:hover { background-color: #fce8e6; color: #c5221f; }

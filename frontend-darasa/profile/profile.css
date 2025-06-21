@@ -1,0 +1,9 @@
+.profile-container { max-width: 700px; margin: 0 auto; background: #fff; padding: 2.5rem; border-radius: 8px; border: 1px solid #dadce0; }
+.form-group small { display: block; margin-top: 8px; font-size: 0.85rem; color: #5f6368; }
+.form-divider { border: 0; border-top: 1px solid #dadce0; margin: 2rem 0; }
+.form-section-title { font-size: 1.25rem; font-weight: 500; margin-bottom: 0.25rem; }
+.form-actions { display: flex; justify-content: flex-end; }
+.alert { padding: 1rem; border-radius: 4px; margin-bottom: 1.5rem; }
+.alert-success { background: #e6f4ea; color: #1e8e3e; }
+.alert-error { background: #fce8e6; color: #d93025; }
+input[disabled] { background-color: #f1f3f4; cursor: not-allowed; }

@@ -1,0 +1,118 @@
+/*
+ * Styles for the student grades page (grades.php).
+ * This file should be loaded AFTER student.css to apply specific styles.
+ * It inherits variables like --primary-color from student.css.
+*/
+
+.grades-grid {
+    display: grid;
+    /* Creates a responsive grid that fits as many cards as possible */
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.grade-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.grade-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    transform: translateY(-3px);
+}
+
+.card-main-content {
+    padding: 1.5rem;
+    flex-grow: 1; /* Allows this section to grow if needed */
+}
+
+.assignment-title {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem 0;
+}
+
+.class-name {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.card-grade-section {
+    padding: 1.5rem;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+}
+
+.grade-display {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    font-weight: 400;
+    /* Uses the green --primary-color from student.css */
+    color: var(--primary-color); 
+}
+
+.grade-display .score {
+    font-size: 2.5rem;
+    line-height: 1;
+}
+
+.grade-display .total {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-left: 0.25rem;
+}
+
+.status-badge.pending {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #feefc3; /* Yellow for pending */
+    color: #a56a00;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.card-feedback-section {
+    padding: 1.5rem;
+    background-color: #f8f9fa; /* A slightly off-white background */
+    border-top: 1px solid var(--border-color);
+}
+/* Ensure the last card section has rounded bottom corners */
+.grade-card > .card-feedback-section:last-child {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+
+.card-feedback-section h4 {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+}
+
+.card-feedback-section p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+    white-space: pre-wrap; /* Respects line breaks from teacher feedback */
+}
+
+.card-feedback-section p em {
+    color: #80868b; /* A slightly darker gray for emphasis */
+}
+
+/* The .empty-state style is already defined in student.css, 
+  so it will be applied automatically if no grades are present.
+  No need to redefine it here.
+*/

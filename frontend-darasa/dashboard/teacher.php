@@ -2,102 +2,133 @@
 session_start();
 require_once __DIR__ . '/../../backend-darasa/connect.php';
 
-// Check authentication
+// Authentication check
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'teacher') {
     header("Location: ../auth/login.html");
     exit;
 }
 
-// Get teacher info
-$user_id = $_SESSION['user_id'];
-$stmt = $conn->prepare("SELECT id, full_name FROM teachers WHERE user_id = ?");
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$teacher = $stmt->get_result()->fetch_assoc();
-$stmt->close();
+try {
+    // Get teacher info
+    $user_id = $_SESSION['user_id'];
+    $stmt = $pdo->prepare("SELECT id, full_name FROM teachers WHERE user_id = ?");
+    $stmt->execute([$user_id]);
+    $teacher = $stmt->fetch();
 
-if (!$teacher) {
-    die("Teacher profile not found.");
+    if (!$teacher) {
+        die("Teacher profile not found.");
+    }
+
+    // Get classes with student count
+    $stmt = $pdo->prepare("
+        SELECT c.*, COUNT(cs.student_id) as student_count 
+        FROM classes c 
+        LEFT JOIN class_students cs ON c.id = cs.class_id 
+        WHERE c.teacher_id = ? 
+        GROUP BY c.id 
+        ORDER BY c.created_at DESC
+    ");
+    $stmt->execute([$teacher['id']]);
+    $classes = $stmt->fetchAll();
+    $totalClasses = count($classes);
+} catch (PDOException $e) {
+    die("Database Error: " . $e->getMessage());
 }
-
-// Get classes
-$stmt = $conn->prepare("
-    SELECT c.*, COUNT(cs.student_id) as student_count 
-    FROM classes c 
-    LEFT JOIN class_students cs ON c.id = cs.class_id 
-    WHERE c.teacher_id = ? 
-    GROUP BY c.id 
-    ORDER BY c.created_at DESC
-");
-$stmt->bind_param("i", $teacher['id']);
-$stmt->execute();
-$classes = $stmt->get_result();
-$stmt->close();
-$conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Darasa Classroom</title>
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Teacher Dashboard - Darasa</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="teacher.css">
     <link rel="icon" href="../assets/images/logo_white.png" type="image/png">
 </head>
 
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <img src="../assets/images/logo_blue.png" alt="Darasa Logo">
-                <span>Darasa Classroom</span>
+    <div class="page-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <img src="../assets/images/logo_blue.png" alt="Darasa Logo">
+                    <span>Darasa</span>
+                </div>
             </div>
-            <div style="display: flex; align-items: center; gap: 16px;">
-                <span style="color: #5f6368;">Hello, <?= htmlspecialchars($teacher['full_name']) ?>!</span>
-                <a href="../../backend-darasa/auth/logout.php" class="btn btn-danger">
-                    <i class="fas fa-sign-out-alt"></i> Logout
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-link active"><i class="fas fa-home"></i> <span>Home</span></a>
+                <a href="../assignments/view-assignments.php" class="nav-link"><i class="fas fa-tasks"></i> <span>Assignments</span></a>
+                <a href="../materials/materials.php" class="nav-link"><i class="fas fa-book-open"></i> <span>Materials</span></a>
+                <a href="../announcements/announcements.php" class="nav-link"><i class="fas fa-bullhorn"></i> <span>Announcements</span></a>
+                <a href="../profile/profile.php" class="nav-link"><i class="fas fa-user"></i> <span>Profile</span></a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="../../backend-darasa/auth/logout.php" class="nav-link logout">
+                    <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
                 </a>
             </div>
+        </aside>
+
+        <div class="main-content">
+            <header class="header">
+                <div class="header-content">
+        
+                    <div class="header-user">
+                        <span style="font-weight: 500;">Welcome Back , <?= htmlspecialchars($teacher['full_name']) ?></span>
+                    </div>
+                </div>
+            </header>
+
+            <main class="container">
+                <div class="page-header">
+                     <h1 class="page-title">Darasa</h1>
+                    
+                      <i onclick="openModal('createClassModal')" title="Create New Class" class="fas fa-plus" style="background-color: #007bff; color: white; padding: 11px; border-radius: 20px;"></i>
+                </div>
+
+            <?php if ($totalClasses > 0): ?>
+                    <div class="class-grid">
+                        <?php foreach ($classes as $class): ?>
+                            <div class="class-card">
+                                <div class="class-card-header" style="background-image: url('../assets/images/<?= htmlspecialchars($class['background_image'] ?? 'hero.jpg') ?>');">
+                                    <a href="../assignments/teacher-assignments.php?class_id=<?= $class['id'] ?>" class="class-title-link">
+                                        <h3><?= htmlspecialchars($class['name']) ?></h3>
+                                        <p class="class-description">Class Code: <?= htmlspecialchars($class['class_code']) ?></p>
+                                    </a>
+                                </div>
+                                <div class="class-card-content">
+                                    <p><strong>Students:</strong> <?= $class['student_count'] ?></p>
+                                </div>
+                                <div class="class-card-footer">
+                                    <button onclick="openAddModal(<?= $class['id'] ?>)" class="btn-icon" title="Add Item"><i class="fas fa-plus"></i></button>
+                                    <a href="../assignments/teacher-assignments.php?class_id=<?= $class['id'] ?>" class="btn-icon" title="View Assignments"><i class="fas fa-folder-open"></i></a>
+                                    <a href="../materials/upload-material.php" class="btn-icon" title="Add Materials"><i class="fas fa-book"></i></a>
+                                    <form action="../../backend-darasa/handlers/class_handler.php" method="POST" onsubmit="return confirm('Are you sure you want to delete this class? This action is permanent.')" style="display: inline;">
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="class_id" value="<?= $class['id'] ?>">
+                                        <button type="submit" class="btn-icon" title="Delete Class"><i class="fas fa-trash"></i></button>
+                                    </form>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <div class="empty-state">
+                        <div class="empty-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                        <h3>Your classroom awaits</h3>
+                        <p>Click the 'Create Class' button to get started.</p>
+                    </div>
+                <?php endif; ?>
+            </main>
         </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Welcome Section -->
-        <div style="background: linear-gradient(135deg, #1a73e8 0%, #4285f4 100%); 
-                    color: white; padding: 32px; border-radius: 8px; margin-bottom: 24px; text-align: center;">
-            <h1 style="font-size: 28px; font-weight: 400; margin-bottom: 8px;">
-                Welcome back, <?= htmlspecialchars($teacher['full_name']) ?>!
-            </h1>
-            <p style="font-size: 16px; opacity: 0.9;">Manage your classes and connect with your students</p>
-        </div>
-
-        <!-- Status Messages -->
-        <?php if (isset($_GET['status'])): ?>
-            <div class="alert alert-<?= $_GET['status'] === 'success' ? 'success' : 'error' ?>">
-                <i class="fas fa-<?= $_GET['status'] === 'success' ? 'check' : 'exclamation' ?>-circle"></i>
-                <?= $_GET['status'] === 'success' ? 'Operation completed successfully!' : 'An error occurred. Please try again.' ?>
-            </div>
-        <?php endif; ?>
-
-        <!-- Create Class Button -->
-        <button class="btn btn-primary" onclick="toggleForm()" style="margin-bottom: 24px;">
-            <i class="fas fa-plus"></i> Create New Class
-        </button>
-
-        <!-- Create Class Form -->
-        <div id="createForm"
-            style="display: none; background: white; padding: 24px; border-radius: 8px; 
-                                   box-shadow: 0 1px 3px rgba(0,0,0,0.12); margin-bottom: 24px; border: 1px solid #e8eaed;">
-            <h3 style="margin-bottom: 20px; color: #1a73e8; font-size: 18px; font-weight: 500;">
-                <i class="fas fa-chalkboard-teacher"></i> Create New Class
-            </h3>
+    </div>
+    
+    <div id="createClassModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn btn-icon" onclick="closeModal('createClassModal')"><i class="fas fa-times"></i></button>
+            <h3 class="modal-header">Create Class</h3>
             <form action="../../backend-darasa/handlers/class_handler.php" method="POST">
                 <input type="hidden" name="action" value="create">
                 <div class="form-group">
@@ -105,111 +136,34 @@ $conn->close();
                     <input type="text" name="name" placeholder="e.g., Form 4 Physics" required>
                 </div>
                 <div class="form-group">
-                    <label>Description (Optional)</label>
-                    <textarea name="description" rows="3" placeholder="Brief description of the class"></textarea>
+                    <label>Description (optional)</label>
+                    <input type="text" name="description" placeholder="A brief description">
                 </div>
-                <div style="display: flex; gap: 12px; justify-content: flex-end;">
-                    <button type="button" onclick="toggleForm()" style="background: #f8f9fa; color: #3c4043; border: 1px solid #dadce0; 
-                                   padding: 10px 20px; border-radius: 20px; cursor: pointer;">
-                        Cancel
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Create Class
-                    </button>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeModal('createClassModal')" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
                 </div>
             </form>
         </div>
+    </div>
 
-        <!-- Classes Section -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-            <h2 style="font-size: 24px; font-weight: 400; color: #3c4043;">Your Classes</h2>
-            <div style="background: white; padding: 12px 16px; border-radius: 8px; border: 1px solid #e8eaed; 
-                        display: flex; align-items: center; gap: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                <i class="fas fa-chalkboard-teacher" style="color: #1a73e8;"></i>
-                <div>
-                    <strong><?= $classes->num_rows ?></strong>
-                    <span style="color: #5f6368; font-size: 14px;"> Total Classes</span>
-                </div>
+    <div id="addItemModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn btn-icon" onclick="closeModal('addItemModal')"><i class="fas fa-times"></i></button>
+            <h3 class="modal-header">What would you like to add?</h3>
+            <div class="add-item-options">
+                 <a href="#" id="addAssignmentLink" class="btn btn-secondary add-option">
+                    <i class="fas fa-tasks"></i>
+                    <span>Add Assignment</span>
+                </a>
+                <a href="#" id="addMaterialLink" class="btn btn-secondary add-option">
+                    <i class="fas fa-book-open"></i>
+                    <span>Add Material</span>
+                </a>
             </div>
         </div>
+    </div>
 
-        <!-- Classes Grid -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
-            <?php if ($classes->num_rows > 0): ?>
-                <?php while ($class = $classes->fetch_assoc()): ?>
-                    <div class="class-card">
-                        <!-- Class Header -->
-                        <div class="class-header">
-                            <h3><?= htmlspecialchars($class['name']) ?></h3>
-                            <?php if (!empty($class['description'])): ?>
-                                <p><?= htmlspecialchars($class['description']) ?></p>
-                            <?php endif; ?>
-                        </div>
-
-                        <!-- Class Body -->
-                        <div class="class-body">
-                            <!-- Class Code -->
-                            <div class="class-code">
-                                <div>
-                                    <small style="color: #5f6368;">Class Code</small><br>
-                                    <span class="class-code-text"><?= $class['class_code'] ?></span>
-                                </div>
-                                <button class="copy-btn" onclick="copyCode('<?= $class['class_code'] ?>')"
-                                    title="Copy class code">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                            </div>
-
-                            <!-- Class Meta -->
-                            <div style="display: flex; justify-content: space-between; align-items: center; 
-                                        margin-bottom: 12px; font-size: 14px; color: #5f6368;">
-                                <div style="display: flex; align-items: center; gap: 6px;">
-                                    <i class="fas fa-users"></i>
-                                    <span><?= $class['student_count'] ?> students</span>
-                                </div>
-                                <small>Created: <?= date('M j, Y', strtotime($class['created_at'])) ?></small>
-                            </div>
-
-                            <!-- Class Actions -->
-                            <div class="class-actions">
-                                <div class="class-tools">
-                                    <a href="#" class="tool-btn" onclick="alert('Assignment feature coming soon!')">
-                                        <i class="fas fa-tasks"></i> Assignments
-                                    </a>
-                                    <a href="#" class="tool-btn" onclick="alert('Materials feature coming soon!')">
-                                        <i class="fas fa-folder"></i> Materials
-                                    </a>
-                                </div>
-                                <form action="../../backend-darasa/handlers/class_handler.php" method="POST"
-                                    onsubmit="return confirm('Are you sure you want to delete this class?')"
-                                    style="display: inline;">
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="class_id" value="<?= $class['id'] ?>">
-                                    <button type="submit" class="btn btn-danger">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <!-- Empty State -->
-                <div style="text-align: center; padding: 48px 24px; background: white; border-radius: 8px; 
-                           border: 1px solid #e8eaed; grid-column: 1 / -1;">
-                    <i class="fas fa-chalkboard-teacher" style="font-size: 48px; color: #dadce0; margin-bottom: 16px;"></i>
-                    <h3 style="font-size: 20px; font-weight: 400; margin-bottom: 8px; color: #5f6368;">No classes yet</h3>
-                    <p style="color: #80868b; margin-bottom: 24px;">Create your first class to get started with teaching!
-                    </p>
-                    <button class="btn btn-primary" onclick="toggleForm()">
-                        <i class="fas fa-plus"></i> Create Your First Class
-                    </button>
-                </div>
-            <?php endif; ?>
-        </div>
-    </main>
-
-    <script src="script.js"></script>
+    <script src="teacher.js"></script>
 </body>
-
 </html>

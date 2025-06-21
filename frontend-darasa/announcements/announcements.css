@@ -1,0 +1,45 @@
+/* Styling for Announcement forms and cards */
+.form-container { max-width: 800px; margin: 0 auto; background: #fff; padding: 2.5rem; border-radius: 8px; border: 1px solid #dadce0; }
+.form-title { font-size: 1.75rem; font-weight: 400; text-align: center; margin-bottom: 0.5rem; }
+.form-subtitle { text-align: center; color: #5f6368; margin-bottom: 2rem; }
+
+/* Select Dropdown Styling */
+.form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 16px;
+    font-family: inherit;
+    color: var(--text-primary);
+    background-color: #fff;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M5%208l5%205%205-5z%22%20fill%3D%22%235f6368%22/%3E%3C/svg%3E');
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+    cursor: pointer;
+}
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+}
+
+.form-group textarea { width: 100%; padding: 12px 16px; border: 1px solid #dadce0; border-radius: 4px; font-size: 16px; font-family: inherit; resize: vertical; }
+.form-group textarea:focus { outline: none; border-color: #1a73e8; box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2); }
+.form-actions { display: flex; justify-content: flex-end; margin-top: 1rem; }
+
+/* Announcement List */
+.announcements-list { display: flex; flex-direction: column; gap: 1.5rem; }
+.announcement-card { background: #fff; border: 1px solid #dadce0; border-radius: 8px; overflow: hidden; }
+.announcement-card .card-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background-color: #f8f9fa; border-bottom: 1px solid #dadce0; }
+.card-title { font-size: 1.2rem; font-weight: 500; margin: 0; }
+.card-class-name { font-size: 0.9rem; color: #5f6368; }
+.announcement-card .card-content { padding: 1.5rem; line-height: 1.6; }
+.card-content p { margin: 0; }
+.announcement-card .card-footer { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; font-size: 0.85rem; color: #5f6368; background-color: #f8f9fa; border-top: 1px solid #dadce0; }
+.card-author, .card-timestamp { display: flex; align-items: center; gap: 8px; }
+.alert { padding: 1rem; border-radius: 4px; margin-bottom: 1.5rem; }
+.alert-success { background: #e6f4ea; color: #1e8e3e; }

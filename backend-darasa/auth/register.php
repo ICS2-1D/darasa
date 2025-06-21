@@ -4,12 +4,24 @@ session_start();
 $showAlert = false;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
     require_once __DIR__ . '/../connect.php';
 
-    $fullname = $_POST['fullname'];
-    $email = $_POST['email'];
+    // Validate and sanitize inputs
+    $fullname = filter_input(INPUT_POST, 'fullname', FILTER_SANITIZE_STRING);
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
+
+    // Validate email format
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        header("Location: ../../frontend-darasa/auth/register.html?error=Invalid email format");
+        exit();
+    }
+
+    // Validate password strength
+    if (strlen($password) < 8) {
+        header("Location: ../../frontend-darasa/auth/register.html?error=Password must be at least 8 characters");
+        exit();
+    }
 
     // Hash the password before storing
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);

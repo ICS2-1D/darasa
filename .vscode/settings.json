@@ -2,10 +2,26 @@
     "cSpell.words": [
         "ABCDEFGHJKLMNPQRSTUVWXYZ",
         "Darasa",
+        "ERRMODE",
         "getteacher",
         "loggedin",
         "strathmore",
         "Superbase"
     ],
-    "liveServer.settings.port": 5501
+    "liveServer.settings.port": 5501,
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "darasa",
+            "database": "darasa",
+            "username": "root"
+        }
+    ]
 }
