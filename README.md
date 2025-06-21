@@ -1,59 +1,39 @@
-# Darasa - Student Management System
+# Darasa - Classroom Management System
 
-A web-based student management system built to help students and lecturers efficiently manage academic journey, courses, grades.
+A modern, web-based classroom management system built with PHP, MySQL. Darasa enables teachers to create classes, manage students, distribute materials, create assignments, and track student progress.
 
 ## Features
 
-- Student or Lecturer registration
-- Join classes
-- Track assignments
-- Attendance monitoring
-- User-friendly interface
+### For Teachers
+- 📚 **Class Management** - Create and manage multiple classes
+- 📝 **Assignment System** - Create, distribute, and grade assignments
+- 📄 **Material Sharing** - Upload and share class materials
+- 📢 **Announcements** - Send announcements to students
+- 👥 **Student Management** - Track student enrollment and progress
+- 📊 **Grading System** - Grade assignments and provide feedback
 
-## Getting Started
+### For Students
+- 🎓 **Class Enrollment** - Join classes using class codes
+- 📚 **Assignment Submission** - Submit assignments and track grades
+- 📖 **Material Access** - Download class materials
+- 📢 **Announcements** - Receive class announcements
+- 📊 **Progress Tracking** - View grades and feedback
 
-### Prerequisites
-- PHP 7.4 or higher
-- Composer installed
-- Git installed
-- MySQL/MariaDB database
-- Apache/Nginx server
+## Tech Stack
 
-### Installation Steps
+- **Backend**: PHP 8.1, MySQL 8.0
+- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
+- **Database**: MySQL with PDO
 
-1. Clone the repository
-```bash
-git clone https://github.com/yourusername/darasa.git
-cd darasa
-```
 
-2. Install dependencies
-```bash
-composer install
-```
 
-3. Configure database settings
-- Create a `.env` file in root directory
-- Add your database credentials:
-```
-DB_HOST=localhost
-DB_NAME=darasa
-DB_USER=your_username
-DB_PASS=your_password
-```
+### Installation
 
-4. Configure web server
-- Point your web server to the `public` directory
-- Ensure mod_rewrite is enabled for Apache
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd darasa
+   ```
 
-5. Run the application
-- Access through your web server
-- Example: `http://localhost/darasa`
 
-## Technologies
-
-- Frontend: HTML, CSS, JavaScript
-- Backend: PHP
-- Database: MySQL/MariaDB
-- Package Manager: Composer
-
+**Built with ❤️ for educators and students**
