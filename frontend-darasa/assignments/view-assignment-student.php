@@ -87,11 +87,11 @@ try {
             </div>
         </aside>
         <div class="main-content">
-            <header class="header">
+            <!-- <header class="header">
                  <div class="header-content">
                     <a href="../dashboard/student.php" class="back-link"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
                 </div>
-            </header>
+            </header> -->
             <main class="container">
                 <div class="page-header">
                     <h1 class="page-title">Assignments for <?= htmlspecialchars($className) ?></h1>

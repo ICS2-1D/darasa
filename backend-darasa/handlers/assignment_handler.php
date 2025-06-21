@@ -43,7 +43,7 @@ if ($action === 'create' && $role === 'teacher') {
         $sql = "INSERT INTO assignments (class_id, title, description, due_date, max_points, file_path) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$class_id, $title, $description, $due_date, $max_points, $file_path]);
-        header("Location: ../../frontend-darasa/assignment/view-assignments.php?status=success");
+        header("Location: ../../frontend-darasa/assignments/view-assignments.php?status=success");
         exit;
     } catch (PDOException $e) { die("DB Error: " . $e->getMessage()); }
 } 
@@ -61,7 +61,7 @@ elseif ($action === 'delete' && $role === 'teacher') {
         }
         $stmt = $pdo->prepare("DELETE FROM assignments WHERE id = ?");
         $stmt->execute([$assignment_id]);
-        header("Location: ../../frontend-darasa/assignment/view-assignments.php?deleted=success");
+        header("Location: ../../frontend-darasa/assignments/view-assignments.php?deleted=success");
         exit;
     } catch (PDOException $e) { die("DB Error: " . $e->getMessage()); }
 }
@@ -86,7 +86,7 @@ elseif ($action === 'grade_submission' && $role === 'teacher') {
         $stmt->execute([$grade, $feedback, $submission_id]);
 
         // Redirect back to the grading page with a success message
-        header("Location: ../../frontend-darasa/assignment/view-submissions.php?assignment_id=$assignment_id&grade_status=success");
+        header("Location: ../../frontend-darasa/assignments/view-submissions.php?assignment_id=$assignment_id&grade_status=success");
         exit;
 
     } catch (PDOException $e) {
@@ -117,14 +117,14 @@ elseif ($action === 'submit_student' && $role === 'student') {
         }
     }
     if (empty($submission_text) && is_null($submission_file_path)) {
-        header("Location: ../../frontend-darasa/assignment/view-assignment-student.php?class_id=$class_id&submit_status=error&message=No+content+submitted");
+        header("Location: ../../frontend-darasa/assignments/view-assignment-student.php?class_id=$class_id&submit_status=error&message=No+content+submitted");
         exit;
     }
     try {
         $sql = "INSERT INTO submissions (assignment_id, student_id, submission_text, file_path, submitted_at) VALUES (?, ?, ?, ?, NOW()) ON DUPLICATE KEY UPDATE submission_text = VALUES(submission_text), file_path = VALUES(file_path), submitted_at = NOW()";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$assignment_id, $student_id, $submission_text, $submission_file_path]);
-        header("Location: ../../frontend-darasa/assignment/view-assignment-student.php?class_id=$class_id&submit_status=success");
+        header("Location: ../../frontend-darasa/assignments/view-assignment-student.php?class_id=$class_id&submit_status=success");
         exit;
     } catch (PDOException $e) { die("DB Error: " . $e->getMessage()); }
 }
