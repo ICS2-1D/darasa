@@ -53,28 +53,31 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Grades - Darasa</title>
-    <!-- Base layout styles -->
     <link rel="stylesheet" href="../dashboard/student.css">
-    <!-- Page-specific styles for grade cards -->
     <link rel="stylesheet" href="grades.css">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="../assets/images/logo_white.png" type="image/png">
 </head>
 <body>
     <div class="page-wrapper">
         <!-- Sidebar Navigation -->
-        <aside class="sidebar" id="sidebar">
+         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <a href="student.php" class="logo">
+                <div class="logo">
                     <img src="../assets/images/logo_blue.png" alt="Darasa Logo">
                     <span>Darasa</span>
-                </a>
+                </div>
             </div>
             <nav class="sidebar-nav">
-                <a href="../dashboard/student.php" class="nav-link"><i class="fas fa-home"></i> <span>My Classes</span></a>
-                <a href="grades.php" class="nav-link active"><i class="fas fa-chart-line"></i> <span>My Grades</span></a>
-                <a href="#" class="nav-link"><i class="fas fa-user"></i> <span>Profile</span></a>
+                <a href="../dashboard/teacher.php" class="nav-link active"><i class="fas fa-home"></i>
+                    <span>Home</span></a>
+                <a href="../assignments/view-assignments.php" class="nav-link"><i class="fas fa-tasks"></i>
+                    <span>Assignments</span></a>
+                <a href="../materials/materials.php" class="nav-link"><i class="fas fa-book-open"></i>
+                    <span>Materials</span></a>
+                <a href="../announcements/announcements.php" class="nav-link"><i class="fas fa-bullhorn"></i>
+                    <span>Announcements</span></a>
+                <a href="../profile/profile.php" class="nav-link"><i class="fas fa-user"></i> <span>Profile</span></a>
             </nav>
             <div class="sidebar-footer">
                 <a href="../../backend-darasa/auth/logout.php" class="nav-link logout">

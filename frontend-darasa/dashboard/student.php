@@ -109,7 +109,7 @@ try {
                                     </div>
                                 </div>
                                 <div class="class-card-footer">
-                                    <a href="../assignment/view-assignment-student.php?class_id=<?= $class['id'] ?>" class="btn-icon" title="View Assignments">
+                                    <a href="../assignments/view-assignment-student.php?class_id=<?= $class['id'] ?>" class="btn-icon" title="View Assignments">
                                         <i class="fas fa-folder-open"></i>
                                     </a>
                                     <!-- === LINK UPDATED HERE === -->

@@ -59,15 +59,16 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assignments for <?= htmlspecialchars($className) ?> - Darasa</title>
-    <link rel="stylesheet" href="../dashboard/teacher.css"> <!-- Reusing teacher.css for base styles -->
-    <link rel="stylesheet" href="assignment.css"> <!-- Main assignment styles -->
-    <link rel="stylesheet" href="student-assignment.css"> <!-- Student-specific styles -->
+    <link rel="stylesheet" href="../dashboard/teacher.css">
+    <link rel="stylesheet" href="assignment.css"> 
+    <link rel="stylesheet" href="student-assignment.css"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="../assets/images/logo_white.png" type="image/png">
 </head>
 <body>
     <div class="page-wrapper">
-        <div class="main-content full-width">
+        
+        <div class="main-content">
             <header class="header">
                  <div class="header-content">
                     <a href="../dashboard/student.php" class="back-link"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
